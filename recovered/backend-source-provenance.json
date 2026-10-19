@@ -1,0 +1,54 @@
+{
+  "files": [
+    {
+      "path": "functions/src/index.ts",
+      "sha256": "ddf523aa86b12a0e07dd291aaf5a319c735c3b3bceb27bc62131ca828e3cd952",
+      "bytes": 262287,
+      "origin": "Gen2 deployed source ZIP",
+      "snapshotPath": "recovered/backend-snapshots/src/index.ts",
+      "workingSha256": "21f0a1452d3217483a7e47836e69e39b9a05972ebdf8205a0bbe935935d1c29d",
+      "workingFileModified": true
+    },
+    {
+      "path": "functions/package.json",
+      "sha256": "3192625bef31816ed18f69d094abd9ed00399c384388cd9cce1605caa2ddef13",
+      "bytes": 808,
+      "origin": "Gen2 deployed source ZIP",
+      "snapshotPath": "recovered/backend-snapshots/package.json",
+      "workingSha256": "cb2348dec51eb3ed83e2ae2d7693874b117136406780aa3ac7b79ebc8153ea43",
+      "workingFileModified": true
+    },
+    {
+      "path": "functions/package-lock.json",
+      "sha256": "aecab239ba5ea67a05abfa2a1d13c252b7ad306ac54423cb80420187d3f51aac",
+      "bytes": 159646,
+      "origin": "Gen2 deployed source ZIP",
+      "snapshotPath": "recovered/backend-snapshots/package-lock.json",
+      "workingSha256": "6235e414edd4767b3bb798e76bc39e0b6ae1af5aa8604c9d103b3518eb16328d",
+      "workingFileModified": true
+    },
+    {
+      "path": "functions/tsconfig.json",
+      "sha256": "88dcb5ee3e5ac94b0c9d5820d0848d2de74d536872397a36817c98566a104e11",
+      "bytes": 284,
+      "origin": "Gen2 deployed source ZIP",
+      "snapshotPath": "recovered/backend-snapshots/tsconfig.json",
+      "workingSha256": "88dcb5ee3e5ac94b0c9d5820d0848d2de74d536872397a36817c98566a104e11",
+      "workingFileModified": false
+    }
+  ],
+  "gen1AndGen2SourceIdentical": true,
+  "gen1ImageFunctions": [
+    "attendanceReminders",
+    "backfillProfilePhotoThumbs",
+    "cleanupOldFiles"
+  ],
+  "gen2Functions": [
+    "onChangeMetaUpdated",
+    "onImageFinalizeGenerateThumb"
+  ],
+  "allExportNamesRecovered": 30,
+  "originalGen1ZipUnavailable": 28,
+  "secretsPublished": false,
+  "modificationsDocumentedIn": "docs/RECOVERY-STATUS.md"
+}

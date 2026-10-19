@@ -1,0 +1,28 @@
+{
+  "name": "MCI Servidores",
+  "short_name": "MCI",
+  "description": "Sistema de gestión de servidores y eventos MCI",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "gcm_sender_id": "103953800507",
+  "icons": [
+    {
+      "src": "/mci-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/mci-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "lang": "es",
+  "prefer_related_applications": false
+}

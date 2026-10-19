@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/mci-logo-pagina.png" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#ffffff"
+    />
+    <meta name="color-scheme" content="light" />
+    <meta
+      name="description"
+      content="Sistema de gestión de servidores y eventos MCI"
+    />
+
+    <!-- Speed up map embeds (OpenStreetMap) -->
+    <link rel="dns-prefetch" href="//www.openstreetmap.org" />
+    <link rel="preconnect" href="https://www.openstreetmap.org" />
+    <link rel="dns-prefetch" href="//tile.openstreetmap.org" />
+    <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin />
+
+    <!-- PWA Manifest -->
+    <!-- PWA Manifest injected by vite-plugin-pwa -->
+
+    <!-- iOS PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="MCI Servidores" />
+    <link rel="apple-touch-icon" href="/mci-logo.png" />
+    <title>MCI Servidores</title>
+
+    <style>
+      /* === NOTCH FIX === */
+      /* Con viewport-fit=cover y black-translucent, el contenido se extiende al notch.
+         El fondo del HTML/BODY se muestra en el área del notch. */
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        background-color: #ffffff !important;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
+
+      /* Root */
+      #root {
+        min-height: 100vh;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Fondo fijo que cubre toda la pantalla (imitando la pantalla de actualización) */
+      #app-bg {
+        position: fixed;
+        inset: 0;
+        background: #ffffff;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      /* Notch cover global (cubre safe-area con blanco) */
+      #notch-cover {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: env(safe-area-inset-top, 0px);
+        background-color: #ffffff;
+        z-index: 2147483647;
+        pointer-events: none;
+      }
+
+      /* Pantalla de actualización PWA */
+      #pwa-update-screen {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        background: linear-gradient(135deg, #4f46e5 0%, #3e1de5 100%);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+      }
+      #pwa-update-screen.show {
+        display: flex;
+      }
+      .update-logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        margin-bottom: 8px;
+        background-color: white;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+      .update-spinner {
+        width: 56px;
+        height: 56px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      .update-text {
+        color: white;
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+      }
+      .update-subtext {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        text-align: center;
+        margin-top: -12px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-BU_ZgoWo.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor-react-BwINE3B3.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-B05fqWAG.css">
+  <link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
+  <body>
+    <!-- Notch cover global -->
+    <div id="notch-cover"></div>
+
+    <!-- Fondo permanente para cubrir notch y barras -->
+    <div id="app-bg"></div>
+
+    <!-- Pantalla de actualización PWA -->
+    <div id="pwa-update-screen">
+      <img
+        src="/mci-logo-pagina.png"
+        alt="MCI"
+        class="update-logo"
+        loading="lazy"
+        decoding="async"
+      />
+      <div class="update-spinner"></div>
+      <p class="update-text">Aplicando actualización...</p>
+      <p class="update-subtext">Por favor espera un momento</p>
+    </div>
+
+    <div id="root"></div>
+  </body>
+</html>

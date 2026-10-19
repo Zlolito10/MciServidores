@@ -1,0 +1,7 @@
+{
+  "environment": "local-emulators",
+  "entry": "dist/app/entry-66TMWRHP.js",
+  "moduleInputs": 37,
+  "originalJsxRecovered": false,
+  "rebuiltFromEditableRecoveredJavaScript": true
+}

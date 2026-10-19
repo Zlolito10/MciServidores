@@ -1,0 +1,249 @@
+{
+  "files": [
+    {
+      "path": "/.well-known/security.txt",
+      "hash": "84c234f6852e753ffda3a5dd82e88541dd7d6c91233c7c5c61c27bd4818c8522",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/__/firebase/init.js",
+      "hash": "1ac35c36bdc31a2f298e8591cef10c4d868150f6c9eaad09d0532b4a00ae3e57",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/__/firebase/init.json",
+      "hash": "351df8bd5f4c27282371aecf3a264bf8b701d9929c5948fb94c3d3cd52bf4be0",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/app-version.json",
+      "hash": "32c9adb9f72e6826c0a48892b30df771d31e3573e7bdd84f8d002d259dc23a4f",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/App-BPrQ3EPG.js",
+      "hash": "ac6387d6e289de43597ba70350f343ff910e8f8c914de8deef7c9889b49b09b4",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/AppHistory-oOipttKZ.js",
+      "hash": "141d54da90ae464583cc1dae7ee1a5d8fc1097e2fdca0bcd15956f8cf3358607",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/Attendance-BoRlsPo1.js",
+      "hash": "916f9db656224d0f76f6f77466d29795daaf165ed7262e44f45f3ef415fad3cb",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/CameraModal-BwvRT9Xn.js",
+      "hash": "5950eefff7e165a1c78d44724de17cbe7048e2b78477f5a337e63969fcb06c08",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/Dashboard-DN8eeJDA.js",
+      "hash": "09e428652fa22f812decb326e3cab1748a3c4e9bc4c7ece967d63037ad1dc34a",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/EventDetails-CpDlqXqO.js",
+      "hash": "b05d09e9c256517f076c840ed13739dd28ffc49a4856e7e566953d97c71d9260",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/Events-CIOfy-8U.js",
+      "hash": "b524a80d97990f6a3f5930609ccbcbc1e3d0eb57ddb4cfe33f18272608577827",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/EventsGrid-BNb5ngU2.js",
+      "hash": "31ce743d2cebb5ee315aa6a5839cfed65c286512f0a5472fd575420fa0eecf22",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/LoadingButton-DoDnirDC.js",
+      "hash": "171f0a8930cbc684a7d34038ac99b93277df6575f35d242d3bf53e854927e4bb",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/LoadingSpinner-DQ5LcqWB.js",
+      "hash": "118fd9157e74b149473026b74a5874ce212914b96081a6d9dedcf015e248fa2b",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/ManageMinistriesModal-BO1rzanM.js",
+      "hash": "4e9150486d044fefab4ed506d90923ffdead80d4257ee6280700da4797baa7e6",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/NotificationsAutoRegister-Dn_C-rjK.js",
+      "hash": "ac57e8449a501498a67580d6af3b3d2371c2c21bc583ee3f68403575bbdebeb8",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/PendingAssignment-BisqKKqT.js",
+      "hash": "c4625f342f80edf323203d550c2efe89b65ebb516f780ee4f11e68ca33ab3dc5",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/PendingRequests-ofGtBucD.js",
+      "hash": "f9ff75cc30feb832158c4263f1cc0a463c76ab5ab8e39d19210dc87823780008",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/Roles-23Dg9NXW.js",
+      "hash": "76ed33bddcfa61025b91cc8c29a10cd3c9cc867f40549164614b66bc015de96a",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/SelectPicker-D1mnbmt-.js",
+      "hash": "f36e46a72a60412ac5907bf13659945ce4ef5dac1a942fee9b0b7ce09e3be906",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/ServiceAreas-CFqvjtqq.js",
+      "hash": "2ee938b454814d6b447ff5f6d52f5862f6555d9d7c5f5ae1a25e934254d045b4",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/ServiceHistory-k07fUeOW.js",
+      "hash": "9c8aff9b6805ff2d1b2b4c90ba40aa5e80c2e0f9ddddcca8a7d6dbe9a914ee5a",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/Settings-BtbU5gHm.js",
+      "hash": "e6573eba51c2912115a8f1cd209eb8817be218acb1dd0fae3ace72b4d413b214",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/TuesdayTeaching-B3nMLJdY.js",
+      "hash": "c902bbe4305d4298e839b26e345b2c888d0c1ad4ec0aed6b332e8348073c0d85",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/Udlv-B63vtmB5.js",
+      "hash": "7765113e8c0be05e96ff8aa95698bf6a52a494cbb9338be6afc76840efb09c59",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/Volunteers-CUDiGEOd.js",
+      "hash": "e497d9c80c1e2f690942bcbae36c7f60c758f5ed703bca761b802c71b914802d",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/html2canvas.esm-Ge7aVWlp.js",
+      "hash": "4a14e81bcee3b39f38af103c9008cb1847cfe7acdc93f1c5e0ac66fba1990c3f",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/index-B05fqWAG.css",
+      "hash": "9a38f41b52c91b281e48022ef34a6ed6912aa65d6a099a51188eb2444e8108cf",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/index-BU_ZgoWo.js",
+      "hash": "0e1f8c9e820c65f9cdfb180224bd16e6f36aad8572a0da83b6d7c5fec805d473",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/index.es-DmxuMTI-.js",
+      "hash": "536095ffc5565bb87fd347ef4c5684b2d8ce4dbb86061d598c53f9bc775a9e9b",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/notifications-BEtI2pcG.js",
+      "hash": "e98bccd5d419b29e862138914a9451ba3a975e4b24f09560f654349e9c943ab0",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/optimistic-Pk6VB-2G.js",
+      "hash": "63bf7ed85fd7ce44379ab9cb5e8170e450986682e62f079edccf58e2cb31163b",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/purify.es-C65SP4u9.js",
+      "hash": "97fa570703e9eb6fc299cec7f6e36413a6a6e0514e2be77b102875c6b25b5d27",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/roleUtils-BDLO6O1S.js",
+      "hash": "35c02278cfbf30ffdc43121f6f414fcf78513f5d9ab6e96fb7cddb95e13a1e54",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/useNotifications-fJ3DWoi9.js",
+      "hash": "d9a9f6832b02e91df09fcdb3df60980c29e2113496227cbcaea4ea2cf532fd88",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/useOptimizedChat-D_A1-F_L.js",
+      "hash": "fe60ddaec09be0b2d47a6cbfa86489ce6a6d67a0840bbc9f64de113e3016f6f4",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/vendor-firebase-BjYbfC3F.js",
+      "hash": "510938f5bac78f8aa269f0978a9e4e0f87b6639b8001dc62536c3936274fcd25",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/vendor-pdf-Cf03QSry.js",
+      "hash": "06bf283e072e207f42313977604d9635b3c180c8a6bc0566f1c74806362a46be",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/vendor-react-BwINE3B3.js",
+      "hash": "5dbc596aa5023cc2551981e7cac885dbfc654fe4aea61b08c16d9e23e71119c1",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/assets/vendor-ui-CnvYSvQL.js",
+      "hash": "51a9540d73fbdec273fd2f31f00960016f87fc48c22753e66a8110b544aa72d1",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/firebase-messaging-sw.js",
+      "hash": "51ece2451d84be42973ea0a6f030a640e28f31aed63a8c176b3ea79ab3d8cb40",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/index.html",
+      "hash": "aaabc3ebcaa0f901268128316995f11685370a30dd27542ad511cf21989e4e4d",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/manifest.json.legacy",
+      "hash": "a4c7d2dcb627ca560ab93c11f05b76cfd3808f31a030d38dbfe7a8bd8310b53e",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/manifest.webmanifest",
+      "hash": "eb47da4ff5a2d4d8356d57abc8227f64135ce5a19dc4145a2304bc9938e8d2f3",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/mci-logo-pagina.png",
+      "hash": "1560102aae58db793ab76be5cd9e22b3d8d72c17c6e14ba0655a2322de896d54",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/mci-logo.png",
+      "hash": "1560102aae58db793ab76be5cd9e22b3d8d72c17c6e14ba0655a2322de896d54",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/registerSW.js",
+      "hash": "41835eb2fede16f1660e3a1dc3d11804d370b93fb1d1453aef2e6254a12dc0b2",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/vite.svg",
+      "hash": "9de4d3c4e50257d9874f07e9efc929efefc85e51f931a9af716f9a7ebb23ef68",
+      "status": "ACTIVE"
+    },
+    {
+      "path": "/workbox-d8d0471a.js",
+      "hash": "47481a74419a8167334860007b4ac9225c3e598605adbf5a2558b766e3fdc051",
+      "status": "ACTIVE"
+    }
+  ]
+}

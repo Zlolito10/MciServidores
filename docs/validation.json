@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-19",
+  "project": "mcimachala-servidor",
+  "hostingFiles": 47,
+  "reservedFirebasePathsExcluded": 2,
+  "readableModules": 28,
+  "astEqual": 28,
+  "backendFunctions": 30,
+  "backendOriginalSourcesRecovered": true,
+  "frontendOriginalJsxTsxRecovered": false,
+  "frontendEditableRecoveredJavaScript": true,
+  "frontendBuild": "passed",
+  "backendBuild": "passed",
+  "tests": {
+    "nodeServer": {
+      "passed": 9,
+      "failed": 0
+    },
+    "pythonRecovery": {
+      "passed": 12,
+      "failed": 0
+    },
+    "emulatorIntegration": {
+      "checksPassed": 13,
+      "failed": 0,
+      "nodeResultsIncludingContainer": 14
+    }
+  },
+  "browser": {
+    "environment": "demo-mci-servidores",
+    "login": "passed",
+    "eventCreation": "passed",
+    "eventDetails": "passed",
+    "screens": [
+      "dashboard",
+      "events",
+      "areas",
+      "volunteers",
+      "requests",
+      "attendance",
+      "tuesday-teaching",
+      "udlv",
+      "roles",
+      "settings"
+    ],
+    "consoleErrorsObserved": 0,
+    "mobileViewportWidth": 390,
+    "horizontalDocumentOverflow": false,
+    "images": [
+      "docs/images/dashboard-desktop.jpg",
+      "docs/images/dashboard-mobile.jpg"
+    ]
+  },
+  "dependencyAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 8,
+    "high": 0,
+    "critical": 0,
+    "total": 8
+  },
+  "productionWritesPerformed": false,
+  "productionDeploymentPerformed": false,
+  "unverified": [
+    "Google OAuth",
+    "FCM push and missing messaging worker logic",
+    "Drive integration",
+    "camera and GPS",
+    "scheduled Pub/Sub tasks",
+    "original frontend source unavailable"
+  ],
+  "previousCloudCommit": "b84d5a7c990ab7963161e2c1c3c200c031233f44",
+  "previousBundleImported": false
+}

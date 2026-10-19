@@ -1,0 +1,992 @@
+[
+  {
+    "module": "App-BPrQ3EPG.js",
+    "offset": 5108,
+    "callee": "as",
+    "path": "127.0.0.1/{id}"
+  },
+  {
+    "module": "App-BPrQ3EPG.js",
+    "offset": 13887,
+    "callee": "ne",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "App-BPrQ3EPG.js",
+    "offset": 14077,
+    "callee": "ne",
+    "path": "users/{id}"
+  },
+  {
+    "module": "App-BPrQ3EPG.js",
+    "offset": 14800,
+    "callee": "ne",
+    "path": "pending_assignments/{id}"
+  },
+  {
+    "module": "App-BPrQ3EPG.js",
+    "offset": 16626,
+    "callee": "ne",
+    "path": "users/{id}"
+  },
+  {
+    "module": "App-BPrQ3EPG.js",
+    "offset": 17241,
+    "callee": "ne",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "App-BPrQ3EPG.js",
+    "offset": 33277,
+    "callee": "ne",
+    "path": "users/{id}"
+  },
+  {
+    "module": "App-BPrQ3EPG.js",
+    "offset": 45433,
+    "callee": "ne",
+    "path": "app_cache/{id}"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 7271,
+    "callee": "de",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 7467,
+    "callee": "de",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 17949,
+    "callee": "de",
+    "path": "events"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 18838,
+    "callee": "Xe",
+    "path": "meta/attendanceSync"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 19728,
+    "callee": "de",
+    "path": "events"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 19999,
+    "callee": "de",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 21066,
+    "callee": "de",
+    "path": "events"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 21832,
+    "callee": "de",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 24181,
+    "callee": "Xe",
+    "path": "users/{id}"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 25080,
+    "callee": "Xe",
+    "path": "users/{id}"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 25776,
+    "callee": "Xe",
+    "path": "users/{id}"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 27190,
+    "callee": "Xe",
+    "path": "events/{id}/assignments/{id}"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 29222,
+    "callee": "Xe",
+    "path": "events/{id}/assignments/{id}"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 31063,
+    "callee": "Xe",
+    "path": "events/{id}/assignments/{id}"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 32392,
+    "callee": "Xe",
+    "path": "events/{id}/assignments/{id}"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 34039,
+    "callee": "de",
+    "path": "events"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 34339,
+    "callee": "de",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 35403,
+    "callee": "de",
+    "path": "events"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 35676,
+    "callee": "de",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 36127,
+    "callee": "Xe",
+    "path": "meta/attendanceSync"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 38523,
+    "callee": "de",
+    "path": "events"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 38819,
+    "callee": "de",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 43205,
+    "callee": "de",
+    "path": "events"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 43501,
+    "callee": "de",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 48512,
+    "callee": "de",
+    "path": "events"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 48814,
+    "callee": "de",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 54582,
+    "callee": "de",
+    "path": "events"
+  },
+  {
+    "module": "Attendance-BoRlsPo1.js",
+    "offset": 54861,
+    "callee": "de",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Dashboard-DN8eeJDA.js",
+    "offset": 10518,
+    "callee": "Ge",
+    "path": "users/{id}"
+  },
+  {
+    "module": "Dashboard-DN8eeJDA.js",
+    "offset": 16460,
+    "callee": "fe",
+    "path": "events"
+  },
+  {
+    "module": "Dashboard-DN8eeJDA.js",
+    "offset": 17246,
+    "callee": "fe",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Dashboard-DN8eeJDA.js",
+    "offset": 17847,
+    "callee": "fe",
+    "path": "comments"
+  },
+  {
+    "module": "Dashboard-DN8eeJDA.js",
+    "offset": 18986,
+    "callee": "fe",
+    "path": "comments"
+  },
+  {
+    "module": "Dashboard-DN8eeJDA.js",
+    "offset": 21423,
+    "callee": "Ge",
+    "path": "comments/{id}"
+  },
+  {
+    "module": "Dashboard-DN8eeJDA.js",
+    "offset": 38571,
+    "callee": "Ge",
+    "path": "events/{id}/assignments/{id}"
+  },
+  {
+    "module": "Dashboard-DN8eeJDA.js",
+    "offset": 39076,
+    "callee": "fe",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Dashboard-DN8eeJDA.js",
+    "offset": 39244,
+    "callee": "fe",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 7247,
+    "callee": "A",
+    "path": "events/{id}/autoBackups/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 7418,
+    "callee": "A",
+    "path": "events/{id}/autoBackups/{id}/repertoire/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 7767,
+    "callee": "A",
+    "path": "events/{id}/autoBackups/{id}/materials/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 10051,
+    "callee": "j",
+    "path": "events"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 10625,
+    "callee": "j",
+    "path": "events"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 11245,
+    "callee": "j",
+    "path": "commands"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 11728,
+    "callee": "j",
+    "path": "events/{id}/repertoire"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 12217,
+    "callee": "j",
+    "path": "commands"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 13443,
+    "callee": "j",
+    "path": "events/{id}/replicateBackups"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 13527,
+    "callee": "j",
+    "path": "events/{id}/replicateBackups"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 13569,
+    "callee": "j",
+    "path": "events/{id}/autoBackups"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 13648,
+    "callee": "j",
+    "path": "events/{id}/autoBackups"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 14324,
+    "callee": "j",
+    "path": "commands"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 15018,
+    "callee": "j",
+    "path": "events"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 15517,
+    "callee": "j",
+    "path": "events/{id}/materials"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 15815,
+    "callee": "j",
+    "path": "commands"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 17140,
+    "callee": "j",
+    "path": "events/{id}/materials"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 17695,
+    "callee": "A",
+    "path": "events/{id}/materials/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 18021,
+    "callee": "j",
+    "path": "events/{id}/replicateBackups"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 18105,
+    "callee": "j",
+    "path": "events/{id}/replicateBackups"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 18147,
+    "callee": "j",
+    "path": "events/{id}/autoBackups"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 18226,
+    "callee": "j",
+    "path": "events/{id}/autoBackups"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 18260,
+    "callee": "j",
+    "path": "events/{id}/materials"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 18854,
+    "callee": "j",
+    "path": "events/{id}/{id}/{id}/materials"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 19209,
+    "callee": "A",
+    "path": "events/{id}/materials/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 23206,
+    "callee": "A",
+    "path": "events/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 23224,
+    "callee": "j",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 23256,
+    "callee": "j",
+    "path": "events/{id}/repertoire"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 23287,
+    "callee": "j",
+    "path": "events/{id}/materials"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 25248,
+    "callee": "A",
+    "path": "events/{id}/assignments/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 25769,
+    "callee": "A",
+    "path": "events/{id}/assignments/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 26513,
+    "callee": "A",
+    "path": "events/{id}/repertoire/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 26659,
+    "callee": "j",
+    "path": "events/{id}/repertoire"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 27423,
+    "callee": "A",
+    "path": "events/{id}/repertoire/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 27572,
+    "callee": "A",
+    "path": "events/{id}/repertoire/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 27634,
+    "callee": "A",
+    "path": "events/{id}/repertoire/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 27997,
+    "callee": "A",
+    "path": "events/{id}/repertoire/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 29805,
+    "callee": "A",
+    "path": "events/{id}/materials/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 29979,
+    "callee": "j",
+    "path": "events/{id}/materials"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 30294,
+    "callee": "A",
+    "path": "events/{id}/materials/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 30671,
+    "callee": "A",
+    "path": "events/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 31002,
+    "callee": "A",
+    "path": "events/{id}"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 31329,
+    "callee": "j",
+    "path": "materials_library"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 31861,
+    "callee": "j",
+    "path": "materials_library"
+  },
+  {
+    "module": "EventDetails-CpDlqXqO.js",
+    "offset": 32180,
+    "callee": "A",
+    "path": "materials_library/{id}"
+  },
+  {
+    "module": "Events-CIOfy-8U.js",
+    "offset": 14859,
+    "callee": "Q",
+    "path": "event_templates"
+  },
+  {
+    "module": "Events-CIOfy-8U.js",
+    "offset": 15669,
+    "callee": "Q",
+    "path": "event_templates"
+  },
+  {
+    "module": "Events-CIOfy-8U.js",
+    "offset": 15882,
+    "callee": "X",
+    "path": "event_templates/{id}"
+  },
+  {
+    "module": "Events-CIOfy-8U.js",
+    "offset": 16288,
+    "callee": "X",
+    "path": "event_templates/{id}"
+  },
+  {
+    "module": "Events-CIOfy-8U.js",
+    "offset": 31346,
+    "callee": "Q",
+    "path": "event_templates"
+  },
+  {
+    "module": "Events-CIOfy-8U.js",
+    "offset": 33444,
+    "callee": "X",
+    "path": "events/{id}"
+  },
+  {
+    "module": "Events-CIOfy-8U.js",
+    "offset": 33659,
+    "callee": "Q",
+    "path": "events"
+  },
+  {
+    "module": "Events-CIOfy-8U.js",
+    "offset": 44205,
+    "callee": "Q",
+    "path": "events"
+  },
+  {
+    "module": "Events-CIOfy-8U.js",
+    "offset": 44504,
+    "callee": "Q",
+    "path": "events/{id}/assignments"
+  },
+  {
+    "module": "Events-CIOfy-8U.js",
+    "offset": 51049,
+    "callee": "X",
+    "path": "events/{id}"
+  },
+  {
+    "module": "notifications-BEtI2pcG.js",
+    "offset": 22522,
+    "callee": "te",
+    "path": "userTokens/{id}"
+  },
+  {
+    "module": "notifications-BEtI2pcG.js",
+    "offset": 22764,
+    "callee": "te",
+    "path": "userTokens/{id}"
+  },
+  {
+    "module": "PendingAssignment-BisqKKqT.js",
+    "offset": 906,
+    "callee": "y",
+    "path": "private_chats/{id}/messages"
+  },
+  {
+    "module": "PendingRequests-ofGtBucD.js",
+    "offset": 1087,
+    "callee": "c",
+    "path": "system/pending_users"
+  },
+  {
+    "module": "PendingRequests-ofGtBucD.js",
+    "offset": 1537,
+    "callee": "c",
+    "path": "private_chats/{id}"
+  },
+  {
+    "module": "PendingRequests-ofGtBucD.js",
+    "offset": 1787,
+    "callee": "W",
+    "path": "private_chats/{id}/messages"
+  },
+  {
+    "module": "PendingRequests-ofGtBucD.js",
+    "offset": 2323,
+    "callee": "c",
+    "path": "private_chats/{id}"
+  },
+  {
+    "module": "PendingRequests-ofGtBucD.js",
+    "offset": 2555,
+    "callee": "c",
+    "path": "users/{id}"
+  },
+  {
+    "module": "PendingRequests-ofGtBucD.js",
+    "offset": 2624,
+    "callee": "c",
+    "path": "pending_assignments/{id}"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 1643,
+    "callee": "I",
+    "path": "roles"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 2457,
+    "callee": "l",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 3132,
+    "callee": "I",
+    "path": "service_areas"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 3345,
+    "callee": "l",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 3442,
+    "callee": "l",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 3884,
+    "callee": "l",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 4280,
+    "callee": "l",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 4515,
+    "callee": "l",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 4611,
+    "callee": "I",
+    "path": "roles"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 5076,
+    "callee": "l",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 5100,
+    "callee": "l",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 5404,
+    "callee": "l",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 5428,
+    "callee": "l",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "Roles-23Dg9NXW.js",
+    "offset": 5562,
+    "callee": "l",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "ServiceAreas-CFqvjtqq.js",
+    "offset": 1429,
+    "callee": "C",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "ServiceAreas-CFqvjtqq.js",
+    "offset": 1446,
+    "callee": "C",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "ServiceAreas-CFqvjtqq.js",
+    "offset": 2668,
+    "callee": "B",
+    "path": "service_areas"
+  },
+  {
+    "module": "ServiceAreas-CFqvjtqq.js",
+    "offset": 4095,
+    "callee": "C",
+    "path": "service_areas/{id}"
+  },
+  {
+    "module": "ServiceAreas-CFqvjtqq.js",
+    "offset": 4364,
+    "callee": "B",
+    "path": "service_areas"
+  },
+  {
+    "module": "ServiceAreas-CFqvjtqq.js",
+    "offset": 4775,
+    "callee": "C",
+    "path": "service_areas/{id}"
+  },
+  {
+    "module": "ServiceHistory-k07fUeOW.js",
+    "offset": 2301,
+    "callee": "Le",
+    "path": "assignments"
+  },
+  {
+    "module": "ServiceHistory-k07fUeOW.js",
+    "offset": 3547,
+    "callee": "Ce",
+    "path": "events"
+  },
+  {
+    "module": "Settings-BtbU5gHm.js",
+    "offset": 1189,
+    "callee": "w",
+    "path": "roles/{id}"
+  },
+  {
+    "module": "Settings-BtbU5gHm.js",
+    "offset": 2471,
+    "callee": "w",
+    "path": "users/{id}"
+  },
+  {
+    "module": "Settings-BtbU5gHm.js",
+    "offset": 2492,
+    "callee": "w",
+    "path": "userTokens/{id}"
+  },
+  {
+    "module": "Settings-BtbU5gHm.js",
+    "offset": 5784,
+    "callee": "w",
+    "path": "users/{id}"
+  },
+  {
+    "module": "Settings-BtbU5gHm.js",
+    "offset": 18735,
+    "callee": "w",
+    "path": "users/{id}"
+  },
+  {
+    "module": "Settings-BtbU5gHm.js",
+    "offset": 18951,
+    "callee": "w",
+    "path": "users/{id}"
+  },
+  {
+    "module": "TuesdayTeaching-B3nMLJdY.js",
+    "offset": 2177,
+    "callee": "U",
+    "path": "teaching_sessions"
+  },
+  {
+    "module": "TuesdayTeaching-B3nMLJdY.js",
+    "offset": 2549,
+    "callee": "U",
+    "path": "teaching_attendance_records"
+  },
+  {
+    "module": "TuesdayTeaching-B3nMLJdY.js",
+    "offset": 2988,
+    "callee": "U",
+    "path": "teaching_attendance_records"
+  },
+  {
+    "module": "TuesdayTeaching-B3nMLJdY.js",
+    "offset": 4620,
+    "callee": "se",
+    "path": "teaching_sessions/{id}"
+  },
+  {
+    "module": "TuesdayTeaching-B3nMLJdY.js",
+    "offset": 4885,
+    "callee": "se",
+    "path": "teaching_attendance_records/{id}"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 1466,
+    "callee": "v",
+    "path": "udlv_courses"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 1514,
+    "callee": "v",
+    "path": "udlv_sections"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 1563,
+    "callee": "v",
+    "path": "udlv_classes"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 1858,
+    "callee": "v",
+    "path": "udlv_class_records"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 3551,
+    "callee": "E",
+    "path": "udlv_courses/{id}"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 3726,
+    "callee": "v",
+    "path": "udlv_courses"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 4158,
+    "callee": "E",
+    "path": "udlv_sections/{id}"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 4298,
+    "callee": "v",
+    "path": "udlv_sections"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 4765,
+    "callee": "E",
+    "path": "udlv_classes/{id}"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 4923,
+    "callee": "v",
+    "path": "udlv_classes"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 5308,
+    "callee": "E",
+    "path": "udlv_class_records/{id}"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 5752,
+    "callee": "E",
+    "path": "udlv_courses/{id}"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 5797,
+    "callee": "v",
+    "path": "udlv_sections"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 5891,
+    "callee": "v",
+    "path": "udlv_classes"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 5944,
+    "callee": "E",
+    "path": "udlv_sections/{id}"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 6037,
+    "callee": "v",
+    "path": "udlv_classes"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 6093,
+    "callee": "E",
+    "path": "udlv_sections/{id}"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 6179,
+    "callee": "v",
+    "path": "udlv_class_records"
+  },
+  {
+    "module": "Udlv-B63vtmB5.js",
+    "offset": 6239,
+    "callee": "E",
+    "path": "udlv_classes/{id}"
+  },
+  {
+    "module": "useOptimizedChat-D_A1-F_L.js",
+    "offset": 348,
+    "callee": "v",
+    "path": "private_chats/{id}"
+  },
+  {
+    "module": "useOptimizedChat-D_A1-F_L.js",
+    "offset": 522,
+    "callee": "w",
+    "path": "private_chats/{id}/messages"
+  },
+  {
+    "module": "Volunteers-CUDiGEOd.js",
+    "offset": 2497,
+    "callee": "K",
+    "path": "users/{id}"
+  },
+  {
+    "module": "Volunteers-CUDiGEOd.js",
+    "offset": 3093,
+    "callee": "K",
+    "path": "users/{id}"
+  }
+]

@@ -1,0 +1,3 @@
+const fs=require('node:fs');const path=require('node:path');const prettier=require('prettier');
+const root=path.resolve(__dirname,'../../recovered/hosting/assets');const out=path.resolve(__dirname,'../../recovered/readable-assets');fs.mkdirSync(out,{recursive:true});
+(async()=>{let count=0;for(const file of fs.readdirSync(root).filter(f=>f.endsWith('.js')&&!/^(vendor-|html2canvas\.|purify\.|index\.es-)/.test(f))){const s=fs.readFileSync(path.join(root,file),'utf8');fs.writeFileSync(path.join(out,file),await prettier.format(s,{parser:'babel',filepath:file}));count++}console.log(JSON.stringify({formatted_modules:count,output:out}));})();

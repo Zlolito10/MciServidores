@@ -1,0 +1,103 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Profile photos: only the owner can write/delete their own photos.
+    match /profile-photos/{uid}/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated()
+        && request.auth.uid == uid
+        && (
+          request.method == 'delete'
+          || (
+            request.resource.size < 5 * 1024 * 1024
+            && request.resource.contentType.matches('image/.*')
+          )
+        );
+    }
+
+    // Event images: todos los usuarios autenticados pueden subir
+    match /event-images/{eventId}/{fileName} {
+      allow read: if true;
+      allow write: if isAuthenticated()
+        && (
+          request.method == 'delete'
+          || (
+            request.resource.size < 10 * 1024 * 1024
+            && request.resource.contentType.matches('image/.*')
+          )
+        );
+    }
+
+    // Event template images: todos los usuarios autenticados pueden subir
+    match /event-template-images/{templateId}/{fileName} {
+      allow read: if true;
+      allow write: if isAuthenticated()
+        && (
+          request.method == 'delete'
+          || (
+            request.resource.size < 10 * 1024 * 1024
+            && request.resource.contentType.matches('image/.*')
+          )
+        );
+    }
+
+    // Ministry images: authenticated users can upload
+    match /ministry-images/{fileName} {
+      allow read: if true;
+      allow write: if isAuthenticated()
+        && (
+          request.method == 'delete'
+          || (
+            request.resource.size < 10 * 1024 * 1024
+            && request.resource.contentType.matches('image/.*')
+          )
+        );
+    }
+
+    // Event Coover Images (Direct events/ folder)
+    match /events/{fileName} {
+      allow read: if true;
+      allow write: if isAuthenticated()
+        && (
+          request.method == 'delete'
+          || (
+            request.resource.size < 10 * 1024 * 1024
+            && request.resource.contentType.matches('image/.*')
+          )
+        );
+    }
+
+    // Event materials: todos los usuarios autenticados pueden subir
+    match /events/{eventId}/materials/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated()
+        && (
+          request.method == 'delete'
+          || request.resource.size < 25 * 1024 * 1024
+        );
+    }
+
+    // Attendance photos: todos los usuarios autenticados pueden subir
+    match /attendance/{eventId}/{assignmentId}/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated()
+        && (
+          request.method == 'delete'
+          || (
+            request.resource.size < 10 * 1024 * 1024
+            && request.resource.contentType.matches('image/.*')
+          )
+        );
+    }
+
+    // Default: allow reads to authenticated users, deny writes.
+    match /{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+* text=auto eol=lf
+recovered/hosting/** -text
+recovered/readable-assets/** -text
+recovered/backend-snapshots/** -text
+*.png binary
+*.zip binary

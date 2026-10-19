@@ -1,0 +1,335 @@
+rules_version = '2';
+
+// Rules updated 2026-01-14
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function getUserData() {
+      // Intentar leer el usuario. Si falla o no existe, devolver un map vacio.
+      // IMPORTANTE: Asegurarse que el usuario tenga permiso de lectura sobre su propio documento 'users/{uid}'.
+      let doc = get(/databases/$(database)/documents/users/$(request.auth.uid));
+      return doc != null ? doc.data : {};
+    }
+
+    function getRole() {
+      // Simplificar acceso a role para evitar errores de tipo si data es nulo
+      let data = getUserData();
+      return (data != null && 'role' in data) ? data.role : '';
+    }
+    
+    function hasRole(role) {
+      return getRole() == role;
+    }
+    
+    function isMasterAdmin() {
+      return hasRole('master_admin');
+    }
+    
+    function isAdmin() {
+      return hasRole('admin') || isMasterAdmin();
+    }
+    
+    // Check if user is a ministry admin (role starts with ministry_admin_ or ministry_subadmin_)
+    function isMinistryAdmin() {
+      let role = getRole();
+      return role is string && (
+        role == 'ministry_admin'
+        || role == 'ministry_subadmin'
+        || role.matches('ministry_admin_.*')
+        || role.matches('ministry_subadmin_.*')
+      );
+    }
+
+    function getAssignedMinistryIds() {
+      let data = getUserData();
+
+      // Prefer explicit assignedMinistries array (required for ministry-level permissions).
+      return data.keys().hasAny(['assignedMinistries'])
+        ? data.assignedMinistries
+        : [];
+    }
+
+    function canManageAssignmentArea(areaId) {
+      // Firestore Rules no soporta sentencias if/return; usar expresiones booleanas.
+      let role = getRole();
+      return isAdmin()
+        || role == ('ministry_admin_' + areaId)
+        || role == ('ministry_subadmin_' + areaId)
+        || ((role == 'ministry_admin' || role == 'ministry_subadmin')
+          && getAssignedMinistryIds().hasAny([areaId]));
+    }
+    function getUserAreaNames() {
+      let data = getUserData();
+      return data.keys().hasAny(['areas']) ? data.areas : [];
+    }
+
+    function canReadUdlv(ministryId) {
+      return isAdmin()
+        || (ministryId is string && getAssignedMinistryIds().hasAny([ministryId]))
+        || getUserAreaNames().hasAny(['U de la Vida']);
+    }
+
+    function canManageUdlv(ministryId) {
+      return isAdmin()
+        || (ministryId is string && getAssignedMinistryIds().hasAny([ministryId]));
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      // NOTE: keep reads for authenticated users for current UI flows.
+      // If you want to hide emails/profiles from non-admins, we can tighten this
+      // after confirming which pages rely on listing users.
+      allow read: if isAuthenticated();
+
+      // Prevent privilege escalation: users can only create their own profile.
+      // Only master_admin can create profiles for other users.
+      allow create: if isAuthenticated() && (
+        (request.auth.uid == userId
+          && request.resource.data.keys().hasOnly([
+            'uid', 'email', 'name', 'username', 'role', 'photoURL', 'photoThumbURL', 'preferences', 'createdAt', 'updatedAt'
+          ])
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.role == 'user')
+        || isMasterAdmin()
+      );
+
+      // Users can only update a small safe subset of their own profile fields.
+      // Role/permissions/areas/assignedMinistries are admin-managed.
+      allow update: if isAuthenticated() && (
+        (
+          request.auth.uid == userId
+          && request.resource.data.diff(resource.data).changedKeys().hasOnly([
+            'name', 'photoURL', 'photoThumbURL', 'preferences', 'updatedAt'
+          ])
+        )
+        || isMasterAdmin()
+      );
+
+      allow delete: if isMasterAdmin();
+    }
+
+    // User Tokens Collection (for FCM)
+    match /userTokens/{userId} {
+      allow read, write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // U de la Vida - Cursos
+    match /udlv_courses/{courseId} {
+      allow read: if isAuthenticated() && canReadUdlv(resource.data.ministryId);
+      allow create: if isAuthenticated() && canManageUdlv(request.resource.data.ministryId);
+      allow update, delete: if isAuthenticated() && canManageUdlv(resource.data.ministryId);
+    }
+
+    // U de la Vida - Secciones
+    match /udlv_sections/{sectionId} {
+      allow read: if isAuthenticated() && canReadUdlv(resource.data.ministryId);
+      allow create: if isAuthenticated() && canManageUdlv(request.resource.data.ministryId);
+      allow update, delete: if isAuthenticated() && canManageUdlv(resource.data.ministryId);
+    }
+
+    // U de la Vida - Clases
+    match /udlv_classes/{classId} {
+      allow read: if isAuthenticated() && canReadUdlv(resource.data.ministryId);
+      allow create: if isAuthenticated() && canManageUdlv(request.resource.data.ministryId);
+      allow update, delete: if isAuthenticated() && canManageUdlv(resource.data.ministryId);
+    }
+
+    // U de la Vida - Asistencia y notas por clase
+    match /udlv_class_records/{recordId} {
+      allow read: if isAuthenticated() && canReadUdlv(resource.data.ministryId);
+      allow create, update: if isAuthenticated() && canReadUdlv(request.resource.data.ministryId);
+      allow delete: if isAuthenticated() && canManageUdlv(resource.data.ministryId);
+    }
+
+    // Ensenanza de martes - listado semanal de miembros/servidores
+    match /teaching_sessions/{sessionId} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated() && (isAdmin() || isMinistryAdmin());
+    }
+
+    match /teaching_attendance_records/{recordId} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated() && (isAdmin() || isMinistryAdmin());
+    }
+
+    // Comentarios globales (Dashboard)
+    match /comments/{commentId} {
+      allow read: if isAuthenticated();
+
+      allow create: if isAuthenticated()
+        && request.resource.data.keys().hasOnly(['text', 'authorId', 'authorName', 'authorPhotoURL', 'createdAt'])
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 500
+        && request.resource.data.authorName is string
+        && request.resource.data.authorName.size() > 0
+        && request.resource.data.authorName.size() <= 80
+        && (!('authorPhotoURL' in request.resource.data)
+          || (request.resource.data.authorPhotoURL is string
+            && request.resource.data.authorPhotoURL.size() <= 2048))
+        && request.resource.data.createdAt is timestamp;
+
+      allow update: if false;
+
+      // Permitir eliminar solo al autor o a administradores.
+      allow delete: if isAuthenticated()
+        && (resource.data.authorId == request.auth.uid || isAdmin());
+    }
+
+    // Roles Collection
+    match /roles/{roleId} {
+      allow read: if isAuthenticated();
+      allow write: if isMasterAdmin();
+    }
+
+    // Events Collection
+    match /events/{eventId} {
+      allow read: if isAuthenticated();
+      
+      allow create: if isAuthenticated() && (
+        isAdmin()
+        || isMinistryAdmin()
+        || (request.resource.data.keys().hasAny(['createdBy'])
+          && request.resource.data.createdBy == request.auth.uid)
+      );
+      
+      allow update: if isAuthenticated() && (
+        isAdmin()
+        || isMinistryAdmin()
+        || resource.data.createdBy == request.auth.uid
+      );
+      
+      allow delete: if isAuthenticated() && (
+        isAdmin()
+        || isMinistryAdmin()
+        || resource.data.createdBy == request.auth.uid
+      );
+      
+      // Subcollection: Assignments - ministry admins canmanage assignments for their ministry
+      match /assignments/{assignmentId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated() && (isAdmin() || canManageAssignmentArea(request.resource.data.areaId));
+        allow delete: if isAuthenticated() && (isAdmin() || canManageAssignmentArea(resource.data.areaId));
+        allow update: if isAuthenticated() && (
+          isAdmin()
+          || resource.data.userId == request.auth.uid
+          || canManageAssignmentArea(resource.data.areaId)
+        );
+      }
+
+      // Subcollection: Repertoire - only full admins can edit
+      match /repertoire/{songId} {
+        allow read: if isAuthenticated();
+        allow write: if isAdmin();
+      }
+
+      // Subcollection: Materials - only full admins can edit
+      match /materials/{materialId} {
+        allow read: if isAuthenticated();
+        allow write: if isAdmin();
+      }
+
+      // Backups created by replicate/auto-save flows
+      match /replicateBackups/{backupId}/{documentPath=**} {
+        allow read: if isAuthenticated() && isAdmin();
+        allow write: if isAuthenticated() && isAdmin();
+      }
+
+      match /autoBackups/{backupId}/{documentPath=**} {
+        allow read: if isAuthenticated() && isAdmin();
+        allow write: if isAuthenticated() && isAdmin();
+      }
+    }
+
+    match /change_feed/{feedId} {
+      allow read: if isAuthenticated();
+      allow write: if false; 
+    }
+
+    // App Cache (Optimization for frontend)
+    match /app_cache/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only backend updates cache
+    }
+
+    // Pending Assignments Collection (Denormalized)
+    match /pending_assignments/{userId} {
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow read, delete, update: if isAdmin();
+    }
+
+    // Service Areas
+    match /service_areas/{areaId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Event Templates
+    match /event_templates/{templateId} {
+      // Lectura pÃºblica para permitir que los clientes listan plantillas sin depender de auth
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Material Library
+    match /materials_library/{materialId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Collection Group Queries
+    match /{path=**}/assignments/{assignmentId} {
+      allow read: if isAuthenticated();
+    }
+
+    // App Telemetry (para diagnosticar picos de descargas)
+    match /app_telemetry/{docId} {
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow read: if isMasterAdmin();
+      allow update, delete: if isMasterAdmin();
+    }
+
+    // Command queue (backend workers)
+    match /commands/{commandId} {
+      // Lectura solo para admins; escritura permitida a usuarios autenticados para encolar comandos controlados desde el frontend.
+      allow read: if isAuthenticated() && isAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if false;
+    }
+
+    // App Cache (for filters, meta, etc) - Read for everyone, Write for Admins/System
+    match /app_cache/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Meta / sync markers (solo lectura desde clientes)
+    match /meta/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+
+    // System collections (Aggregation docs)
+    match /system/{docId} {
+      // Pending users list (read by admins only)
+      allow read: if isAuthenticated() && (docId == "pending_users" ? isAdmin() : isAdmin()); 
+      allow write: if false; // Only updated by server (Cloud Functions)
+    }
+
+    // Private Chats - Parent document (for metadata like clearedAt)
+    match /private_chats/{userId} {
+      allow read, write: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+    }
+
+    // Private Chats - User can access their own chat, Admins can access all
+    match /private_chats/{userId}/messages/{messageId} {
+      allow read, write: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+    }
+  }
+}

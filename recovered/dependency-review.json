@@ -1,0 +1,97 @@
+{
+  "checkedAt": "2026-10-19",
+  "before": {
+    "info": 0,
+    "low": 1,
+    "moderate": 8,
+    "high": 8,
+    "critical": 2,
+    "total": 19
+  },
+  "after": {
+    "info": 0,
+    "low": 0,
+    "moderate": 8,
+    "high": 0,
+    "critical": 0,
+    "total": 8
+  },
+  "remaining": {
+    "@google-cloud/firestore": {
+      "severity": "moderate",
+      "direct": false,
+      "fixAvailable": {
+        "name": "firebase-admin",
+        "version": "14.5.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@google-cloud/storage": {
+      "severity": "moderate",
+      "direct": true,
+      "fixAvailable": {
+        "name": "@google-cloud/storage",
+        "version": "8.4.0",
+        "isSemVerMajor": true
+      }
+    },
+    "firebase-admin": {
+      "severity": "moderate",
+      "direct": true,
+      "fixAvailable": {
+        "name": "firebase-admin",
+        "version": "14.5.0",
+        "isSemVerMajor": true
+      }
+    },
+    "google-gax": {
+      "severity": "moderate",
+      "direct": false,
+      "fixAvailable": {
+        "name": "firebase-admin",
+        "version": "14.5.0",
+        "isSemVerMajor": true
+      }
+    },
+    "qs": {
+      "severity": "moderate",
+      "direct": false,
+      "fixAvailable": true
+    },
+    "retry-request": {
+      "severity": "moderate",
+      "direct": false,
+      "fixAvailable": {
+        "name": "@google-cloud/storage",
+        "version": "8.4.0",
+        "isSemVerMajor": true
+      }
+    },
+    "teeny-request": {
+      "severity": "moderate",
+      "direct": false,
+      "fixAvailable": {
+        "name": "@google-cloud/storage",
+        "version": "8.4.0",
+        "isSemVerMajor": true
+      }
+    },
+    "uuid": {
+      "severity": "moderate",
+      "direct": false,
+      "fixAvailable": {
+        "name": "@google-cloud/storage",
+        "version": "8.4.0",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "sharp": {
+    "original": "0.33.5",
+    "current": "0.35.5",
+    "imageProcessingTest": "passed"
+  },
+  "sourceSnapshots": "recovered/backend-snapshots",
+  "runtime": "Node.js 22.23.3",
+  "productionDeploymentPerformed": false
+}

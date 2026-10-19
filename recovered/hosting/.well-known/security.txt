@@ -1,0 +1,7 @@
+# security.txt — https://securitytxt.org/
+# IMPORTANTE: ajusta el email/URL de contacto a uno real.
+
+Contact: mailto:security@example.com
+Preferred-Languages: es, en
+Canonical: https://mcimachala-servidor.web.app/.well-known/security.txt
+Expires: 2026-12-31T23:59:59Z

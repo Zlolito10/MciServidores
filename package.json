@@ -1,0 +1,31 @@
+{
+  "name": "mci-servidores-recovered",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Reproducible local restoration of the recovered MCI Machala Hosting frontend.",
+  "engines": {
+    "node": ">=24.5"
+  },
+  "scripts": {
+    "dev": "node scripts/serve.mjs --dist --port 5176 --api-origin http://127.0.0.1:5001/demo-mci-servidores/us-central1/serverApi",
+    "start": "node scripts/serve.mjs --dist --port 5176 --api-origin http://127.0.0.1:5001/demo-mci-servidores/us-central1/serverApi",
+    "build": "npm run build:frontend && npm run build:backend",
+    "verify": "node scripts/verify.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:recovery": "python -m unittest discover -s tests -p test_recover_project.py -v",
+    "analyze:frontend": "node scripts/analysis/analyze.cjs && node scripts/analysis/format.cjs && node scripts/analysis/firestore.cjs && python scripts/analysis/finalize.py && node scripts/analysis/validate.cjs",
+    "build:frontend": "node scripts/build-frontend.mjs",
+    "build:snapshot": "node scripts/build-snapshot.mjs",
+    "build:backend": "npm --prefix functions run build",
+    "snapshot": "node scripts/serve.mjs --source --port 5177",
+    "emulators": "node scripts/start-emulators.mjs",
+    "test:integration": "node --test tests/emulator.integration.mjs",
+    "seed:emulators": "node scripts/seed-emulators.mjs"
+  },
+  "devDependencies": {
+    "acorn": "8.15.0",
+    "esbuild": "0.25.11",
+    "prettier": "3.8.0"
+  }
+}

@@ -1,0 +1,6861 @@
+{
+  "schema_version": 1,
+  "scope": "Static analysis of publicly deployed application JavaScript only. No private data accessed and application code not executed.",
+  "status_labels": {
+    "confirmed": "Literal or AST structure present in public bundle; backend behavior is not validated.",
+    "inferred": "Frontend intent suggests this behavior; backend implementation not recovered.",
+    "unknown": "Not determinable from available public bundle."
+  },
+  "modules": [
+    {
+      "file": "App-BPrQ3EPG.js",
+      "bytes": 73692,
+      "imports": [
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": [
+            {
+              "local": "S",
+              "imported": "_"
+            }
+          ]
+        },
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "Ve",
+              "imported": "O"
+            },
+            {
+              "local": "o",
+              "imported": "r"
+            },
+            {
+              "local": "Be",
+              "imported": "u"
+            },
+            {
+              "local": "We",
+              "imported": "c"
+            },
+            {
+              "local": "mt",
+              "imported": "L"
+            },
+            {
+              "local": "re",
+              "imported": "R"
+            },
+            {
+              "local": "je",
+              "imported": "N"
+            },
+            {
+              "local": "Dt",
+              "imported": "d"
+            },
+            {
+              "local": "Ot",
+              "imported": "B"
+            },
+            {
+              "local": "Ut",
+              "imported": "e"
+            },
+            {
+              "local": "M",
+              "imported": "f"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "Ft",
+              "imported": "_"
+            },
+            {
+              "local": "zt",
+              "imported": "C"
+            },
+            {
+              "local": "Je",
+              "imported": "r"
+            },
+            {
+              "local": "$t",
+              "imported": "a"
+            },
+            {
+              "local": "Vt",
+              "imported": "g"
+            },
+            {
+              "local": "Bt",
+              "imported": "b"
+            },
+            {
+              "local": "ht",
+              "imported": "c"
+            },
+            {
+              "local": "Wt",
+              "imported": "d"
+            },
+            {
+              "local": "Ht",
+              "imported": "i"
+            },
+            {
+              "local": "Gt",
+              "imported": "p"
+            },
+            {
+              "local": "qt",
+              "imported": "u"
+            },
+            {
+              "local": "Jt",
+              "imported": "e"
+            },
+            {
+              "local": "Kt",
+              "imported": "f"
+            },
+            {
+              "local": "Zt",
+              "imported": "h"
+            },
+            {
+              "local": "Yt",
+              "imported": "G"
+            },
+            {
+              "local": "Xt",
+              "imported": "j"
+            },
+            {
+              "local": "Qt",
+              "imported": "k"
+            },
+            {
+              "local": "es",
+              "imported": "l"
+            },
+            {
+              "local": "ts",
+              "imported": "m"
+            },
+            {
+              "local": "ss",
+              "imported": "n"
+            },
+            {
+              "local": "rs",
+              "imported": "o"
+            },
+            {
+              "local": "ns",
+              "imported": "q"
+            },
+            {
+              "local": "as",
+              "imported": "s"
+            },
+            {
+              "local": "os",
+              "imported": "t"
+            },
+            {
+              "local": "Ee",
+              "imported": "v"
+            },
+            {
+              "local": "ft",
+              "imported": "w"
+            },
+            {
+              "local": "is",
+              "imported": "x"
+            },
+            {
+              "local": "ls",
+              "imported": "y"
+            },
+            {
+              "local": "cs",
+              "imported": "z"
+            },
+            {
+              "local": "ne",
+              "imported": "A"
+            },
+            {
+              "local": "oe",
+              "imported": "B"
+            },
+            {
+              "local": "ds",
+              "imported": "D"
+            },
+            {
+              "local": "us",
+              "imported": "E"
+            },
+            {
+              "local": "ms",
+              "imported": "F"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "ue",
+              "imported": "L"
+            },
+            {
+              "local": "Oe",
+              "imported": "U"
+            },
+            {
+              "local": "gt",
+              "imported": "a"
+            },
+            {
+              "local": "pt",
+              "imported": "E"
+            },
+            {
+              "local": "xt",
+              "imported": "b"
+            },
+            {
+              "local": "hs",
+              "imported": "C"
+            },
+            {
+              "local": "fs",
+              "imported": "c"
+            },
+            {
+              "local": "gs",
+              "imported": "H"
+            },
+            {
+              "local": "ps",
+              "imported": "d"
+            },
+            {
+              "local": "xs",
+              "imported": "e"
+            },
+            {
+              "local": "bs",
+              "imported": "f"
+            },
+            {
+              "local": "ys",
+              "imported": "g"
+            },
+            {
+              "local": "vs",
+              "imported": "h"
+            },
+            {
+              "local": "ws",
+              "imported": "i"
+            },
+            {
+              "local": "js",
+              "imported": "G"
+            },
+            {
+              "local": "_s",
+              "imported": "S"
+            },
+            {
+              "local": "Ke",
+              "imported": "j"
+            },
+            {
+              "local": "Ze",
+              "imported": "k"
+            },
+            {
+              "local": "ks",
+              "imported": "M"
+            },
+            {
+              "local": "Ns",
+              "imported": "X"
+            },
+            {
+              "local": "Es",
+              "imported": "l"
+            },
+            {
+              "local": "As",
+              "imported": "T"
+            },
+            {
+              "local": "Cs",
+              "imported": "m"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "A",
+          "local": "en"
+        },
+        {
+          "exported": "B",
+          "local": "rr"
+        },
+        {
+          "exported": "M",
+          "local": "$e"
+        },
+        {
+          "exported": "O",
+          "local": "jr"
+        },
+        {
+          "exported": "a",
+          "local": "fr"
+        },
+        {
+          "exported": "b",
+          "local": "Qr"
+        },
+        {
+          "exported": "c",
+          "local": "hr"
+        },
+        {
+          "exported": "d",
+          "local": "D"
+        },
+        {
+          "exported": "e",
+          "local": "X"
+        },
+        {
+          "exported": "f",
+          "local": "O"
+        },
+        {
+          "exported": "g",
+          "local": "ur"
+        },
+        {
+          "exported": "h",
+          "local": "Ie"
+        },
+        {
+          "exported": "i",
+          "local": "K"
+        },
+        {
+          "exported": "j",
+          "local": "Yr"
+        },
+        {
+          "exported": "k",
+          "local": "Zr"
+        },
+        {
+          "exported": "l",
+          "local": "Xr"
+        },
+        {
+          "exported": "m",
+          "local": "Rt"
+        },
+        {
+          "exported": "n",
+          "local": "ce"
+        },
+        {
+          "exported": "o",
+          "local": "nr"
+        },
+        {
+          "exported": "p",
+          "local": "ut"
+        },
+        {
+          "exported": "q",
+          "local": "at"
+        },
+        {
+          "exported": "r",
+          "local": "It"
+        },
+        {
+          "exported": "s",
+          "local": "Kr"
+        },
+        {
+          "exported": "t",
+          "local": "xr"
+        },
+        {
+          "exported": "u",
+          "local": "le"
+        },
+        {
+          "exported": "v",
+          "local": "Le"
+        }
+      ],
+      "api_call_count": 20
+    },
+    {
+      "file": "AppHistory-oOipttKZ.js",
+      "bytes": 39587,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "Xe",
+              "imported": "u"
+            },
+            {
+              "local": "d",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "et",
+              "imported": "u"
+            },
+            {
+              "local": "tt",
+              "imported": "i"
+            },
+            {
+              "local": "S",
+              "imported": "f"
+            },
+            {
+              "local": "st",
+              "imported": "B"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "Ce",
+              "imported": "an"
+            },
+            {
+              "local": "ne",
+              "imported": "H"
+            },
+            {
+              "local": "rt",
+              "imported": "ae"
+            },
+            {
+              "local": "F",
+              "imported": "F"
+            },
+            {
+              "local": "_",
+              "imported": "x"
+            },
+            {
+              "local": "le",
+              "imported": "ao"
+            },
+            {
+              "local": "at",
+              "imported": "w"
+            },
+            {
+              "local": "nt",
+              "imported": "s"
+            },
+            {
+              "local": "dt",
+              "imported": "f"
+            },
+            {
+              "local": "Ee",
+              "imported": "D"
+            },
+            {
+              "local": "lt",
+              "imported": "ap"
+            },
+            {
+              "local": "it",
+              "imported": "d"
+            },
+            {
+              "local": "ot",
+              "imported": "U"
+            },
+            {
+              "local": "ct",
+              "imported": "aq"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "AppHistory",
+          "local": "wt"
+        }
+      ],
+      "api_call_count": 4
+    },
+    {
+      "file": "Attendance-BoRlsPo1.js",
+      "bytes": 134459,
+      "imports": [
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": [
+            {
+              "local": "Fa",
+              "imported": "_"
+            }
+          ]
+        },
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "t",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "o",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "gt",
+              "imported": "H"
+            },
+            {
+              "local": "we",
+              "imported": "I"
+            },
+            {
+              "local": "Pa",
+              "imported": "L"
+            },
+            {
+              "local": "ta",
+              "imported": "J"
+            },
+            {
+              "local": "de",
+              "imported": "E"
+            },
+            {
+              "local": "Xe",
+              "imported": "A"
+            },
+            {
+              "local": "ie",
+              "imported": "K"
+            },
+            {
+              "local": "ye",
+              "imported": "w"
+            },
+            {
+              "local": "Mt",
+              "imported": "S"
+            },
+            {
+              "local": "Sn",
+              "imported": "M"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "Tn",
+              "imported": "u"
+            },
+            {
+              "local": "Dn",
+              "imported": "b"
+            },
+            {
+              "local": "In",
+              "imported": "a"
+            },
+            {
+              "local": "Me",
+              "imported": "i"
+            },
+            {
+              "local": "At",
+              "imported": "f"
+            },
+            {
+              "local": "Y",
+              "imported": "e"
+            },
+            {
+              "local": "Ua",
+              "imported": "c"
+            },
+            {
+              "local": "Ht",
+              "imported": "O"
+            },
+            {
+              "local": "xt",
+              "imported": "M"
+            },
+            {
+              "local": "Cn",
+              "imported": "p"
+            }
+          ]
+        },
+        {
+          "source": "./roleUtils-BDLO6O1S.js",
+          "bindings": [
+            {
+              "local": "xs",
+              "imported": "f"
+            }
+          ]
+        },
+        {
+          "source": "./SelectPicker-D1mnbmt-.js",
+          "bindings": [
+            {
+              "local": "Ce",
+              "imported": "S"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "it",
+              "imported": "d"
+            },
+            {
+              "local": "Ja",
+              "imported": "O"
+            },
+            {
+              "local": "Qa",
+              "imported": "Q"
+            },
+            {
+              "local": "En",
+              "imported": "Z"
+            },
+            {
+              "local": "Wt",
+              "imported": "x"
+            },
+            {
+              "local": "_a",
+              "imported": "f"
+            },
+            {
+              "local": "sa",
+              "imported": "w"
+            },
+            {
+              "local": "Ha",
+              "imported": "H"
+            },
+            {
+              "local": "fs",
+              "imported": "y"
+            },
+            {
+              "local": "Wa",
+              "imported": "r"
+            },
+            {
+              "local": "Ya",
+              "imported": "af"
+            },
+            {
+              "local": "Ot",
+              "imported": "C"
+            },
+            {
+              "local": "Yt",
+              "imported": "s"
+            },
+            {
+              "local": "Pe",
+              "imported": "I"
+            },
+            {
+              "local": "nt",
+              "imported": "n"
+            },
+            {
+              "local": "$t",
+              "imported": "X"
+            },
+            {
+              "local": "bs",
+              "imported": "h"
+            },
+            {
+              "local": "Bt",
+              "imported": "$"
+            },
+            {
+              "local": "Vt",
+              "imported": "L"
+            },
+            {
+              "local": "ps",
+              "imported": "T"
+            },
+            {
+              "local": "Ba",
+              "imported": "t"
+            },
+            {
+              "local": "Va",
+              "imported": "v"
+            },
+            {
+              "local": "Mn",
+              "imported": "a0"
+            }
+          ]
+        },
+        {
+          "source": "./LoadingButton-DoDnirDC.js",
+          "bindings": [
+            {
+              "local": "vs",
+              "imported": "L"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "Attendance",
+          "local": "Kn"
+        },
+        {
+          "exported": "default",
+          "local": "Kn"
+        }
+      ],
+      "api_call_count": 6
+    },
+    {
+      "file": "CameraModal-BwvRT9Xn.js",
+      "bytes": 649384,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "ne",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "Ce",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "Jc",
+              "imported": "M"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "Qc",
+              "imported": "o"
+            },
+            {
+              "local": "Ri",
+              "imported": "ae"
+            },
+            {
+              "local": "Io",
+              "imported": "l"
+            },
+            {
+              "local": "Zc",
+              "imported": "as"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "CameraModal",
+          "local": "A0"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "Dashboard-DN8eeJDA.js",
+      "bytes": 59455,
+      "imports": [
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": [
+            {
+              "local": "ct",
+              "imported": "_"
+            }
+          ]
+        },
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "Ot",
+              "imported": "u"
+            },
+            {
+              "local": "h",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./roleUtils-BDLO6O1S.js",
+          "bindings": [
+            {
+              "local": "Rt",
+              "imported": "f"
+            }
+          ]
+        },
+        {
+          "source": "./LoadingSpinner-DQ5LcqWB.js",
+          "bindings": [
+            {
+              "local": "At",
+              "imported": "P"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "mt",
+              "imported": "M"
+            },
+            {
+              "local": "Pt",
+              "imported": "u"
+            },
+            {
+              "local": "Mt",
+              "imported": "a"
+            },
+            {
+              "local": "ut",
+              "imported": "b"
+            },
+            {
+              "local": "_t",
+              "imported": "c"
+            },
+            {
+              "local": "et",
+              "imported": "d"
+            },
+            {
+              "local": "Y",
+              "imported": "e"
+            },
+            {
+              "local": "de",
+              "imported": "i"
+            },
+            {
+              "local": "xt",
+              "imported": "O"
+            },
+            {
+              "local": "ie",
+              "imported": "f"
+            },
+            {
+              "local": "Ut",
+              "imported": "g"
+            },
+            {
+              "local": "zt",
+              "imported": "h"
+            },
+            {
+              "local": "$t",
+              "imported": "j"
+            },
+            {
+              "local": "Ft",
+              "imported": "k"
+            },
+            {
+              "local": "Bt",
+              "imported": "s"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "qe",
+              "imported": "n"
+            },
+            {
+              "local": "Ht",
+              "imported": "o"
+            },
+            {
+              "local": "qt",
+              "imported": "p"
+            },
+            {
+              "local": "Gt",
+              "imported": "q"
+            },
+            {
+              "local": "Wt",
+              "imported": "r"
+            },
+            {
+              "local": "We",
+              "imported": "A"
+            },
+            {
+              "local": "Vt",
+              "imported": "P"
+            },
+            {
+              "local": "Zt",
+              "imported": "g"
+            },
+            {
+              "local": "Kt",
+              "imported": "d"
+            },
+            {
+              "local": "ge",
+              "imported": "s"
+            },
+            {
+              "local": "me",
+              "imported": "t"
+            },
+            {
+              "local": "we",
+              "imported": "u"
+            },
+            {
+              "local": "ye",
+              "imported": "k"
+            },
+            {
+              "local": "tt",
+              "imported": "v"
+            }
+          ]
+        },
+        {
+          "source": "./notifications-BEtI2pcG.js",
+          "bindings": [
+            {
+              "local": "Jt",
+              "imported": "o"
+            }
+          ]
+        },
+        {
+          "source": "./optimistic-Pk6VB-2G.js",
+          "bindings": [
+            {
+              "local": "Qt",
+              "imported": "o"
+            }
+          ]
+        },
+        {
+          "source": "./EventsGrid-BNb5ngU2.js",
+          "bindings": [
+            {
+              "local": "ht",
+              "imported": "E"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "Be",
+              "imported": "H"
+            },
+            {
+              "local": "Ae",
+              "imported": "I"
+            },
+            {
+              "local": "st",
+              "imported": "J"
+            },
+            {
+              "local": "je",
+              "imported": "K"
+            },
+            {
+              "local": "fe",
+              "imported": "E"
+            },
+            {
+              "local": "Xt",
+              "imported": "L"
+            },
+            {
+              "local": "at",
+              "imported": "T"
+            },
+            {
+              "local": "Yt",
+              "imported": "v"
+            },
+            {
+              "local": "Ge",
+              "imported": "A"
+            },
+            {
+              "local": "es",
+              "imported": "M"
+            },
+            {
+              "local": "ts",
+              "imported": "N"
+            },
+            {
+              "local": "ss",
+              "imported": "O"
+            },
+            {
+              "local": "as",
+              "imported": "P"
+            },
+            {
+              "local": "rs",
+              "imported": "Q"
+            },
+            {
+              "local": "rt",
+              "imported": "w"
+            },
+            {
+              "local": "ns",
+              "imported": "R"
+            },
+            {
+              "local": "nt",
+              "imported": "B"
+            }
+          ]
+        },
+        {
+          "source": "./LoadingButton-DoDnirDC.js",
+          "bindings": [
+            {
+              "local": "os",
+              "imported": "L"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "Dashboard",
+          "local": "Rs"
+        }
+      ],
+      "api_call_count": 6
+    },
+    {
+      "file": "EventDetails-CpDlqXqO.js",
+      "bytes": 101854,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "Ds",
+              "imported": "g"
+            },
+            {
+              "local": "zs",
+              "imported": "u"
+            },
+            {
+              "local": "c",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "Os",
+              "imported": "u"
+            },
+            {
+              "local": "Ls",
+              "imported": "a"
+            },
+            {
+              "local": "$s",
+              "imported": "b"
+            },
+            {
+              "local": "Ps",
+              "imported": "c"
+            },
+            {
+              "local": "Fs",
+              "imported": "l"
+            },
+            {
+              "local": "v",
+              "imported": "i"
+            },
+            {
+              "local": "h",
+              "imported": "e"
+            },
+            {
+              "local": "nt",
+              "imported": "O"
+            },
+            {
+              "local": "Us",
+              "imported": "g"
+            },
+            {
+              "local": "W",
+              "imported": "M"
+            },
+            {
+              "local": "_s",
+              "imported": "o"
+            },
+            {
+              "local": "ot",
+              "imported": "s"
+            },
+            {
+              "local": "Bs",
+              "imported": "p"
+            },
+            {
+              "local": "N",
+              "imported": "f"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "A",
+              "imported": "A"
+            },
+            {
+              "local": "j",
+              "imported": "E"
+            },
+            {
+              "local": "lt",
+              "imported": "H"
+            },
+            {
+              "local": "Ft",
+              "imported": "Q"
+            },
+            {
+              "local": "dt",
+              "imported": "O"
+            },
+            {
+              "local": "Oe",
+              "imported": "S"
+            },
+            {
+              "local": "ct",
+              "imported": "R"
+            },
+            {
+              "local": "M",
+              "imported": "w"
+            },
+            {
+              "local": "de",
+              "imported": "I"
+            },
+            {
+              "local": "ye",
+              "imported": "K"
+            },
+            {
+              "local": "ce",
+              "imported": "J"
+            },
+            {
+              "local": "mt",
+              "imported": "M"
+            },
+            {
+              "local": "Ws",
+              "imported": "B"
+            },
+            {
+              "local": "xt",
+              "imported": "L"
+            },
+            {
+              "local": "me",
+              "imported": "N"
+            },
+            {
+              "local": "Gs",
+              "imported": "P"
+            },
+            {
+              "local": "Vs",
+              "imported": "V"
+            },
+            {
+              "local": "qs",
+              "imported": "D"
+            },
+            {
+              "local": "Hs",
+              "imported": "U"
+            }
+          ]
+        },
+        {
+          "source": "./ManageMinistriesModal-BO1rzanM.js",
+          "bindings": [
+            {
+              "local": "Ks",
+              "imported": "M"
+            }
+          ]
+        },
+        {
+          "source": "./SelectPicker-D1mnbmt-.js",
+          "bindings": [
+            {
+              "local": "Xs",
+              "imported": "S"
+            }
+          ]
+        },
+        {
+          "source": "./LoadingSpinner-DQ5LcqWB.js",
+          "bindings": [
+            {
+              "local": "Ys",
+              "imported": "P"
+            }
+          ]
+        },
+        {
+          "source": "./roleUtils-BDLO6O1S.js",
+          "bindings": [
+            {
+              "local": "Ut",
+              "imported": "N"
+            },
+            {
+              "local": "Or",
+              "imported": "i"
+            },
+            {
+              "local": "Lr",
+              "imported": "f"
+            }
+          ]
+        },
+        {
+          "source": "./optimistic-Pk6VB-2G.js",
+          "bindings": [
+            {
+              "local": "Js",
+              "imported": "o"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "Le",
+              "imported": "I"
+            },
+            {
+              "local": "Zs",
+              "imported": "O"
+            },
+            {
+              "local": "Qs",
+              "imported": "W"
+            },
+            {
+              "local": "ut",
+              "imported": "f"
+            },
+            {
+              "local": "ea",
+              "imported": "K"
+            },
+            {
+              "local": "_t",
+              "imported": "m"
+            },
+            {
+              "local": "$r",
+              "imported": "s"
+            },
+            {
+              "local": "Bt",
+              "imported": "l"
+            },
+            {
+              "local": "C",
+              "imported": "L"
+            },
+            {
+              "local": "ta",
+              "imported": "d"
+            },
+            {
+              "local": "$e",
+              "imported": "n"
+            },
+            {
+              "local": "ve",
+              "imported": "Y"
+            },
+            {
+              "local": "xe",
+              "imported": "Z"
+            },
+            {
+              "local": "gt",
+              "imported": "t"
+            },
+            {
+              "local": "ke",
+              "imported": "_"
+            },
+            {
+              "local": "J",
+              "imported": "P"
+            },
+            {
+              "local": "G",
+              "imported": "r"
+            },
+            {
+              "local": "Pr",
+              "imported": "D"
+            },
+            {
+              "local": "ht",
+              "imported": "$"
+            },
+            {
+              "local": "je",
+              "imported": "a0"
+            },
+            {
+              "local": "ra",
+              "imported": "F"
+            },
+            {
+              "local": "Ur",
+              "imported": "x"
+            },
+            {
+              "local": "Fr",
+              "imported": "y"
+            },
+            {
+              "local": "Wt",
+              "imported": "a1"
+            },
+            {
+              "local": "sa",
+              "imported": "a2"
+            },
+            {
+              "local": "aa",
+              "imported": "a3"
+            },
+            {
+              "local": "ia",
+              "imported": "T"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "EventDetails",
+          "local": "ba"
+        }
+      ],
+      "api_call_count": 24
+    },
+    {
+      "file": "Events-CIOfy-8U.js",
+      "bytes": 51669,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "t",
+              "imported": "r"
+            },
+            {
+              "local": "le",
+              "imported": "d"
+            },
+            {
+              "local": "We",
+              "imported": "u"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "me",
+              "imported": "I"
+            },
+            {
+              "local": "Q",
+              "imported": "E"
+            },
+            {
+              "local": "ue",
+              "imported": "J"
+            },
+            {
+              "local": "Ue",
+              "imported": "w"
+            },
+            {
+              "local": "Pe",
+              "imported": "M"
+            },
+            {
+              "local": "X",
+              "imported": "A"
+            },
+            {
+              "local": "Ie",
+              "imported": "O"
+            },
+            {
+              "local": "Ae",
+              "imported": "P"
+            },
+            {
+              "local": "$e",
+              "imported": "Q"
+            },
+            {
+              "local": "de",
+              "imported": "D"
+            },
+            {
+              "local": "Qe",
+              "imported": "B"
+            },
+            {
+              "local": "Ke",
+              "imported": "S"
+            },
+            {
+              "local": "Xe",
+              "imported": "N"
+            },
+            {
+              "local": "Ze",
+              "imported": "L"
+            },
+            {
+              "local": "we",
+              "imported": "H"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "xe",
+              "imported": "u"
+            },
+            {
+              "local": "ge",
+              "imported": "b"
+            },
+            {
+              "local": "_",
+              "imported": "e"
+            },
+            {
+              "local": "Re",
+              "imported": "s"
+            },
+            {
+              "local": "Oe",
+              "imported": "a"
+            },
+            {
+              "local": "ae",
+              "imported": "i"
+            },
+            {
+              "local": "Y",
+              "imported": "f"
+            },
+            {
+              "local": "ke",
+              "imported": "n"
+            },
+            {
+              "local": "et",
+              "imported": "l"
+            },
+            {
+              "local": "tt",
+              "imported": "m"
+            },
+            {
+              "local": "st",
+              "imported": "M"
+            }
+          ]
+        },
+        {
+          "source": "./EventsGrid-BNb5ngU2.js",
+          "bindings": [
+            {
+              "local": "at",
+              "imported": "E"
+            }
+          ]
+        },
+        {
+          "source": "./SelectPicker-D1mnbmt-.js",
+          "bindings": [
+            {
+              "local": "J",
+              "imported": "S"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "V",
+              "imported": "X"
+            },
+            {
+              "local": "Le",
+              "imported": "w"
+            },
+            {
+              "local": "rt",
+              "imported": "C"
+            },
+            {
+              "local": "G",
+              "imported": "L"
+            },
+            {
+              "local": "lt",
+              "imported": "z"
+            },
+            {
+              "local": "Se",
+              "imported": "B"
+            },
+            {
+              "local": "it",
+              "imported": "D"
+            },
+            {
+              "local": "nt",
+              "imported": "s"
+            },
+            {
+              "local": "Ee",
+              "imported": "F"
+            },
+            {
+              "local": "Ce",
+              "imported": "x"
+            },
+            {
+              "local": "pe",
+              "imported": "P"
+            },
+            {
+              "local": "Z",
+              "imported": "I"
+            },
+            {
+              "local": "ce",
+              "imported": "r"
+            },
+            {
+              "local": "ot",
+              "imported": "J"
+            },
+            {
+              "local": "dt",
+              "imported": "n"
+            },
+            {
+              "local": "F",
+              "imported": "d"
+            },
+            {
+              "local": "re",
+              "imported": "f"
+            },
+            {
+              "local": "he",
+              "imported": "K"
+            },
+            {
+              "local": "Fe",
+              "imported": "N"
+            },
+            {
+              "local": "ct",
+              "imported": "O"
+            },
+            {
+              "local": "mt",
+              "imported": "Q"
+            },
+            {
+              "local": "ut",
+              "imported": "R"
+            },
+            {
+              "local": "xt",
+              "imported": "j"
+            },
+            {
+              "local": "gt",
+              "imported": "V"
+            }
+          ]
+        },
+        {
+          "source": "./ManageMinistriesModal-BO1rzanM.js",
+          "bindings": [
+            {
+              "local": "pt",
+              "imported": "M"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "Events",
+          "local": "Ut"
+        }
+      ],
+      "api_call_count": 6
+    },
+    {
+      "file": "EventsGrid-BNb5ngU2.js",
+      "bytes": 10822,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "b",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "w",
+              "imported": "O"
+            },
+            {
+              "local": "S",
+              "imported": "s"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "U",
+              "imported": "O"
+            },
+            {
+              "local": "M",
+              "imported": "U"
+            },
+            {
+              "local": "I",
+              "imported": "Q"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "T",
+              "imported": "d"
+            },
+            {
+              "local": "B",
+              "imported": "s"
+            },
+            {
+              "local": "E",
+              "imported": "n"
+            },
+            {
+              "local": "V",
+              "imported": "y"
+            },
+            {
+              "local": "W",
+              "imported": "r"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "E",
+          "local": "H"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "index-BU_ZgoWo.js",
+      "bytes": 187015,
+      "imports": [
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": [
+            {
+              "local": "xs",
+              "imported": "_"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "Ls",
+              "imported": "a"
+            },
+            {
+              "local": "Ks",
+              "imported": "b"
+            },
+            {
+              "local": "Js",
+              "imported": "r"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "j",
+          "local": "mm"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "LoadingButton-DoDnirDC.js",
+      "bytes": 558,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "L",
+          "local": "d"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "LoadingSpinner-DQ5LcqWB.js",
+      "bytes": 552,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "P",
+          "local": "a"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "ManageMinistriesModal-BO1rzanM.js",
+      "bytes": 4239,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "g",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "p",
+              "imported": "M"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "h",
+              "imported": "f"
+            },
+            {
+              "local": "f",
+              "imported": "C"
+            },
+            {
+              "local": "y",
+              "imported": "L"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "M",
+          "local": "C"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "notifications-BEtI2pcG.js",
+      "bytes": 23940,
+      "imports": [
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "T",
+              "imported": "r"
+            },
+            {
+              "local": "k",
+              "imported": "_"
+            },
+            {
+              "local": "I",
+              "imported": "C"
+            },
+            {
+              "local": "D",
+              "imported": "b"
+            },
+            {
+              "local": "ee",
+              "imported": "a0"
+            },
+            {
+              "local": "R",
+              "imported": "a1"
+            },
+            {
+              "local": "De",
+              "imported": "a2"
+            },
+            {
+              "local": "Re",
+              "imported": "g"
+            },
+            {
+              "local": "F",
+              "imported": "c"
+            },
+            {
+              "local": "Fe",
+              "imported": "a3"
+            },
+            {
+              "local": "Ke",
+              "imported": "a4"
+            },
+            {
+              "local": "Le",
+              "imported": "a5"
+            },
+            {
+              "local": "E",
+              "imported": "a6"
+            },
+            {
+              "local": "te",
+              "imported": "A"
+            },
+            {
+              "local": "je",
+              "imported": "S"
+            },
+            {
+              "local": "qe",
+              "imported": "a7"
+            },
+            {
+              "local": "$e",
+              "imported": "B"
+            },
+            {
+              "local": "We",
+              "imported": "a8"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "xe",
+              "imported": "v"
+            },
+            {
+              "local": "ne",
+              "imported": "i"
+            },
+            {
+              "local": "oe",
+              "imported": "f"
+            },
+            {
+              "local": "ie",
+              "imported": "e"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "a",
+          "local": "bn"
+        },
+        {
+          "exported": "b",
+          "local": "Mn"
+        },
+        {
+          "exported": "c",
+          "local": "An"
+        },
+        {
+          "exported": "d",
+          "local": "Dn"
+        },
+        {
+          "exported": "g",
+          "local": "Cn"
+        },
+        {
+          "exported": "i",
+          "local": "V"
+        },
+        {
+          "exported": "o",
+          "local": "On"
+        },
+        {
+          "exported": "r",
+          "local": "Pn"
+        },
+        {
+          "exported": "s",
+          "local": "En"
+        }
+      ],
+      "api_call_count": 2
+    },
+    {
+      "file": "NotificationsAutoRegister-Dn_C-rjK.js",
+      "bytes": 342,
+      "imports": [
+        {
+          "source": "./useNotifications-fJ3DWoi9.js",
+          "bindings": [
+            {
+              "local": "t",
+              "imported": "u"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": []
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": []
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        },
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": []
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": []
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": []
+        },
+        {
+          "source": "./notifications-BEtI2pcG.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "NotificationsAutoRegister",
+          "local": "u"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "optimistic-Pk6VB-2G.js",
+      "bytes": 10424,
+      "imports": [],
+      "exports": [
+        {
+          "exported": "o",
+          "local": "N"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "PendingAssignment-BisqKKqT.js",
+      "bytes": 5008,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "f",
+              "imported": "u"
+            },
+            {
+              "local": "i",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "b",
+              "imported": "u"
+            },
+            {
+              "local": "p",
+              "imported": "O"
+            },
+            {
+              "local": "j",
+              "imported": "g"
+            },
+            {
+              "local": "v",
+              "imported": "e"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "w",
+              "imported": "N"
+            },
+            {
+              "local": "y",
+              "imported": "E"
+            },
+            {
+              "local": "N",
+              "imported": "D"
+            }
+          ]
+        },
+        {
+          "source": "./LoadingButton-DoDnirDC.js",
+          "bindings": [
+            {
+              "local": "k",
+              "imported": "L"
+            }
+          ]
+        },
+        {
+          "source": "./useOptimizedChat-D_A1-F_L.js",
+          "bindings": [
+            {
+              "local": "A",
+              "imported": "u"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "E",
+              "imported": "ap"
+            },
+            {
+              "local": "M",
+              "imported": "A"
+            },
+            {
+              "local": "D",
+              "imported": "k"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "PendingAssignment",
+          "local": "U"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "PendingRequests-ofGtBucD.js",
+      "bytes": 8232,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "r",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "q",
+              "imported": "u"
+            },
+            {
+              "local": "G",
+              "imported": "b"
+            },
+            {
+              "local": "F",
+              "imported": "a"
+            },
+            {
+              "local": "o",
+              "imported": "e"
+            },
+            {
+              "local": "J",
+              "imported": "O"
+            },
+            {
+              "local": "K",
+              "imported": "g"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "c",
+              "imported": "A"
+            },
+            {
+              "local": "U",
+              "imported": "H"
+            },
+            {
+              "local": "Q",
+              "imported": "B"
+            },
+            {
+              "local": "C",
+              "imported": "D"
+            },
+            {
+              "local": "V",
+              "imported": "N"
+            },
+            {
+              "local": "W",
+              "imported": "E"
+            },
+            {
+              "local": "X",
+              "imported": "S"
+            },
+            {
+              "local": "Y",
+              "imported": "M"
+            }
+          ]
+        },
+        {
+          "source": "./LoadingButton-DoDnirDC.js",
+          "bindings": [
+            {
+              "local": "Z",
+              "imported": "L"
+            }
+          ]
+        },
+        {
+          "source": "./ManageMinistriesModal-BO1rzanM.js",
+          "bindings": [
+            {
+              "local": "ee",
+              "imported": "M"
+            }
+          ]
+        },
+        {
+          "source": "./useOptimizedChat-D_A1-F_L.js",
+          "bindings": [
+            {
+              "local": "se",
+              "imported": "u"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "te",
+              "imported": "w"
+            },
+            {
+              "local": "re",
+              "imported": "t"
+            },
+            {
+              "local": "ae",
+              "imported": "ar"
+            },
+            {
+              "local": "le",
+              "imported": "r"
+            },
+            {
+              "local": "ne",
+              "imported": "s"
+            },
+            {
+              "local": "ie",
+              "imported": "z"
+            },
+            {
+              "local": "oe",
+              "imported": "f"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "PendingRequests",
+          "local": "ye"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "Roles-23Dg9NXW.js",
+      "bytes": 20579,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "c",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "W",
+              "imported": "w"
+            },
+            {
+              "local": "I",
+              "imported": "E"
+            },
+            {
+              "local": "O",
+              "imported": "v"
+            },
+            {
+              "local": "l",
+              "imported": "A"
+            },
+            {
+              "local": "D",
+              "imported": "B"
+            },
+            {
+              "local": "ie",
+              "imported": "S"
+            },
+            {
+              "local": "oe",
+              "imported": "N"
+            },
+            {
+              "local": "w",
+              "imported": "M"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "ne",
+              "imported": "b"
+            },
+            {
+              "local": "de",
+              "imported": "a"
+            },
+            {
+              "local": "le",
+              "imported": "c"
+            },
+            {
+              "local": "i",
+              "imported": "f"
+            },
+            {
+              "local": "d",
+              "imported": "i"
+            },
+            {
+              "local": "o",
+              "imported": "e"
+            },
+            {
+              "local": "G",
+              "imported": "M"
+            }
+          ]
+        },
+        {
+          "source": "./LoadingSpinner-DQ5LcqWB.js",
+          "bindings": [
+            {
+              "local": "me",
+              "imported": "P"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "A",
+              "imported": "S"
+            },
+            {
+              "local": "$",
+              "imported": "b"
+            },
+            {
+              "local": "_",
+              "imported": "f"
+            },
+            {
+              "local": "ce",
+              "imported": "a"
+            },
+            {
+              "local": "V",
+              "imported": "d"
+            },
+            {
+              "local": "L",
+              "imported": "e"
+            },
+            {
+              "local": "F",
+              "imported": "a5"
+            },
+            {
+              "local": "ge",
+              "imported": "y"
+            },
+            {
+              "local": "q",
+              "imported": "r"
+            },
+            {
+              "local": "be",
+              "imported": "C"
+            },
+            {
+              "local": "H",
+              "imported": "L"
+            },
+            {
+              "local": "J",
+              "imported": "T"
+            },
+            {
+              "local": "xe",
+              "imported": "U"
+            },
+            {
+              "local": "pe",
+              "imported": "a6"
+            },
+            {
+              "local": "ue",
+              "imported": "a7"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "Roles",
+          "local": "Ne"
+        }
+      ],
+      "api_call_count": 14
+    },
+    {
+      "file": "roleUtils-BDLO6O1S.js",
+      "bytes": 199,
+      "imports": [],
+      "exports": [
+        {
+          "exported": "N",
+          "local": "n"
+        },
+        {
+          "exported": "f",
+          "local": "o"
+        },
+        {
+          "exported": "i",
+          "local": "i"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "SelectPicker-D1mnbmt-.js",
+      "bytes": 2140,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "r",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "d",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "f",
+              "imported": "x"
+            },
+            {
+              "local": "b",
+              "imported": "C"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "S",
+          "local": "h"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "ServiceAreas-CFqvjtqq.js",
+      "bytes": 15027,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "o",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "Z",
+              "imported": "a"
+            },
+            {
+              "local": "ee",
+              "imported": "u"
+            },
+            {
+              "local": "se",
+              "imported": "b"
+            },
+            {
+              "local": "ae",
+              "imported": "c"
+            },
+            {
+              "local": "te",
+              "imported": "O"
+            },
+            {
+              "local": "z",
+              "imported": "M"
+            },
+            {
+              "local": "h",
+              "imported": "i"
+            },
+            {
+              "local": "re",
+              "imported": "d"
+            },
+            {
+              "local": "g",
+              "imported": "f"
+            },
+            {
+              "local": "v",
+              "imported": "e"
+            },
+            {
+              "local": "ie",
+              "imported": "j"
+            },
+            {
+              "local": "ne",
+              "imported": "k"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "oe",
+              "imported": "w"
+            },
+            {
+              "local": "B",
+              "imported": "E"
+            },
+            {
+              "local": "le",
+              "imported": "M"
+            },
+            {
+              "local": "C",
+              "imported": "A"
+            },
+            {
+              "local": "de",
+              "imported": "O"
+            },
+            {
+              "local": "ce",
+              "imported": "k"
+            },
+            {
+              "local": "me",
+              "imported": "P"
+            },
+            {
+              "local": "ge",
+              "imported": "Q"
+            },
+            {
+              "local": "pe",
+              "imported": "S"
+            },
+            {
+              "local": "xe",
+              "imported": "N"
+            },
+            {
+              "local": "F",
+              "imported": "v"
+            },
+            {
+              "local": "G",
+              "imported": "B"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "W",
+              "imported": "e"
+            },
+            {
+              "local": "q",
+              "imported": "P"
+            },
+            {
+              "local": "ue",
+              "imported": "y"
+            },
+            {
+              "local": "H",
+              "imported": "r"
+            },
+            {
+              "local": "he",
+              "imported": "T"
+            },
+            {
+              "local": "K",
+              "imported": "L"
+            },
+            {
+              "local": "fe",
+              "imported": "a4"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "ServiceAreas",
+          "local": "_e"
+        }
+      ],
+      "api_call_count": 8
+    },
+    {
+      "file": "ServiceHistory-k07fUeOW.js",
+      "bytes": 24950,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "c",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./roleUtils-BDLO6O1S.js",
+          "bindings": [
+            {
+              "local": "ne",
+              "imported": "f"
+            }
+          ]
+        },
+        {
+          "source": "./LoadingSpinner-DQ5LcqWB.js",
+          "bindings": [
+            {
+              "local": "Se",
+              "imported": "P"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "ie",
+              "imported": "H"
+            },
+            {
+              "local": "le",
+              "imported": "I"
+            },
+            {
+              "local": "oe",
+              "imported": "K"
+            },
+            {
+              "local": "Ee",
+              "imported": "Y"
+            },
+            {
+              "local": "Ce",
+              "imported": "E"
+            },
+            {
+              "local": "Le",
+              "imported": "Z"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "Oe",
+              "imported": "u"
+            },
+            {
+              "local": "K",
+              "imported": "i"
+            },
+            {
+              "local": "Ie",
+              "imported": "c"
+            },
+            {
+              "local": "de",
+              "imported": "e"
+            },
+            {
+              "local": "Me",
+              "imported": "f"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "ce",
+              "imported": "H"
+            },
+            {
+              "local": "ze",
+              "imported": "ai"
+            },
+            {
+              "local": "Q",
+              "imported": "x"
+            },
+            {
+              "local": "O",
+              "imported": "C"
+            },
+            {
+              "local": "$",
+              "imported": "X"
+            },
+            {
+              "local": "me",
+              "imported": "d"
+            },
+            {
+              "local": "ue",
+              "imported": "s"
+            },
+            {
+              "local": "Ae",
+              "imported": "n"
+            },
+            {
+              "local": "$e",
+              "imported": "t"
+            },
+            {
+              "local": "xe",
+              "imported": "k"
+            },
+            {
+              "local": "Re",
+              "imported": "T"
+            },
+            {
+              "local": "Fe",
+              "imported": "u"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "ServiceHistory",
+          "local": "qe"
+        }
+      ],
+      "api_call_count": 1
+    },
+    {
+      "file": "Settings-BtbU5gHm.js",
+      "bytes": 28421,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "We",
+              "imported": "u"
+            },
+            {
+              "local": "o",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "He",
+              "imported": "u"
+            },
+            {
+              "local": "Ge",
+              "imported": "a"
+            },
+            {
+              "local": "c",
+              "imported": "i"
+            },
+            {
+              "local": "y",
+              "imported": "e"
+            },
+            {
+              "local": "Ve",
+              "imported": "q"
+            },
+            {
+              "local": "Qe",
+              "imported": "O"
+            },
+            {
+              "local": "b",
+              "imported": "f"
+            },
+            {
+              "local": "pe",
+              "imported": "M"
+            },
+            {
+              "local": "fe",
+              "imported": "k"
+            },
+            {
+              "local": "Je",
+              "imported": "s"
+            },
+            {
+              "local": "Q",
+              "imported": "B"
+            },
+            {
+              "local": "be",
+              "imported": "h"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "w",
+              "imported": "A"
+            },
+            {
+              "local": "J",
+              "imported": "S"
+            },
+            {
+              "local": "Xe",
+              "imported": "O"
+            },
+            {
+              "local": "Ke",
+              "imported": "P"
+            },
+            {
+              "local": "Ye",
+              "imported": "Q"
+            },
+            {
+              "local": "Ze",
+              "imported": "W"
+            },
+            {
+              "local": "je",
+              "imported": "v"
+            },
+            {
+              "local": "ve",
+              "imported": "M"
+            },
+            {
+              "local": "ea",
+              "imported": "X"
+            },
+            {
+              "local": "ye",
+              "imported": "B"
+            }
+          ]
+        },
+        {
+          "source": "./useNotifications-fJ3DWoi9.js",
+          "bindings": [
+            {
+              "local": "aa",
+              "imported": "u"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "ta",
+              "imported": "a8"
+            },
+            {
+              "local": "X",
+              "imported": "U"
+            },
+            {
+              "local": "sa",
+              "imported": "a4"
+            },
+            {
+              "local": "ra",
+              "imported": "a9"
+            },
+            {
+              "local": "we",
+              "imported": "S"
+            },
+            {
+              "local": "K",
+              "imported": "C"
+            },
+            {
+              "local": "ia",
+              "imported": "N"
+            },
+            {
+              "local": "Ne",
+              "imported": "a"
+            },
+            {
+              "local": "Y",
+              "imported": "T"
+            },
+            {
+              "local": "oa",
+              "imported": "D"
+            },
+            {
+              "local": "na",
+              "imported": "aa"
+            },
+            {
+              "local": "da",
+              "imported": "ab"
+            },
+            {
+              "local": "Z",
+              "imported": "L"
+            },
+            {
+              "local": "la",
+              "imported": "ac"
+            },
+            {
+              "local": "ca",
+              "imported": "ad"
+            },
+            {
+              "local": "xa",
+              "imported": "ae"
+            },
+            {
+              "local": "ke",
+              "imported": "E"
+            },
+            {
+              "local": "Se",
+              "imported": "b"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        },
+        {
+          "source": "./notifications-BEtI2pcG.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "Settings",
+          "local": "va"
+        }
+      ],
+      "api_call_count": 7
+    },
+    {
+      "file": "TuesdayTeaching-B3nMLJdY.js",
+      "bytes": 18575,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "l",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "ke",
+              "imported": "b"
+            },
+            {
+              "local": "je",
+              "imported": "u"
+            },
+            {
+              "local": "Ne",
+              "imported": "a"
+            },
+            {
+              "local": "j",
+              "imported": "e"
+            },
+            {
+              "local": "$",
+              "imported": "q"
+            },
+            {
+              "local": "ve",
+              "imported": "g"
+            },
+            {
+              "local": "we",
+              "imported": "O"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "M",
+              "imported": "L"
+            },
+            {
+              "local": "ee",
+              "imported": "f"
+            },
+            {
+              "local": "Se",
+              "imported": "R"
+            },
+            {
+              "local": "Ce",
+              "imported": "ag"
+            },
+            {
+              "local": "te",
+              "imported": "ah"
+            },
+            {
+              "local": "_e",
+              "imported": "C"
+            },
+            {
+              "local": "De",
+              "imported": "s"
+            },
+            {
+              "local": "ze",
+              "imported": "w"
+            },
+            {
+              "local": "Ee",
+              "imported": "a5"
+            },
+            {
+              "local": "Ae",
+              "imported": "p"
+            },
+            {
+              "local": "Re",
+              "imported": "v"
+            },
+            {
+              "local": "Te",
+              "imported": "l"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "B",
+              "imported": "I"
+            },
+            {
+              "local": "Le",
+              "imported": "J"
+            },
+            {
+              "local": "U",
+              "imported": "E"
+            },
+            {
+              "local": "I",
+              "imported": "K"
+            },
+            {
+              "local": "$e",
+              "imported": "B"
+            },
+            {
+              "local": "se",
+              "imported": "A"
+            },
+            {
+              "local": "Me",
+              "imported": "R"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "TuesdayTeaching",
+          "local": "Ge"
+        },
+        {
+          "exported": "default",
+          "local": "Ge"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "Udlv-B63vtmB5.js",
+      "bytes": 43590,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "Qe",
+              "imported": "u"
+            },
+            {
+              "local": "i",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "T",
+              "imported": "I"
+            },
+            {
+              "local": "me",
+              "imported": "J"
+            },
+            {
+              "local": "v",
+              "imported": "E"
+            },
+            {
+              "local": "te",
+              "imported": "H"
+            },
+            {
+              "local": "q",
+              "imported": "K"
+            },
+            {
+              "local": "Se",
+              "imported": "R"
+            },
+            {
+              "local": "E",
+              "imported": "A"
+            },
+            {
+              "local": "se",
+              "imported": "M"
+            },
+            {
+              "local": "ze",
+              "imported": "w"
+            },
+            {
+              "local": "ge",
+              "imported": "S"
+            },
+            {
+              "local": "ue",
+              "imported": "N"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "Je",
+              "imported": "u"
+            },
+            {
+              "local": "Ke",
+              "imported": "a"
+            },
+            {
+              "local": "Xe",
+              "imported": "b"
+            },
+            {
+              "local": "Ye",
+              "imported": "r"
+            },
+            {
+              "local": "Ze",
+              "imported": "t"
+            },
+            {
+              "local": "Te",
+              "imported": "n"
+            },
+            {
+              "local": "o",
+              "imported": "e"
+            },
+            {
+              "local": "ae",
+              "imported": "M"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "et",
+              "imported": "L"
+            },
+            {
+              "local": "D",
+              "imported": "f"
+            },
+            {
+              "local": "M",
+              "imported": "G"
+            },
+            {
+              "local": "Ee",
+              "imported": "aj"
+            },
+            {
+              "local": "he",
+              "imported": "P"
+            },
+            {
+              "local": "tt",
+              "imported": "Q"
+            },
+            {
+              "local": "be",
+              "imported": "S"
+            },
+            {
+              "local": "pe",
+              "imported": "ak"
+            },
+            {
+              "local": "je",
+              "imported": "e"
+            },
+            {
+              "local": "G",
+              "imported": "d"
+            },
+            {
+              "local": "re",
+              "imported": "al"
+            },
+            {
+              "local": "fe",
+              "imported": "r"
+            },
+            {
+              "local": "st",
+              "imported": "O"
+            },
+            {
+              "local": "Ae",
+              "imported": "T"
+            },
+            {
+              "local": "ve",
+              "imported": "h"
+            },
+            {
+              "local": "at",
+              "imported": "t"
+            },
+            {
+              "local": "le",
+              "imported": "a5"
+            },
+            {
+              "local": "rt",
+              "imported": "am"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "Udlv",
+          "local": "xt"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "useNotifications-fJ3DWoi9.js",
+      "bytes": 3075,
+      "imports": [
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "i",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "R",
+              "imported": "u"
+            },
+            {
+              "local": "I",
+              "imported": "i"
+            }
+          ]
+        },
+        {
+          "source": "./notifications-BEtI2pcG.js",
+          "bindings": [
+            {
+              "local": "y",
+              "imported": "i"
+            },
+            {
+              "local": "O",
+              "imported": "g"
+            },
+            {
+              "local": "D",
+              "imported": "a"
+            },
+            {
+              "local": "U",
+              "imported": "o"
+            },
+            {
+              "local": "W",
+              "imported": "b"
+            },
+            {
+              "local": "v",
+              "imported": "c"
+            },
+            {
+              "local": "q",
+              "imported": "r"
+            },
+            {
+              "local": "k",
+              "imported": "s"
+            },
+            {
+              "local": "x",
+              "imported": "d"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "u",
+          "local": "G"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "useOptimizedChat-D_A1-F_L.js",
+      "bytes": 1536,
+      "imports": [
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "o",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "v",
+              "imported": "A"
+            },
+            {
+              "local": "S",
+              "imported": "H"
+            },
+            {
+              "local": "w",
+              "imported": "E"
+            },
+            {
+              "local": "m",
+              "imported": "I"
+            },
+            {
+              "local": "h",
+              "imported": "$"
+            },
+            {
+              "local": "x",
+              "imported": "K"
+            },
+            {
+              "local": "p",
+              "imported": "J"
+            },
+            {
+              "local": "J",
+              "imported": "T"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "C",
+              "imported": "e"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "exported": "u",
+          "local": "L"
+        }
+      ],
+      "api_call_count": 0
+    },
+    {
+      "file": "Volunteers-CUDiGEOd.js",
+      "bytes": 27853,
+      "imports": [
+        {
+          "source": "./index-BU_ZgoWo.js",
+          "bindings": [
+            {
+              "local": "e",
+              "imported": "j"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-react-BwINE3B3.js",
+          "bindings": [
+            {
+              "local": "d",
+              "imported": "r"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-firebase-BjYbfC3F.js",
+          "bindings": [
+            {
+              "local": "me",
+              "imported": "M"
+            },
+            {
+              "local": "K",
+              "imported": "A"
+            },
+            {
+              "local": "xe",
+              "imported": "S"
+            }
+          ]
+        },
+        {
+          "source": "./App-BPrQ3EPG.js",
+          "bindings": [
+            {
+              "local": "ge",
+              "imported": "b"
+            },
+            {
+              "local": "be",
+              "imported": "a"
+            },
+            {
+              "local": "ue",
+              "imported": "u"
+            },
+            {
+              "local": "he",
+              "imported": "O"
+            },
+            {
+              "local": "Q",
+              "imported": "M"
+            },
+            {
+              "local": "X",
+              "imported": "i"
+            },
+            {
+              "local": "Y",
+              "imported": "f"
+            },
+            {
+              "local": "Z",
+              "imported": "e"
+            }
+          ]
+        },
+        {
+          "source": "./LoadingSpinner-DQ5LcqWB.js",
+          "bindings": [
+            {
+              "local": "pe",
+              "imported": "P"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-ui-CnvYSvQL.js",
+          "bindings": [
+            {
+              "local": "O",
+              "imported": "f"
+            },
+            {
+              "local": "fe",
+              "imported": "w"
+            },
+            {
+              "local": "p",
+              "imported": "S"
+            },
+            {
+              "local": "F",
+              "imported": "x"
+            },
+            {
+              "local": "g",
+              "imported": "C"
+            },
+            {
+              "local": "f",
+              "imported": "e"
+            },
+            {
+              "local": "ye",
+              "imported": "y"
+            },
+            {
+              "local": "je",
+              "imported": "r"
+            },
+            {
+              "local": "ke",
+              "imported": "T"
+            },
+            {
+              "local": "ee",
+              "imported": "L"
+            }
+          ]
+        },
+        {
+          "source": "./vendor-pdf-Cf03QSry.js",
+          "bindings": []
+        }
+      ],
+      "exports": [
+        {
+          "exported": "Volunteers",
+          "local": "Re"
+        }
+      ],
+      "api_call_count": 2
+    }
+  ],
+  "routes": [
+    {
+      "module": "PendingAssignment-BisqKKqT.js",
+      "route": "/dashboard",
+      "offset": 718,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/register",
+      "offset": 71667,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "Settings-BtbU5gHm.js",
+      "route": "/login",
+      "offset": 6788,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/dashboard/my-history",
+      "offset": 56007,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "route": "/dashboard/events",
+      "offset": 34259,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "Udlv-B63vtmB5.js",
+      "route": "/dashboard/areas",
+      "offset": 13230,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "Dashboard-DN8eeJDA.js",
+      "route": "/dashboard/volunteers",
+      "offset": 33877,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/dashboard/requests",
+      "offset": 54169,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/dashboard/attendance",
+      "offset": 55700,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/dashboard/tuesday-teaching",
+      "offset": 55808,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/dashboard/udlv",
+      "offset": 55919,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/dashboard/roles",
+      "offset": 55608,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/dashboard/settings",
+      "offset": 60842,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/dashboard/events/:id",
+      "offset": 56361,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/dashboard/app-history",
+      "offset": 56215,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/pending-assignment",
+      "offset": 71827,
+      "confidence": "confirmed frontend route declaration or route literal"
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "route": "/",
+      "behavior": "redirect to /dashboard",
+      "confidence": "confirmed frontend route declaration or route literal"
+    }
+  ],
+  "notes": [
+    "All endpoints are evidence of frontend intent/call sites, not confirmation of backend existence.",
+    "No application module was executed; source was parsed/formatted only. No private data was read and no authenticated API was invoked.",
+    "Vendor-named bundles, html2canvas, purify and index.es dependency chunks were excluded from contract discovery. Some application chunks embed SDK/dependency code; only application call sites were used.",
+    "Query cache-busters may be dynamic expressions. Payload types marked dynamic cannot be inferred safely from a minified variable alone.",
+    "Readable copies preserve the public Firebase client configuration present in the original artifact; reports intentionally omit client configuration values."
+  ],
+  "api_calls": [
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/changes/meta?{param}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 7732,
+      "path": "/api/changes/meta",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/me?t={param}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 15368,
+      "path": "/api/me",
+      "query_parameters": [
+        "t"
+      ]
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/me?t={param}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 15493,
+      "path": "/api/me",
+      "query_parameters": [
+        "t"
+      ]
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/session/refresh",
+      "method": "POST",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 15620,
+      "path": "/api/session/refresh",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/me",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 15896,
+      "path": "/api/me",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/sessionLogin",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "idToken": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 16029,
+      "path": "/api/sessionLogin",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/sessionLogout",
+      "method": "POST",
+      "headers": null,
+      "request_body": {},
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 16228,
+      "path": "/api/sessionLogout",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/sessionLogin",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "idToken": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 16447,
+      "path": "/api/sessionLogin",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/me?{param}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 18967,
+      "path": "/api/me",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/sessionLogout",
+      "method": "POST",
+      "headers": null,
+      "request_body": {},
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 19435,
+      "path": "/api/sessionLogout",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/passwordLogin",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "username": "dynamic (type not proven)",
+        "password": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 21438,
+      "path": "/api/passwordLogin",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/me",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 21568,
+      "path": "/api/me",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/sessionLogin",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "idToken": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 22013,
+      "path": "/api/sessionLogin",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/sessionLogin",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "idToken": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 22851,
+      "path": "/api/sessionLogin",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/me",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 22968,
+      "path": "/api/me",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/users",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 44927,
+      "path": "/api/users",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/roles",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 44977,
+      "path": "/api/roles",
+      "query_parameters": []
+    },
+    {
+      "module": "App-BPrQ3EPG.js",
+      "callee": "O",
+      "route": "/api/service_areas",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 44993,
+      "path": "/api/service_areas",
+      "query_parameters": []
+    },
+    {
+      "module": "AppHistory-oOipttKZ.js",
+      "callee": "S",
+      "route": "/api/admin/telemetry/daily/routes?day={param}&type=api&limit=5&{param}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 6729,
+      "path": "/api/admin/telemetry/daily/routes",
+      "query_parameters": [
+        "day",
+        "limit",
+        "type"
+      ]
+    },
+    {
+      "module": "AppHistory-oOipttKZ.js",
+      "callee": "S",
+      "route": "/api/admin/telemetry/daily/routes?day={param}&type=asset&limit=5&{param}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 6866,
+      "path": "/api/admin/telemetry/daily/routes",
+      "query_parameters": [
+        "day",
+        "limit",
+        "type"
+      ]
+    },
+    {
+      "module": "Attendance-BoRlsPo1.js",
+      "callee": "At",
+      "route": "/api/events?limit=500",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 17704,
+      "path": "/api/events",
+      "query_parameters": [
+        "limit"
+      ]
+    },
+    {
+      "module": "Attendance-BoRlsPo1.js",
+      "callee": "At",
+      "route": "/api/attendance/events?startDate={param}&endDate={param}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 20910,
+      "path": "/api/attendance/events",
+      "query_parameters": [
+        "endDate",
+        "startDate"
+      ]
+    },
+    {
+      "module": "Attendance-BoRlsPo1.js",
+      "callee": "At",
+      "route": "/api/attendance/peopleStatsData?startDate={param}&endDate={param}&eventIds={param}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 21248,
+      "path": "/api/attendance/peopleStatsData",
+      "query_parameters": [
+        "endDate",
+        "eventIds",
+        "startDate"
+      ]
+    },
+    {
+      "module": "Attendance-BoRlsPo1.js",
+      "callee": "At",
+      "route": "/api/service_areas",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 33111,
+      "path": "/api/service_areas",
+      "query_parameters": []
+    },
+    {
+      "module": "Attendance-BoRlsPo1.js",
+      "callee": "At",
+      "route": "/api/attendance/events?startDate={param}&endDate={param}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 33332,
+      "path": "/api/attendance/events",
+      "query_parameters": [
+        "endDate",
+        "startDate"
+      ]
+    },
+    {
+      "module": "Attendance-BoRlsPo1.js",
+      "callee": "At",
+      "route": "/api/attendance/records?startDate={param}&endDate={param}&eventIds={param}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 33505,
+      "path": "/api/attendance/records",
+      "query_parameters": [
+        "endDate",
+        "eventIds",
+        "startDate"
+      ]
+    },
+    {
+      "module": "Dashboard-DN8eeJDA.js",
+      "callee": "ie",
+      "route": "/api/dashboard",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 11918,
+      "path": "/api/dashboard",
+      "query_parameters": []
+    },
+    {
+      "module": "Dashboard-DN8eeJDA.js",
+      "callee": "ie",
+      "route": "/api/comments/recent",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 12129,
+      "path": "/api/comments/recent",
+      "query_parameters": []
+    },
+    {
+      "module": "Dashboard-DN8eeJDA.js",
+      "callee": "ie",
+      "route": "/api/changes/meta",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 15141,
+      "path": "/api/changes/meta",
+      "query_parameters": []
+    },
+    {
+      "module": "Dashboard-DN8eeJDA.js",
+      "callee": "ie",
+      "route": "/api/comments",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "text": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 18784,
+      "path": "/api/comments",
+      "query_parameters": []
+    },
+    {
+      "module": "Dashboard-DN8eeJDA.js",
+      "callee": "ie",
+      "route": "/api/comments/react",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "commentId": "dynamic (type not proven)",
+        "reaction": "dynamic (type not proven)",
+        "action": "string"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 20028,
+      "path": "/api/comments/react",
+      "query_parameters": []
+    },
+    {
+      "module": "Dashboard-DN8eeJDA.js",
+      "callee": "ie",
+      "route": "/api/comments/{commentId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": {},
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 21312,
+      "path": "/api/comments/{commentId}",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events?year={param}&month={param}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 9618,
+      "path": "/api/events",
+      "query_parameters": [
+        "month",
+        "year"
+      ]
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/commands",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "type": "string",
+        "sourceEventId": "dynamic (type not proven)",
+        "targetEventId": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 11125,
+      "path": "/api/commands",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/repertoire",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 11622,
+      "path": "/api/events/{eventId}/repertoire",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/commands",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "type": "string",
+        "sourceEventId": "dynamic (type not proven)",
+        "targetEventId": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 12098,
+      "path": "/api/commands",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/materials",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 15415,
+      "path": "/api/events/{eventId}/materials",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/commands",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "type": "string",
+        "sourceEventId": "dynamic (type not proven)",
+        "targetEventId": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 15697,
+      "path": "/api/commands",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/details",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 21393,
+      "path": "/api/events/{eventId}/details",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/assignments/{assignmentId}",
+      "method": "PUT",
+      "headers": null,
+      "request_body": {
+        "id": "string",
+        "areaId": "string",
+        "areaName": "string",
+        "roleName": "string",
+        "userId": "string",
+        "userName": "string",
+        "userPhoto": "string | null"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 25002,
+      "path": "/api/events/{eventId}/assignments/{assignmentId}",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/assignments/{assignmentId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 25629,
+      "path": "/api/events/{eventId}/assignments/{assignmentId}",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/repertoire/{repertoireId}",
+      "method": "PATCH",
+      "headers": null,
+      "request_body": {
+        "title": "FormData string | null",
+        "key": "string joined with +",
+        "link": "FormData string | null",
+        "ref1": "FormData string | null",
+        "link2": "FormData string | null",
+        "ref2": "FormData string | null",
+        "notes": "FormData string | null"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 26188,
+      "path": "/api/events/{eventId}/repertoire/{repertoireId}",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/repertoire",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "title": "FormData string | null",
+        "key": "string joined with +",
+        "link": "FormData string | null",
+        "ref1": "FormData string | null",
+        "link2": "FormData string | null",
+        "ref2": "FormData string | null",
+        "notes": "FormData string | null",
+        "order": "number"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 26399,
+      "path": "/api/events/{eventId}/repertoire",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/repertoire/reorder",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "items": [
+          {
+            "id": "string",
+            "order": "number"
+          }
+        ]
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 27241,
+      "path": "/api/events/{eventId}/repertoire/reorder",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/repertoire/{repertoireId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 27887,
+      "path": "/api/events/{eventId}/repertoire/{repertoireId}",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/materials/upload",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "multipart_form_data": {
+          "title": "string",
+          "songId": "optional string",
+          "songTitle": "optional string",
+          "materialId": "optional string",
+          "file": "File"
+        }
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 28814,
+      "path": "/api/events/{eventId}/materials/upload",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/materials/{materialId}",
+      "method": "PATCH",
+      "headers": null,
+      "request_body": {
+        "title": "dynamic (type not proven)",
+        "songId": "computed",
+        "songTitle": "computed"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 28912,
+      "path": "/api/events/{eventId}/materials/{materialId}",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/materials/{materialId}",
+      "method": "PATCH",
+      "headers": null,
+      "request_body": "dynamic (type not proven)",
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 29231,
+      "path": "/api/events/{eventId}/materials/{materialId}",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/materials",
+      "method": "POST",
+      "headers": null,
+      "request_body": "dynamic (type not proven)",
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 29341,
+      "path": "/api/events/{eventId}/materials",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}/materials/{materialId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 30185,
+      "path": "/api/events/{eventId}/materials/{materialId}",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}",
+      "method": "PATCH",
+      "headers": null,
+      "request_body": {
+        "activeMinistries": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 30577,
+      "path": "/api/events/{eventId}",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/events/{eventId}",
+      "method": "PATCH",
+      "headers": null,
+      "request_body": {
+        "status": "string"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 30908,
+      "path": "/api/events/{eventId}",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/materials_library",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 31240,
+      "path": "/api/materials_library",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/materials_library",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "title": "dynamic (type not proven)",
+        "url": "computed"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 31709,
+      "path": "/api/materials_library",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "callee": "N",
+      "route": "/api/materials_library/{materialId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 32100,
+      "path": "/api/materials_library/{materialId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Events-CIOfy-8U.js",
+      "callee": "Y",
+      "route": "/api/events/image",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "multipart_form_data": {
+          "file": "File"
+        }
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 32737,
+      "path": "/api/events/image",
+      "query_parameters": []
+    },
+    {
+      "module": "Events-CIOfy-8U.js",
+      "callee": "Y",
+      "route": "/api/events/{eventId}",
+      "method": "PATCH",
+      "headers": null,
+      "request_body": "dynamic (type not proven)",
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 33366,
+      "path": "/api/events/{eventId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Events-CIOfy-8U.js",
+      "callee": "Y",
+      "route": "/api/events",
+      "method": "POST",
+      "headers": null,
+      "request_body": "dynamic (type not proven)",
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 33610,
+      "path": "/api/events",
+      "query_parameters": []
+    },
+    {
+      "module": "Events-CIOfy-8U.js",
+      "callee": "Y",
+      "route": "/api/notify/users",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "serialized_json": {
+          "userIds": "computed",
+          "title": "computed",
+          "body": "computed",
+          "data": {
+            "url": "string"
+          }
+        }
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 43048,
+      "path": "/api/notify/users",
+      "query_parameters": []
+    },
+    {
+      "module": "Events-CIOfy-8U.js",
+      "callee": "Y",
+      "route": "/api/notify/all",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "serialized_json": {
+          "title": "computed",
+          "body": "computed",
+          "data": {
+            "url": "string"
+          }
+        }
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 43660,
+      "path": "/api/notify/all",
+      "query_parameters": []
+    },
+    {
+      "module": "Events-CIOfy-8U.js",
+      "callee": "Y",
+      "route": "/api/events/{eventId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 50939,
+      "path": "/api/events/{eventId}",
+      "query_parameters": []
+    },
+    {
+      "module": "notifications-BEtI2pcG.js",
+      "callee": "oe",
+      "route": "/api/notifications/register",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "pushKey": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 22440,
+      "path": "/api/notifications/register",
+      "query_parameters": []
+    },
+    {
+      "module": "notifications-BEtI2pcG.js",
+      "callee": "oe",
+      "route": "/api/notifications/unregister",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "pushKey": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 22680,
+      "path": "/api/notifications/unregister",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 1611,
+      "path": "/api/roles",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles/{roleId}",
+      "method": "PUT",
+      "headers": null,
+      "request_body": "dynamic (type not proven)",
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 2365,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/service_areas",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 3092,
+      "path": "/api/service_areas",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles/{roleId}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 3287,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles/{roleId}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 3384,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles/{roleId}",
+      "method": "PUT",
+      "headers": null,
+      "request_body": "dynamic (type not proven)",
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 3813,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles/{roleId}",
+      "method": "PUT",
+      "headers": null,
+      "request_body": "dynamic (type not proven)",
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 4209,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles/{roleId}",
+      "method": "PUT",
+      "headers": null,
+      "request_body": "dynamic (type not proven)",
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 4440,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "...": "spread object",
+        "isSystem": "computed"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 4546,
+      "path": "/api/roles",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles/{roleId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 4942,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles/{roleId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 5007,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles/{roleId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 5270,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles/{roleId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 5335,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Roles-23Dg9NXW.js",
+      "callee": "i",
+      "route": "/api/roles/{roleId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 5495,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "ServiceAreas-CFqvjtqq.js",
+      "callee": "g",
+      "route": "/api/roles/{roleId}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 576,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "ServiceAreas-CFqvjtqq.js",
+      "callee": "g",
+      "route": "/api/roles/{roleId}",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 634,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "ServiceAreas-CFqvjtqq.js",
+      "callee": "g",
+      "route": "/api/roles/{roleId}",
+      "method": "PUT",
+      "headers": null,
+      "request_body": {
+        "id": "dynamic (type not proven)",
+        "name": "string",
+        "description": "string",
+        "permissions": [
+          "string"
+        ],
+        "isSystem": "computed",
+        "ministryId": "dynamic (type not proven)",
+        "ministryName": "dynamic (type not proven)",
+        "roleType": "string"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 698,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "ServiceAreas-CFqvjtqq.js",
+      "callee": "g",
+      "route": "/api/roles/{roleId}",
+      "method": "PUT",
+      "headers": null,
+      "request_body": {
+        "id": "dynamic (type not proven)",
+        "name": "string",
+        "description": "string",
+        "permissions": [
+          "string"
+        ],
+        "isSystem": "computed",
+        "ministryId": "dynamic (type not proven)",
+        "ministryName": "dynamic (type not proven)",
+        "roleType": "string"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 1064,
+      "path": "/api/roles/{roleId}",
+      "query_parameters": []
+    },
+    {
+      "module": "ServiceAreas-CFqvjtqq.js",
+      "callee": "g",
+      "route": "/api/service_areas",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 2610,
+      "path": "/api/service_areas",
+      "query_parameters": []
+    },
+    {
+      "module": "ServiceAreas-CFqvjtqq.js",
+      "callee": "g",
+      "route": "/api/service_areas/{areaId}",
+      "method": "PUT",
+      "headers": null,
+      "request_body": {
+        "name": "computed",
+        "description": "computed",
+        "roles": "computed",
+        "imageURL": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 3952,
+      "path": "/api/service_areas/{areaId}",
+      "query_parameters": []
+    },
+    {
+      "module": "ServiceAreas-CFqvjtqq.js",
+      "callee": "g",
+      "route": "/api/service_areas",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "name": "computed",
+        "description": "computed",
+        "roles": "computed",
+        "imageURL": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 4211,
+      "path": "/api/service_areas",
+      "query_parameters": []
+    },
+    {
+      "module": "ServiceAreas-CFqvjtqq.js",
+      "callee": "g",
+      "route": "/api/service_areas/{areaId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 4692,
+      "path": "/api/service_areas/{areaId}",
+      "query_parameters": []
+    },
+    {
+      "module": "ServiceHistory-k07fUeOW.js",
+      "callee": "Me",
+      "route": "/api/service-history",
+      "method": "GET",
+      "headers": null,
+      "request_body": null,
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 1534,
+      "path": "/api/service-history",
+      "query_parameters": []
+    },
+    {
+      "module": "Settings-BtbU5gHm.js",
+      "callee": "b",
+      "route": "/api/users/me/delete",
+      "method": "POST",
+      "headers": null,
+      "request_body": {},
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 2206,
+      "path": "/api/users/me/delete",
+      "query_parameters": []
+    },
+    {
+      "module": "Settings-BtbU5gHm.js",
+      "callee": "b",
+      "route": "/api/notify/user",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "userId": "string",
+        "title": "string",
+        "body": "string"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 3781,
+      "path": "/api/notify/user",
+      "query_parameters": []
+    },
+    {
+      "module": "Settings-BtbU5gHm.js",
+      "callee": "b",
+      "route": "/api/users/me/photo",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "multipart_form_data": {
+          "file": "File"
+        }
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 5318,
+      "path": "/api/users/me/photo",
+      "query_parameters": []
+    },
+    {
+      "module": "Settings-BtbU5gHm.js",
+      "callee": "b",
+      "route": "/api/users/me",
+      "method": "PATCH",
+      "headers": null,
+      "request_body": {
+        "name": "dynamic (type not proven)"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 5488,
+      "path": "/api/users/me",
+      "query_parameters": []
+    },
+    {
+      "module": "Settings-BtbU5gHm.js",
+      "callee": "b",
+      "route": "/api/users/me/password",
+      "method": "POST",
+      "headers": null,
+      "request_body": {
+        "newPassword": "computed"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 6268,
+      "path": "/api/users/me/password",
+      "query_parameters": []
+    },
+    {
+      "module": "Settings-BtbU5gHm.js",
+      "callee": "b",
+      "route": "/api/users/me",
+      "method": "PATCH",
+      "headers": null,
+      "request_body": {
+        "preferences": {
+          "notifications": "computed"
+        }
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 18645,
+      "path": "/api/users/me",
+      "query_parameters": []
+    },
+    {
+      "module": "Settings-BtbU5gHm.js",
+      "callee": "b",
+      "route": "/api/users/me",
+      "method": "PATCH",
+      "headers": null,
+      "request_body": {
+        "preferences": {
+          "notifications": "computed"
+        }
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 18861,
+      "path": "/api/users/me",
+      "query_parameters": []
+    },
+    {
+      "module": "Volunteers-CUDiGEOd.js",
+      "callee": "Y",
+      "route": "/api/users/{userId}",
+      "method": "PATCH",
+      "headers": null,
+      "request_body": {
+        "name": "computed",
+        "role": "computed",
+        "areas": "computed",
+        "ministryRoles": "computed",
+        "assignedMinistries": "dynamic (type not proven)",
+        "...": "spread object"
+      },
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 2195,
+      "path": "/api/users/{userId}",
+      "query_parameters": []
+    },
+    {
+      "module": "Volunteers-CUDiGEOd.js",
+      "callee": "Y",
+      "route": "/api/users/{userId}",
+      "method": "DELETE",
+      "headers": null,
+      "request_body": {},
+      "confidence": "confirmed call-site",
+      "transport": "bffFetch",
+      "shared_request_policy": "bffFetch",
+      "source_offset_original_utf16": 3010,
+      "path": "/api/users/{userId}",
+      "query_parameters": []
+    },
+    {
+      "module": "AppHistory-oOipttKZ.js",
+      "route": "/api/admin/telemetry/latest?limitUsers={limitUsers}&__t={cacheBust}",
+      "method": "GET",
+      "request_body": null,
+      "headers": null,
+      "transport": "bffFetch",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 238,
+      "shared_request_policy": "bffFetch",
+      "path": "/api/admin/telemetry/latest",
+      "query_parameters": [
+        "__t",
+        "limitUsers"
+      ]
+    },
+    {
+      "module": "AppHistory-oOipttKZ.js",
+      "route": "/api/admin/telemetry/daily?days={days}&limit={limit}&__t={cacheBust}",
+      "method": "GET",
+      "request_body": null,
+      "headers": null,
+      "transport": "bffFetch",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 275,
+      "shared_request_policy": "bffFetch",
+      "path": "/api/admin/telemetry/daily",
+      "query_parameters": [
+        "__t",
+        "days",
+        "limit"
+      ]
+    },
+    {
+      "module": "AppHistory-oOipttKZ.js",
+      "route": "/api/admin/firestore-reads?hours={hours}&__t={cacheBust}",
+      "method": "GET",
+      "request_body": null,
+      "headers": null,
+      "transport": "bffFetch",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 329,
+      "shared_request_policy": "bffFetch",
+      "path": "/api/admin/firestore-reads",
+      "query_parameters": [
+        "__t",
+        "hours"
+      ]
+    },
+    {
+      "module": "AppHistory-oOipttKZ.js",
+      "route": "/api/admin/app-history?limit={limit}&__t={cacheBust}",
+      "method": "GET",
+      "request_body": null,
+      "headers": null,
+      "transport": "bffFetch",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 349,
+      "shared_request_policy": "bffFetch",
+      "path": "/api/admin/app-history",
+      "query_parameters": [
+        "__t",
+        "limit"
+      ]
+    },
+    {
+      "module": "AppHistory-oOipttKZ.js",
+      "route": "/api/admin/app-history/meta?__t={cacheBust}",
+      "method": "GET",
+      "request_body": null,
+      "headers": null,
+      "transport": "bffFetch",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 372,
+      "shared_request_policy": "bffFetch",
+      "path": "/api/admin/app-history/meta",
+      "query_parameters": [
+        "__t"
+      ]
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "route": "/api/notify/repertoire",
+      "method": "POST",
+      "request_body": {
+        "eventId": "string"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "transport": "fetch",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 763,
+      "shared_request_policy": null,
+      "path": "/api/notify/repertoire",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "route": "/api/notify/materials",
+      "method": "POST",
+      "request_body": {
+        "eventId": "string"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "transport": "fetch",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 983,
+      "shared_request_policy": null,
+      "path": "/api/notify/materials",
+      "query_parameters": []
+    },
+    {
+      "module": "Settings-BtbU5gHm.js",
+      "route": "/api/notify/user",
+      "method": "POST",
+      "request_body": {
+        "userId": "string",
+        "title": "string",
+        "body": "string"
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "transport": "fetch local-host fallback",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 244,
+      "shared_request_policy": null,
+      "path": "/api/notify/user",
+      "query_parameters": []
+    },
+    {
+      "module": "Dashboard-DN8eeJDA.js",
+      "route": "/comments/react",
+      "method": "POST",
+      "request_body": {
+        "commentId": "string",
+        "reaction": "string",
+        "action": "toggle"
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer <Firebase ID token obtained from current user>"
+      },
+      "transport": "fetch",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 1149,
+      "shared_request_policy": null,
+      "path": "/comments/react",
+      "query_parameters": []
+    },
+    {
+      "module": "Dashboard-DN8eeJDA.js",
+      "route": "/api/events/{eventId}/assignments/{assignmentId}/attendance/photo",
+      "method": "POST",
+      "request_body": {
+        "multipart_form_data": {
+          "type": "check-in | check-out",
+          "attendanceTimeIso": "ISO string",
+          "attendanceStatus": "late | present | completed",
+          "wasLate": "0 | 1 string",
+          "wasCheckOutLate": "0 | 1 string",
+          "lat": "number serialized as string",
+          "lng": "number serialized as string",
+          "accuracyMeters": "optional number serialized as string",
+          "capturedAtMs": "number serialized as string",
+          "file": "File"
+        }
+      },
+      "headers": null,
+      "transport": "bffFetch",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 2040,
+      "shared_request_policy": "bffFetch",
+      "path": "/api/events/{eventId}/assignments/{assignmentId}/attendance/photo",
+      "query_parameters": []
+    },
+    {
+      "module": "Dashboard-DN8eeJDA.js",
+      "route": "/api/events/{eventId}/assignments/{assignmentId}/attendance",
+      "method": "POST",
+      "request_body": {
+        "type": "check-in | check-out",
+        "attendanceTimeIso": "ISO string",
+        "attendanceStatus": "late | present | completed",
+        "wasLate": "boolean",
+        "wasCheckOutLate": "boolean",
+        "location": {
+          "lat": "number",
+          "lng": "number",
+          "accuracyMeters": "optional number",
+          "capturedAtMs": "number"
+        }
+      },
+      "headers": null,
+      "transport": "bffFetch",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 2052,
+      "shared_request_policy": "bffFetch",
+      "path": "/api/events/{eventId}/assignments/{assignmentId}/attendance",
+      "query_parameters": []
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "route": "/api/download-material?path={storagePath}&filename={filename}",
+      "method": "GET",
+      "request_body": null,
+      "headers": null,
+      "transport": "browser download navigation",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 1877,
+      "shared_request_policy": null,
+      "path": "/api/download-material",
+      "query_parameters": [
+        "filename",
+        "path"
+      ]
+    },
+    {
+      "module": "EventDetails-CpDlqXqO.js",
+      "route": "/api/download?path={storagePath}&inline=1",
+      "method": "GET",
+      "request_body": null,
+      "headers": null,
+      "transport": "asset URL generator",
+      "confidence": "confirmed call-site, manually traced local variable",
+      "source_readable_line": 255,
+      "shared_request_policy": null,
+      "path": "/api/download",
+      "query_parameters": [
+        "inline",
+        "path"
+      ]
+    }
+  ],
+  "request_policies": {
+    "bffFetch": {
+      "confidence": "confirmed implementation; execution branch may be inactive",
+      "source": "App-BPrQ3EPG.js:587-670 (readable copy)",
+      "credentials": "include",
+      "default_method": "GET",
+      "default_timeout_ms": 30000,
+      "headers": {
+        "Content-Type": "application/json when options.json provided",
+        "x-app-version": "optional pwa_app_version from localStorage",
+        "x-app-path": "current pathname",
+        "x-xsrf-token": "cached XSRF token for non-GET/HEAD/OPTIONS requests when available",
+        "Cache-Control": "no-store when bypassCache/no-store/no-cache"
+      },
+      "body": "JSON.stringify(options.json) or raw options.body; FormData supplies its browser-generated content type",
+      "response": "JSON response (fallback {raw:text}); non-2xx -> BffError with status/data; read responses cached with ETag; 304 retry when cache absent",
+      "authorization": "No Authorization header added by this wrapper. Cookie session transport is configured with credentials:include. Backend validation is unknown."
+    }
+  },
+  "firebase": {
+    "project_id": "mcimachala-servidor",
+    "client_configuration_keys": [
+      "apiKey",
+      "authDomain",
+      "projectId",
+      "storageBucket",
+      "messagingSenderId",
+      "appId",
+      "measurementId"
+    ],
+    "client_configuration_values": "Omitted; use the original public artifact when necessary. These are frontend Firebase configuration, not server credentials.",
+    "api_function": {
+      "confidence": "confirmed URL referenced in frontend, not a verified deployed Functions inventory",
+      "name": "api",
+      "region": "us-central1",
+      "origin": "https://us-central1-mcimachala-servidor.cloudfunctions.net",
+      "evidence": [
+        "Settings-BtbU5gHm.js:244 readable",
+        "EventDetails-CpDlqXqO.js:761,981 readable"
+      ]
+    },
+    "build_flags": {
+      "confidence": "confirmed literal empty objects in this deployed bundle",
+      "He": {},
+      "Nt": {},
+      "effective_false_flags": [
+        "VITE_BFF_MODE",
+        "VITE_USE_EMULATORS",
+        "VITE_ENABLE_BFF",
+        "VITE_BFF_STRICT_AUTH"
+      ],
+      "effective_auth_persistence": "local by default",
+      "implication": "Most feature branches use direct client Firestore/Storage. Existing BFF code documents an alternate branch; it does not prove that branch is enabled."
+    }
+  },
+  "firestore_paths": [
+    {
+      "path_template": "roles/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "App-BPrQ3EPG.js",
+        "Roles-23Dg9NXW.js",
+        "ServiceAreas-CFqvjtqq.js",
+        "Settings-BtbU5gHm.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "App-BPrQ3EPG.js",
+          "offset": 13887
+        },
+        {
+          "module": "App-BPrQ3EPG.js",
+          "offset": 17241
+        },
+        {
+          "module": "Roles-23Dg9NXW.js",
+          "offset": 2457
+        }
+      ]
+    },
+    {
+      "path_template": "users/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "App-BPrQ3EPG.js",
+        "Attendance-BoRlsPo1.js",
+        "Dashboard-DN8eeJDA.js",
+        "PendingRequests-ofGtBucD.js",
+        "Settings-BtbU5gHm.js",
+        "Volunteers-CUDiGEOd.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "App-BPrQ3EPG.js",
+          "offset": 14077
+        },
+        {
+          "module": "App-BPrQ3EPG.js",
+          "offset": 16626
+        },
+        {
+          "module": "App-BPrQ3EPG.js",
+          "offset": 33277
+        }
+      ]
+    },
+    {
+      "path_template": "pending_assignments/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "App-BPrQ3EPG.js",
+        "PendingRequests-ofGtBucD.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "App-BPrQ3EPG.js",
+          "offset": 14800
+        },
+        {
+          "module": "PendingRequests-ofGtBucD.js",
+          "offset": 2624
+        }
+      ]
+    },
+    {
+      "path_template": "app_cache/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "App-BPrQ3EPG.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "App-BPrQ3EPG.js",
+          "offset": 45433
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/assignments",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Attendance-BoRlsPo1.js",
+        "Dashboard-DN8eeJDA.js",
+        "EventDetails-CpDlqXqO.js",
+        "Events-CIOfy-8U.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Attendance-BoRlsPo1.js",
+          "offset": 7271
+        },
+        {
+          "module": "Attendance-BoRlsPo1.js",
+          "offset": 7467
+        },
+        {
+          "module": "Attendance-BoRlsPo1.js",
+          "offset": 19999
+        }
+      ]
+    },
+    {
+      "path_template": "events",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Attendance-BoRlsPo1.js",
+        "Dashboard-DN8eeJDA.js",
+        "EventDetails-CpDlqXqO.js",
+        "Events-CIOfy-8U.js",
+        "ServiceHistory-k07fUeOW.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Attendance-BoRlsPo1.js",
+          "offset": 17949
+        },
+        {
+          "module": "Attendance-BoRlsPo1.js",
+          "offset": 19728
+        },
+        {
+          "module": "Attendance-BoRlsPo1.js",
+          "offset": 21066
+        }
+      ]
+    },
+    {
+      "path_template": "meta/attendanceSync",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Attendance-BoRlsPo1.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Attendance-BoRlsPo1.js",
+          "offset": 18838
+        },
+        {
+          "module": "Attendance-BoRlsPo1.js",
+          "offset": 36127
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/assignments/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Attendance-BoRlsPo1.js",
+        "Dashboard-DN8eeJDA.js",
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Attendance-BoRlsPo1.js",
+          "offset": 27190
+        },
+        {
+          "module": "Attendance-BoRlsPo1.js",
+          "offset": 29222
+        },
+        {
+          "module": "Attendance-BoRlsPo1.js",
+          "offset": 31063
+        }
+      ]
+    },
+    {
+      "path_template": "comments",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Dashboard-DN8eeJDA.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Dashboard-DN8eeJDA.js",
+          "offset": 17847
+        },
+        {
+          "module": "Dashboard-DN8eeJDA.js",
+          "offset": 18986
+        }
+      ]
+    },
+    {
+      "path_template": "comments/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Dashboard-DN8eeJDA.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Dashboard-DN8eeJDA.js",
+          "offset": 21423
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/autoBackups/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 7247
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/autoBackups/{id}/repertoire/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 7418
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/autoBackups/{id}/materials/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 7767
+        }
+      ]
+    },
+    {
+      "path_template": "commands",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 11245
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 12217
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 14324
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/repertoire",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 11728
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 23256
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 26659
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/replicateBackups",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 13443
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 13527
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 18021
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/autoBackups",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 13569
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 13648
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 18147
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/materials",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 15517
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 17140
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 18260
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/materials/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 17695
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 19209
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 29805
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/{id}/{id}/materials",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 18854
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js",
+        "Events-CIOfy-8U.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 23206
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 30671
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 31002
+        }
+      ]
+    },
+    {
+      "path_template": "events/{id}/repertoire/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 26513
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 27423
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 27572
+        }
+      ]
+    },
+    {
+      "path_template": "materials_library",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 31329
+        },
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 31861
+        }
+      ]
+    },
+    {
+      "path_template": "materials_library/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "EventDetails-CpDlqXqO.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "EventDetails-CpDlqXqO.js",
+          "offset": 32180
+        }
+      ]
+    },
+    {
+      "path_template": "event_templates",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Events-CIOfy-8U.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Events-CIOfy-8U.js",
+          "offset": 14859
+        },
+        {
+          "module": "Events-CIOfy-8U.js",
+          "offset": 15669
+        },
+        {
+          "module": "Events-CIOfy-8U.js",
+          "offset": 31346
+        }
+      ]
+    },
+    {
+      "path_template": "event_templates/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Events-CIOfy-8U.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Events-CIOfy-8U.js",
+          "offset": 15882
+        },
+        {
+          "module": "Events-CIOfy-8U.js",
+          "offset": 16288
+        }
+      ]
+    },
+    {
+      "path_template": "userTokens/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "notifications-BEtI2pcG.js",
+        "Settings-BtbU5gHm.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "notifications-BEtI2pcG.js",
+          "offset": 22522
+        },
+        {
+          "module": "notifications-BEtI2pcG.js",
+          "offset": 22764
+        },
+        {
+          "module": "Settings-BtbU5gHm.js",
+          "offset": 2492
+        }
+      ]
+    },
+    {
+      "path_template": "private_chats/{id}/messages",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "PendingAssignment-BisqKKqT.js",
+        "PendingRequests-ofGtBucD.js",
+        "useOptimizedChat-D_A1-F_L.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "PendingAssignment-BisqKKqT.js",
+          "offset": 906
+        },
+        {
+          "module": "PendingRequests-ofGtBucD.js",
+          "offset": 1787
+        },
+        {
+          "module": "useOptimizedChat-D_A1-F_L.js",
+          "offset": 522
+        }
+      ]
+    },
+    {
+      "path_template": "system/pending_users",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "PendingRequests-ofGtBucD.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "PendingRequests-ofGtBucD.js",
+          "offset": 1087
+        }
+      ]
+    },
+    {
+      "path_template": "private_chats/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "PendingRequests-ofGtBucD.js",
+        "useOptimizedChat-D_A1-F_L.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "PendingRequests-ofGtBucD.js",
+          "offset": 1537
+        },
+        {
+          "module": "PendingRequests-ofGtBucD.js",
+          "offset": 2323
+        },
+        {
+          "module": "useOptimizedChat-D_A1-F_L.js",
+          "offset": 348
+        }
+      ]
+    },
+    {
+      "path_template": "roles",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Roles-23Dg9NXW.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Roles-23Dg9NXW.js",
+          "offset": 1643
+        },
+        {
+          "module": "Roles-23Dg9NXW.js",
+          "offset": 4611
+        }
+      ]
+    },
+    {
+      "path_template": "service_areas",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Roles-23Dg9NXW.js",
+        "ServiceAreas-CFqvjtqq.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Roles-23Dg9NXW.js",
+          "offset": 3132
+        },
+        {
+          "module": "ServiceAreas-CFqvjtqq.js",
+          "offset": 2668
+        },
+        {
+          "module": "ServiceAreas-CFqvjtqq.js",
+          "offset": 4364
+        }
+      ]
+    },
+    {
+      "path_template": "service_areas/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "ServiceAreas-CFqvjtqq.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "ServiceAreas-CFqvjtqq.js",
+          "offset": 4095
+        },
+        {
+          "module": "ServiceAreas-CFqvjtqq.js",
+          "offset": 4775
+        }
+      ]
+    },
+    {
+      "path_template": "assignments",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "ServiceHistory-k07fUeOW.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "ServiceHistory-k07fUeOW.js",
+          "offset": 2301
+        }
+      ]
+    },
+    {
+      "path_template": "teaching_sessions",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "TuesdayTeaching-B3nMLJdY.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "TuesdayTeaching-B3nMLJdY.js",
+          "offset": 2177
+        }
+      ]
+    },
+    {
+      "path_template": "teaching_attendance_records",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "TuesdayTeaching-B3nMLJdY.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "TuesdayTeaching-B3nMLJdY.js",
+          "offset": 2549
+        },
+        {
+          "module": "TuesdayTeaching-B3nMLJdY.js",
+          "offset": 2988
+        }
+      ]
+    },
+    {
+      "path_template": "teaching_sessions/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "TuesdayTeaching-B3nMLJdY.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "TuesdayTeaching-B3nMLJdY.js",
+          "offset": 4620
+        }
+      ]
+    },
+    {
+      "path_template": "teaching_attendance_records/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "TuesdayTeaching-B3nMLJdY.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "TuesdayTeaching-B3nMLJdY.js",
+          "offset": 4885
+        }
+      ]
+    },
+    {
+      "path_template": "udlv_courses",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Udlv-B63vtmB5.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 1466
+        },
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 3726
+        }
+      ]
+    },
+    {
+      "path_template": "udlv_sections",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Udlv-B63vtmB5.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 1514
+        },
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 4298
+        },
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 5797
+        }
+      ]
+    },
+    {
+      "path_template": "udlv_classes",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Udlv-B63vtmB5.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 1563
+        },
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 4923
+        },
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 5891
+        }
+      ]
+    },
+    {
+      "path_template": "udlv_class_records",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Udlv-B63vtmB5.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 1858
+        },
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 6179
+        }
+      ]
+    },
+    {
+      "path_template": "udlv_courses/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Udlv-B63vtmB5.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 3551
+        },
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 5752
+        }
+      ]
+    },
+    {
+      "path_template": "udlv_sections/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Udlv-B63vtmB5.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 4158
+        },
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 5944
+        },
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 6093
+        }
+      ]
+    },
+    {
+      "path_template": "udlv_classes/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Udlv-B63vtmB5.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 4765
+        },
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 6239
+        }
+      ]
+    },
+    {
+      "path_template": "udlv_class_records/{id}",
+      "confidence": "confirmed client-side path construction; existence/access unverified",
+      "modules": [
+        "Udlv-B63vtmB5.js"
+      ],
+      "examples_original_offsets": [
+        {
+          "module": "Udlv-B63vtmB5.js",
+          "offset": 5308
+        }
+      ]
+    }
+  ],
+  "roles": {
+    "confidence": "confirmed frontend constants and predicates; server authorization unknown",
+    "ids": [
+      "master_admin",
+      "admin",
+      "user",
+      "ministry_admin",
+      "ministry_subadmin"
+    ],
+    "dynamic_id_patterns": [
+      "ministry_admin_{ministryId}",
+      "ministry_subadmin_{ministryId}"
+    ],
+    "permissions": [
+      "view_dashboard",
+      "manage_users",
+      "manage_roles",
+      "manage_events",
+      "view_events",
+      "manage_services",
+      "view_reports",
+      "manage_ministry_events",
+      "manage_ministry_users",
+      "view_ministry_reports",
+      "view_ministry_attendance"
+    ],
+    "sentinel_no_role": "__NO_ROLE__",
+    "fields_seen": [
+      "role",
+      "permissions",
+      "assignedMinistries",
+      "areas",
+      "ministryRoles",
+      "ministryId",
+      "ministryName",
+      "roleType"
+    ]
+  },
+  "data_model_examples": {
+    "users": {
+      "uid": "string",
+      "email": "string",
+      "name": "string",
+      "role": "string",
+      "photoURL": "optional string",
+      "photoThumbURL": "optional string",
+      "assignedMinistries": "array",
+      "areas": "array",
+      "permissions": "array",
+      "ministryRoles": "object or dynamic",
+      "createdAt": "date/timestamp",
+      "preferences": {
+        "notifications": "boolean-like dynamic"
+      }
+    },
+    "events": {
+      "title": "string",
+      "date": "string",
+      "location": "string",
+      "serviceTime": "string",
+      "time": "string",
+      "endTime": "string",
+      "type": "string (service fallback)",
+      "description": "string",
+      "activeMinistries": "array",
+      "imageUrl": "string",
+      "imageThumbUrl": "string",
+      "status": "string (scheduled on create, completed action)",
+      "createdBy": "user id",
+      "updatedBy": "user id"
+    },
+    "event_assignments": {
+      "id": "string",
+      "areaId": "string",
+      "areaName": "string",
+      "roleName": "string",
+      "userId": "string",
+      "userName": "string",
+      "userPhoto": "string | null"
+    },
+    "udlv_courses": {
+      "name": "string",
+      "description": "string",
+      "docenteId": "string",
+      "tutorId": "string",
+      "asistentId": "string (spelling in actual bundle)",
+      "teamIds": "array of user ids",
+      "createdAt": "date",
+      "createdBy": "user id"
+    },
+    "note": "Partial client write/read shapes, not an authoritative server schema. No database contents have been accessed."
+  },
+  "readability": {
+    "method": "prettier@3.8.0 babel parser, one output file per original application chunk, exact same filenames/imports/exports",
+    "script": "/workspace/frontend-analysis-tools/format.cjs",
+    "output_directory": "C:\\Users\\HP\\Documents\\ChatGPT\\reconstrucción proyectos de firebase\\MciServidores\\recovered\\readable-assets",
+    "validation_file": "C:\\Users\\HP\\Documents\\ChatGPT\\reconstrucción proyectos de firebase\\MciServidores\\recovered\\readable-validation.json",
+    "normalized_ast_equal": {
+      "checked": 28,
+      "passed": 28,
+      "parser": "acorn@8.15.0",
+      "ignored_properties": [
+        "start",
+        "end",
+        "raw"
+      ]
+    },
+    "original_artifacts_modified": false,
+    "typescript_recovery": "Original TS/TSX, symbol names, comments, dependency pins and original module boundaries are not recoverable exactly from these compiled chunks. Do not label formatted JS as original source.",
+    "esbuild_alternative": "Transform each chunk as ESM with minify:false, bundle:false, target:esnext, legalComments:preserve. Do not rename hashed import targets or re-bundle vendor chunks. Formatting with prettier is the lower-change choice."
+  },
+  "unknowns": [
+    "Original server/API implementation, complete deployed Functions inventory, runtime generation and service-account permissions.",
+    "Firestore/Storage security rules, deployed indexes and bucket IAM.",
+    "Actual data contents, installed production roles/users, configured Auth providers and authorized domains.",
+    "Original source tree, TypeScript types, original package manifest and exact dependency versions.",
+    "Which hosting rewrites route /api/* and /comments/react; frontend links imply these rewrites but do not reveal their deployed definitions.",
+    "Whether every API endpoint currently exists or returns the shapes the client expects.",
+    "No execution/authenticated validation of protected routes was performed by this analysis."
+  ]
+}

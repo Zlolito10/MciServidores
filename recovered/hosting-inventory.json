@@ -1,0 +1,472 @@
+[
+  {
+    "url": "https://mcimachala-servidor.web.app/.well-known/security.txt",
+    "path": "/.well-known/security.txt",
+    "status": 200,
+    "content_type": "text/plain; charset=utf-8",
+    "bytes": 270,
+    "local": "hosting/.well-known/security.txt",
+    "sha256": "50eab9cd331b08177f609e5aa753e9ecac38f64d520828b11ba9553ed5cdaa07",
+    "hostingUploadHash": "84c234f6852e753ffda3a5dd82e88541dd7d6c91233c7c5c61c27bd4818c8522"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/app-version.json",
+    "path": "/app-version.json",
+    "status": 200,
+    "content_type": "application/json",
+    "bytes": 26,
+    "local": "hosting/app-version.json",
+    "sha256": "08e24b7a28779299086546f46b61a0d3d0aa4327d2af72d30a8718b634bdd4a6",
+    "hostingUploadHash": "32c9adb9f72e6826c0a48892b30df771d31e3573e7bdd84f8d002d259dc23a4f"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/App-BPrQ3EPG.js",
+    "path": "/assets/App-BPrQ3EPG.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 73692,
+    "local": "hosting/assets/App-BPrQ3EPG.js",
+    "sha256": "faea9e34836d2226a4060a7832c81fdcef62450cc824fbbe6f7b0b205f8b5025",
+    "hostingUploadHash": "ac6387d6e289de43597ba70350f343ff910e8f8c914de8deef7c9889b49b09b4"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/AppHistory-oOipttKZ.js",
+    "path": "/assets/AppHistory-oOipttKZ.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 39587,
+    "local": "hosting/assets/AppHistory-oOipttKZ.js",
+    "sha256": "3478f1554cd5560b3bb28b95db26237086ad9c32dff0483b5b6701d89e5c9aa9",
+    "hostingUploadHash": "141d54da90ae464583cc1dae7ee1a5d8fc1097e2fdca0bcd15956f8cf3358607"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/Attendance-BoRlsPo1.js",
+    "path": "/assets/Attendance-BoRlsPo1.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 134459,
+    "local": "hosting/assets/Attendance-BoRlsPo1.js",
+    "sha256": "b3a6442d2814cd31aa56304290f0463a2daf10bb22085b0c9f1c84c7a0ddd8ea",
+    "hostingUploadHash": "916f9db656224d0f76f6f77466d29795daaf165ed7262e44f45f3ef415fad3cb"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/CameraModal-BwvRT9Xn.js",
+    "path": "/assets/CameraModal-BwvRT9Xn.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 649384,
+    "local": "hosting/assets/CameraModal-BwvRT9Xn.js",
+    "sha256": "d2248f26394e989674170575c0bbf79d131cea3cc13d8c126b558f5bc4bad0bd",
+    "hostingUploadHash": "5950eefff7e165a1c78d44724de17cbe7048e2b78477f5a337e63969fcb06c08"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/Dashboard-DN8eeJDA.js",
+    "path": "/assets/Dashboard-DN8eeJDA.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 59455,
+    "local": "hosting/assets/Dashboard-DN8eeJDA.js",
+    "sha256": "93b431d71eb73b8343c34edc786be9337dfa1812eac50aad185add1603933aec",
+    "hostingUploadHash": "09e428652fa22f812decb326e3cab1748a3c4e9bc4c7ece967d63037ad1dc34a"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/EventDetails-CpDlqXqO.js",
+    "path": "/assets/EventDetails-CpDlqXqO.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 101854,
+    "local": "hosting/assets/EventDetails-CpDlqXqO.js",
+    "sha256": "60b3313ba784f7f18c931012a7afa1a41ead037d0b584d8215738f64241921ff",
+    "hostingUploadHash": "b05d09e9c256517f076c840ed13739dd28ffc49a4856e7e566953d97c71d9260"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/Events-CIOfy-8U.js",
+    "path": "/assets/Events-CIOfy-8U.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 51669,
+    "local": "hosting/assets/Events-CIOfy-8U.js",
+    "sha256": "a4448b81e8ab133176c3064233f7c2f1f2f04004958676f1bd19a3bf8e50f7be",
+    "hostingUploadHash": "b524a80d97990f6a3f5930609ccbcbc1e3d0eb57ddb4cfe33f18272608577827"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/EventsGrid-BNb5ngU2.js",
+    "path": "/assets/EventsGrid-BNb5ngU2.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 10822,
+    "local": "hosting/assets/EventsGrid-BNb5ngU2.js",
+    "sha256": "5903ca3f362d8f5a505a41dc7a824cccfe0f808c4c1093e79012cdcaaf14d09c",
+    "hostingUploadHash": "31ce743d2cebb5ee315aa6a5839cfed65c286512f0a5472fd575420fa0eecf22"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/LoadingButton-DoDnirDC.js",
+    "path": "/assets/LoadingButton-DoDnirDC.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 558,
+    "local": "hosting/assets/LoadingButton-DoDnirDC.js",
+    "sha256": "2595c04ad7a97dc60497ac705170b55d3aee65ce3c095f3a3acd7b53dac71aa0",
+    "hostingUploadHash": "171f0a8930cbc684a7d34038ac99b93277df6575f35d242d3bf53e854927e4bb"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/LoadingSpinner-DQ5LcqWB.js",
+    "path": "/assets/LoadingSpinner-DQ5LcqWB.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 552,
+    "local": "hosting/assets/LoadingSpinner-DQ5LcqWB.js",
+    "sha256": "fec3281ebc8364d3c715dbee14eca7231c3162d02cf9ced3bbc70a4ef2a56427",
+    "hostingUploadHash": "118fd9157e74b149473026b74a5874ce212914b96081a6d9dedcf015e248fa2b"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/ManageMinistriesModal-BO1rzanM.js",
+    "path": "/assets/ManageMinistriesModal-BO1rzanM.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 4239,
+    "local": "hosting/assets/ManageMinistriesModal-BO1rzanM.js",
+    "sha256": "b99354e1147ff72b0e25157bc7228ca9f8e260bff66678ad10cefd4487cb8027",
+    "hostingUploadHash": "4e9150486d044fefab4ed506d90923ffdead80d4257ee6280700da4797baa7e6"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/NotificationsAutoRegister-Dn_C-rjK.js",
+    "path": "/assets/NotificationsAutoRegister-Dn_C-rjK.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 342,
+    "local": "hosting/assets/NotificationsAutoRegister-Dn_C-rjK.js",
+    "sha256": "b7cf26d4f8326c30ae6e9cde5ca4f2418cab42553489eba50bead8ca9560e9ff",
+    "hostingUploadHash": "ac57e8449a501498a67580d6af3b3d2371c2c21bc583ee3f68403575bbdebeb8"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/PendingAssignment-BisqKKqT.js",
+    "path": "/assets/PendingAssignment-BisqKKqT.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 5008,
+    "local": "hosting/assets/PendingAssignment-BisqKKqT.js",
+    "sha256": "d92077fbafd4ffaea2c014656b22c43167e06346defc9cd7cbeec2fb4c3debb2",
+    "hostingUploadHash": "c4625f342f80edf323203d550c2efe89b65ebb516f780ee4f11e68ca33ab3dc5"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/PendingRequests-ofGtBucD.js",
+    "path": "/assets/PendingRequests-ofGtBucD.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 8232,
+    "local": "hosting/assets/PendingRequests-ofGtBucD.js",
+    "sha256": "66065557915d897bb32973ed16711115f19613a0a9e79ff7f694f5213506768a",
+    "hostingUploadHash": "f9ff75cc30feb832158c4263f1cc0a463c76ab5ab8e39d19210dc87823780008"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/Roles-23Dg9NXW.js",
+    "path": "/assets/Roles-23Dg9NXW.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 20579,
+    "local": "hosting/assets/Roles-23Dg9NXW.js",
+    "sha256": "c3c0c7ee8f30c2c4a955982712f0b6dc152ae73f874af0a9786b26c27260a9c9",
+    "hostingUploadHash": "76ed33bddcfa61025b91cc8c29a10cd3c9cc867f40549164614b66bc015de96a"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/SelectPicker-D1mnbmt-.js",
+    "path": "/assets/SelectPicker-D1mnbmt-.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 2140,
+    "local": "hosting/assets/SelectPicker-D1mnbmt-.js",
+    "sha256": "1ceab3c9f49ffeaf05633a3510405f0f1b5de6c9a1b45db812fa30ebc57cd557",
+    "hostingUploadHash": "f36e46a72a60412ac5907bf13659945ce4ef5dac1a942fee9b0b7ce09e3be906"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/ServiceAreas-CFqvjtqq.js",
+    "path": "/assets/ServiceAreas-CFqvjtqq.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 15027,
+    "local": "hosting/assets/ServiceAreas-CFqvjtqq.js",
+    "sha256": "28dcfb925f0700b502420e24497f32601a6737793bd346c09e333560e1cb0693",
+    "hostingUploadHash": "2ee938b454814d6b447ff5f6d52f5862f6555d9d7c5f5ae1a25e934254d045b4"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/ServiceHistory-k07fUeOW.js",
+    "path": "/assets/ServiceHistory-k07fUeOW.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 24950,
+    "local": "hosting/assets/ServiceHistory-k07fUeOW.js",
+    "sha256": "4cdcc4d2c3c10a5b027d6c2db6852b1dc59fe437c6af4caaf8b4964e9b50bb2b",
+    "hostingUploadHash": "9c8aff9b6805ff2d1b2b4c90ba40aa5e80c2e0f9ddddcca8a7d6dbe9a914ee5a"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/Settings-BtbU5gHm.js",
+    "path": "/assets/Settings-BtbU5gHm.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 28421,
+    "local": "hosting/assets/Settings-BtbU5gHm.js",
+    "sha256": "4230aeb13535fd4d52c21a99829bbfdd21d5953cce1b8f5b60e243984e50cf3a",
+    "hostingUploadHash": "e6573eba51c2912115a8f1cd209eb8817be218acb1dd0fae3ace72b4d413b214"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/TuesdayTeaching-B3nMLJdY.js",
+    "path": "/assets/TuesdayTeaching-B3nMLJdY.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 18575,
+    "local": "hosting/assets/TuesdayTeaching-B3nMLJdY.js",
+    "sha256": "13ae780fd5f2b6942fd7503946d8507ad8d76d3d85793eae95cbca8e0c9d9bf1",
+    "hostingUploadHash": "c902bbe4305d4298e839b26e345b2c888d0c1ad4ec0aed6b332e8348073c0d85"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/Udlv-B63vtmB5.js",
+    "path": "/assets/Udlv-B63vtmB5.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 43590,
+    "local": "hosting/assets/Udlv-B63vtmB5.js",
+    "sha256": "d391c9b480b5435eff2255a0d284193dec50876d9ac2c7e52ab3f58721d1ccb1",
+    "hostingUploadHash": "7765113e8c0be05e96ff8aa95698bf6a52a494cbb9338be6afc76840efb09c59"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/Volunteers-CUDiGEOd.js",
+    "path": "/assets/Volunteers-CUDiGEOd.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 27853,
+    "local": "hosting/assets/Volunteers-CUDiGEOd.js",
+    "sha256": "6e10b28216ff34da39fa4faf99ae68a1da1bba558d3749d1f15cab03ae86e510",
+    "hostingUploadHash": "e497d9c80c1e2f690942bcbae36c7f60c758f5ed703bca761b802c71b914802d"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/html2canvas.esm-Ge7aVWlp.js",
+    "path": "/assets/html2canvas.esm-Ge7aVWlp.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 201401,
+    "local": "hosting/assets/html2canvas.esm-Ge7aVWlp.js",
+    "sha256": "1b03b251e9c733a298b4c156b056298b81513298d3e0d1797a60fca2edba2d21",
+    "hostingUploadHash": "4a14e81bcee3b39f38af103c9008cb1847cfe7acdc93f1c5e0ac66fba1990c3f"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/index-B05fqWAG.css",
+    "path": "/assets/index-B05fqWAG.css",
+    "status": 200,
+    "content_type": "text/css; charset=utf-8",
+    "bytes": 115591,
+    "local": "hosting/assets/index-B05fqWAG.css",
+    "sha256": "81f463a48b1bc5087c9ea1a4c3bf905eefc571230a93085db637b7280becb182",
+    "hostingUploadHash": "9a38f41b52c91b281e48022ef34a6ed6912aa65d6a099a51188eb2444e8108cf"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/index-BU_ZgoWo.js",
+    "path": "/assets/index-BU_ZgoWo.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 187015,
+    "local": "hosting/assets/index-BU_ZgoWo.js",
+    "sha256": "9abc2e62e034239b513addd5b9c383dcf280ba8e78f9e65d484e05fc625620ba",
+    "hostingUploadHash": "0e1f8c9e820c65f9cdfb180224bd16e6f36aad8572a0da83b6d7c5fec805d473"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/index.es-DmxuMTI-.js",
+    "path": "/assets/index.es-DmxuMTI-.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 158591,
+    "local": "hosting/assets/index.es-DmxuMTI-.js",
+    "sha256": "ff79a2e9dc4765871a637e847ee272b25dd0f990176cafcbf6560f0d67c32e4e",
+    "hostingUploadHash": "536095ffc5565bb87fd347ef4c5684b2d8ce4dbb86061d598c53f9bc775a9e9b"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/notifications-BEtI2pcG.js",
+    "path": "/assets/notifications-BEtI2pcG.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 23940,
+    "local": "hosting/assets/notifications-BEtI2pcG.js",
+    "sha256": "4a0d0b5490e83fda20ed964048330c3f48f9732abd71c51ad0831b59cdeb08e7",
+    "hostingUploadHash": "e98bccd5d419b29e862138914a9451ba3a975e4b24f09560f654349e9c943ab0"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/optimistic-Pk6VB-2G.js",
+    "path": "/assets/optimistic-Pk6VB-2G.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 10424,
+    "local": "hosting/assets/optimistic-Pk6VB-2G.js",
+    "sha256": "36e0baaa6cf2fdd8ba431671dd4cecfa485136e6ea403a699fca30bd68481ccc",
+    "hostingUploadHash": "63bf7ed85fd7ce44379ab9cb5e8170e450986682e62f079edccf58e2cb31163b"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/purify.es-C65SP4u9.js",
+    "path": "/assets/purify.es-C65SP4u9.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 22378,
+    "local": "hosting/assets/purify.es-C65SP4u9.js",
+    "sha256": "cdc698dcce0237ef403f78be57e003811a581488b60a7fc23c902d832892d6e5",
+    "hostingUploadHash": "97fa570703e9eb6fc299cec7f6e36413a6a6e0514e2be77b102875c6b25b5d27"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/roleUtils-BDLO6O1S.js",
+    "path": "/assets/roleUtils-BDLO6O1S.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 199,
+    "local": "hosting/assets/roleUtils-BDLO6O1S.js",
+    "sha256": "a6fb6f82ec3cfb91b071bfaf3b274e502fc85773a599191d679872b4e434d47b",
+    "hostingUploadHash": "35c02278cfbf30ffdc43121f6f414fcf78513f5d9ab6e96fb7cddb95e13a1e54"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/useNotifications-fJ3DWoi9.js",
+    "path": "/assets/useNotifications-fJ3DWoi9.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 3075,
+    "local": "hosting/assets/useNotifications-fJ3DWoi9.js",
+    "sha256": "c1dd661e9560625a5b0502d92d9dd53cca832f42570d02008891035fcf653ab7",
+    "hostingUploadHash": "d9a9f6832b02e91df09fcdb3df60980c29e2113496227cbcaea4ea2cf532fd88"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/useOptimizedChat-D_A1-F_L.js",
+    "path": "/assets/useOptimizedChat-D_A1-F_L.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 1536,
+    "local": "hosting/assets/useOptimizedChat-D_A1-F_L.js",
+    "sha256": "1662ce0e88e0cd87cd37d1885d59432192e5c9d1f9073d0c8d0bc3ee00a079fc",
+    "hostingUploadHash": "fe60ddaec09be0b2d47a6cbfa86489ce6a6d67a0840bbc9f64de113e3016f6f4"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/vendor-firebase-BjYbfC3F.js",
+    "path": "/assets/vendor-firebase-BjYbfC3F.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 438573,
+    "local": "hosting/assets/vendor-firebase-BjYbfC3F.js",
+    "sha256": "da763d3f2b134b1d8cb30d4bf7414f876d568491a2b08c8db249b9f5c8231b8f",
+    "hostingUploadHash": "510938f5bac78f8aa269f0978a9e4e0f87b6639b8001dc62536c3936274fcd25"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/vendor-pdf-Cf03QSry.js",
+    "path": "/assets/vendor-pdf-Cf03QSry.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 417308,
+    "local": "hosting/assets/vendor-pdf-Cf03QSry.js",
+    "sha256": "b322b716c681d9d714eecfc70bf91dba4d323906b2c1f3fc6c3af162384ce7ed",
+    "hostingUploadHash": "06bf283e072e207f42313977604d9635b3c180c8a6bc0566f1c74806362a46be"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/vendor-react-BwINE3B3.js",
+    "path": "/assets/vendor-react-BwINE3B3.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 44402,
+    "local": "hosting/assets/vendor-react-BwINE3B3.js",
+    "sha256": "dd9bfea1fc529da33026af8e6f1f70bdd0b786740d8427d6732ff87cef694052",
+    "hostingUploadHash": "5dbc596aa5023cc2551981e7cac885dbfc654fe4aea61b08c16d9e23e71119c1"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/assets/vendor-ui-CnvYSvQL.js",
+    "path": "/assets/vendor-ui-CnvYSvQL.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 20332,
+    "local": "hosting/assets/vendor-ui-CnvYSvQL.js",
+    "sha256": "943bf537ad154d9fb3d5504e8cf403f0f745680b3a0f1d79bb5cbd2fd451bf1d",
+    "hostingUploadHash": "51a9540d73fbdec273fd2f31f00960016f87fc48c22753e66a8110b544aa72d1"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/firebase-messaging-sw.js",
+    "path": "/firebase-messaging-sw.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 1592,
+    "local": "hosting/firebase-messaging-sw.js",
+    "sha256": "615d8386b3ec659abcdcab83edb0b67ee130554b00d1bbf915ceb4c899cc3143",
+    "hostingUploadHash": "51ece2451d84be42973ea0a6f030a640e28f31aed63a8c176b3ea79ab3d8cb40"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/index.html",
+    "path": "/index.html",
+    "status": 200,
+    "content_type": "text/html; charset=utf-8",
+    "bytes": 4845,
+    "local": "hosting/index.html",
+    "sha256": "a4a1df69d5bfe521deda910916345d4adb2c044c2d1f599fa475365e22bd9e60",
+    "hostingUploadHash": "aaabc3ebcaa0f901268128316995f11685370a30dd27542ad511cf21989e4e4d"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/manifest.json.legacy",
+    "path": "/manifest.json.legacy",
+    "status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "bytes": 660,
+    "local": "hosting/manifest.json.legacy",
+    "sha256": "74a6f0dd7c0aa447adbf963adc6601463efdb3b3b359faba8f6e8733e8d06f61",
+    "hostingUploadHash": "a4c7d2dcb627ca560ab93c11f05b76cfd3808f31a030d38dbfe7a8bd8310b53e"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/manifest.webmanifest",
+    "path": "/manifest.webmanifest",
+    "status": 200,
+    "content_type": "application/manifest+json",
+    "bytes": 420,
+    "local": "hosting/manifest.webmanifest",
+    "sha256": "73b5033801149fe24c9020a174142561a8a0cc124d0366aaac7f3d8f845ce860",
+    "hostingUploadHash": "eb47da4ff5a2d4d8356d57abc8227f64135ce5a19dc4145a2304bc9938e8d2f3"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/mci-logo-pagina.png",
+    "path": "/mci-logo-pagina.png",
+    "status": 200,
+    "content_type": "image/png",
+    "bytes": 7786,
+    "local": "hosting/mci-logo-pagina.png",
+    "sha256": "390127af483927c0d9c31b2dfacccb9579ca121965fa3739b4682bfdb2f8cb06",
+    "hostingUploadHash": "1560102aae58db793ab76be5cd9e22b3d8d72c17c6e14ba0655a2322de896d54"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/mci-logo.png",
+    "path": "/mci-logo.png",
+    "status": 200,
+    "content_type": "image/png",
+    "bytes": 7786,
+    "local": "hosting/mci-logo.png",
+    "sha256": "390127af483927c0d9c31b2dfacccb9579ca121965fa3739b4682bfdb2f8cb06",
+    "hostingUploadHash": "1560102aae58db793ab76be5cd9e22b3d8d72c17c6e14ba0655a2322de896d54"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/registerSW.js",
+    "path": "/registerSW.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 153,
+    "local": "hosting/registerSW.js",
+    "sha256": "575032a268154a3536821746ba361a03f3b9452bef233a946a0c73d42ef1061b",
+    "hostingUploadHash": "41835eb2fede16f1660e3a1dc3d11804d370b93fb1d1453aef2e6254a12dc0b2"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/vite.svg",
+    "path": "/vite.svg",
+    "status": 200,
+    "content_type": "image/svg+xml",
+    "bytes": 1497,
+    "local": "hosting/vite.svg",
+    "sha256": "4a748afd443918bb16591c834c401dae33e87861ab5dbad0811c3a3b4a9214fb",
+    "hostingUploadHash": "9de4d3c4e50257d9874f07e9efc929efefc85e51f931a9af716f9a7ebb23ef68"
+  },
+  {
+    "url": "https://mcimachala-servidor.web.app/workbox-d8d0471a.js",
+    "path": "/workbox-d8d0471a.js",
+    "status": 200,
+    "content_type": "text/javascript; charset=utf-8",
+    "bytes": 21874,
+    "local": "hosting/workbox-d8d0471a.js",
+    "sha256": "96f58596f5b4102f1189189290ecf7d79931a3169b6555ca3f40c99c3c6c7254",
+    "hostingUploadHash": "47481a74419a8167334860007b4ac9225c3e598605adbf5a2558b766e3fdc051"
+  }
+]

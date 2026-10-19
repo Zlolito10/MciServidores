@@ -1,0 +1,272 @@
+[
+  {
+    "name": "backfillEventThumbs",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "backfillEventThumbs",
+    "versionId": "6",
+    "trigger": "http"
+  },
+  {
+    "name": "onUserWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onUserWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "onAssignmentWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onAssignmentWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "backfillPendingUsers",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "backfillPendingUsers",
+    "versionId": "6",
+    "trigger": "http"
+  },
+  {
+    "name": "onEventTemplateWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onEventTemplateWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "fixStorageCors",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "fixStorageCors",
+    "versionId": "6",
+    "trigger": "http"
+  },
+  {
+    "name": "onChatMessageWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onChatMessageWritten",
+    "versionId": "11",
+    "trigger": "event"
+  },
+  {
+    "name": "onNotificationWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onNotificationWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "serverApi",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "serverApi",
+    "versionId": "41",
+    "trigger": "http"
+  },
+  {
+    "name": "onMaterialWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onMaterialWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "onUserTokenWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onUserTokenWritten",
+    "versionId": "27",
+    "trigger": "event"
+  },
+  {
+    "name": "onRepertoireWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onRepertoireWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "onEventWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onEventWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "onEventDeleted",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onEventDeleted",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "onCommandWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onCommandWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "migrateEventImagesFromDataUrl",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "migrateEventImagesFromDataUrl",
+    "versionId": "6",
+    "trigger": "http"
+  },
+  {
+    "name": "attendanceReminders",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "attendanceReminders",
+    "versionId": "45",
+    "trigger": "event"
+  },
+  {
+    "name": "backfillProfilePhotoThumbs",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "backfillProfilePhotoThumbs",
+    "versionId": "6",
+    "trigger": "http"
+  },
+  {
+    "name": "onAttendanceWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onAttendanceWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "onServiceAreaWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onServiceAreaWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "onMinistryDeleted",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onMinistryDeleted",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "onRoleWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onRoleWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "api",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "api",
+    "versionId": "47",
+    "trigger": "http"
+  },
+  {
+    "name": "cleanupOldFiles",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "cleanupOldFiles",
+    "versionId": "13",
+    "trigger": "event"
+  },
+  {
+    "name": "attendanceSyncOnEventWrite",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "attendanceSyncOnEventWrite",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "onUserDeleted",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onUserDeleted",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "attendanceSyncOnAssignmentWrite",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "attendanceSyncOnAssignmentWrite",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "onCommentWritten",
+    "generation": 1,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onCommentWritten",
+    "versionId": "46",
+    "trigger": "event"
+  },
+  {
+    "name": "onChangeMetaUpdated",
+    "generation": 2,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onChangeMetaUpdated",
+    "versionId": null,
+    "trigger": "http"
+  },
+  {
+    "name": "onImageFinalizeGenerateThumb",
+    "generation": 2,
+    "region": "us-central1",
+    "runtime": "nodejs22",
+    "entryPoint": "onImageFinalizeGenerateThumb",
+    "versionId": null,
+    "trigger": "http"
+  }
+]

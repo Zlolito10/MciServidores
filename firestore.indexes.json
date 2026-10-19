@@ -1,0 +1,102 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "udlv_sections",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "ministryId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "app_telemetry_daily_routes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "day",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "bytes",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "udlv_classes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "ministryId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "assignments",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "userId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "eventDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "udlv_courses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "ministryId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": [
+    {
+      "collectionGroup": "assignments",
+      "fieldPath": "userId",
+      "indexes": [
+        {
+          "queryScope": "COLLECTION",
+          "order": "ASCENDING"
+        },
+        {
+          "queryScope": "COLLECTION",
+          "order": "DESCENDING"
+        },
+        {
+          "queryScope": "COLLECTION_GROUP",
+          "order": "ASCENDING"
+        },
+        {
+          "queryScope": "COLLECTION_GROUP",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ]
+}

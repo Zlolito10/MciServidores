@@ -1,0 +1,213 @@
+import { j as e } from "./index-BU_ZgoWo.js";
+import { u as f, r as i } from "./vendor-react-BwINE3B3.js";
+import { u as b, O as p, g as j, e as v } from "./App-BPrQ3EPG.js";
+import { N as w, E as y, D as N } from "./vendor-firebase-BjYbfC3F.js";
+import { L as k } from "./LoadingButton-DoDnirDC.js";
+import { u as A } from "./useOptimizedChat-D_A1-F_L.js";
+import { ap as E, A as M, k as D } from "./vendor-ui-CnvYSvQL.js";
+import "./vendor-pdf-Cf03QSry.js";
+const U = () => {
+  const { user: r, userProfile: a, logout: m } = b(),
+    d = f(),
+    { messages: l } = A(r?.uid || null),
+    [n, o] = i.useState(""),
+    [g, c] = i.useState(!1),
+    x = i.useRef(null);
+  (i.useEffect(() => {
+    const s = a?.role === "admin" || a?.role === "master_admin",
+      t =
+        (a?.assignedMinistries && a.assignedMinistries.length > 0) ||
+        (a?.areas && a.areas.length > 0);
+    (s || t) && d("/dashboard");
+  }, [a, d]),
+    i.useEffect(() => {
+      setTimeout(() => x.current?.scrollIntoView({ behavior: "smooth" }), 100);
+    }, [l]));
+  const u = async (s) => {
+      if ((s.preventDefault(), !(!n.trim() || !r))) {
+        c(!0);
+        try {
+          (await w(y(v, "private_chats", r.uid, "messages"), {
+            text: n.trim(),
+            senderId: r.uid,
+            senderName: a?.name || r.displayName || "Usuario",
+            createdAt: N(),
+            isAdmin: !1,
+          }),
+            o(""));
+        } catch (t) {
+          console.error("Error sending message:", t);
+        } finally {
+          c(!1);
+        }
+      }
+    },
+    h = async () => {
+      (await m(), d("/login"));
+    };
+  return e.jsx("div", {
+    className:
+      "min-h-screen bg-gray-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4",
+    children: e.jsxs("div", {
+      className:
+        "max-w-md w-full bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden flex flex-col h-[85vh] border border-gray-100 dark:border-slate-700",
+      children: [
+        e.jsxs("div", {
+          className:
+            "p-6 bg-indigo-600 text-white text-center relative overflow-hidden",
+          children: [
+            e.jsxs("div", {
+              className: "relative z-10",
+              children: [
+                e.jsx("h1", {
+                  className: "text-2xl font-bold mb-1",
+                  children: "Bienvenido",
+                }),
+                e.jsx("p", {
+                  className: "text-indigo-100 text-sm mb-4 opacity-90",
+                  children: "Estamos validando tu cuenta.",
+                }),
+              ],
+            }),
+            e.jsx("div", {
+              className:
+                "absolute top-0 left-0 w-32 h-32 bg-white/5 rounded-full -translate-x-10 -translate-y-10",
+            }),
+            e.jsx("div", {
+              className:
+                "absolute bottom-0 right-0 w-24 h-24 bg-white/10 rounded-full translate-x-8 translate-y-8",
+            }),
+          ],
+        }),
+        e.jsxs("div", {
+          className:
+            "flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-slate-900/50 space-y-3",
+          children: [
+            l.length === 0
+              ? e.jsxs("div", {
+                  className:
+                    "flex flex-col items-center justify-center h-full text-center text-gray-400 dark:text-slate-500 gap-3",
+                  children: [
+                    e.jsx("div", {
+                      className:
+                        "w-12 h-12 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center",
+                      children: e.jsx(E, { className: "w-6 h-6 opacity-50" }),
+                    }),
+                    e.jsx("p", {
+                      className: "text-sm",
+                      children: "Envía un mensaje para comenzar...",
+                    }),
+                  ],
+                })
+              : l.map((s) => {
+                  const t = s.senderId === r?.uid;
+                  return e.jsx(
+                    "div",
+                    {
+                      className: `flex w-full ${t ? "justify-end" : "justify-start"}`,
+                      children: e.jsxs("div", {
+                        className: `flex max-w-[85%] ${t ? "flex-row-reverse" : "flex-row"} items-end gap-2`,
+                        children: [
+                          !t &&
+                            (s.senderPhotoURL
+                              ? e.jsx(p, {
+                                  src: j(s.senderPhotoURL) || "",
+                                  alt: "Admin",
+                                  className:
+                                    "w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex-shrink-0 object-cover",
+                                  fallbackIcon: e.jsx("span", {
+                                    className:
+                                      "text-xs font-bold text-indigo-600 dark:text-indigo-400",
+                                    children: "AD",
+                                  }),
+                                })
+                              : e.jsx("div", {
+                                  className:
+                                    "w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex-shrink-0 flex items-center justify-center",
+                                  children: e.jsx("span", {
+                                    className:
+                                      "text-xs font-bold text-indigo-600 dark:text-indigo-400",
+                                    children: "AD",
+                                  }),
+                                })),
+                          e.jsxs("div", {
+                            className: `px-4 py-2.5 text-sm shadow-sm break-words relative group ${t ? "bg-indigo-600 text-white rounded-2xl rounded-tr-sm" : "bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-200 border border-gray-100 dark:border-slate-700 rounded-2xl rounded-tl-sm"}`,
+                            children: [
+                              !t &&
+                                e.jsx("p", {
+                                  className:
+                                    "text-[10px] font-bold text-indigo-500 mb-0.5",
+                                  children: "Administrador",
+                                }),
+                              e.jsx("p", {
+                                className: "leading-relaxed",
+                                children: s.text,
+                              }),
+                              e.jsx("p", {
+                                className: `text-[9px] mt-1 text-right opacity-70 ${t ? "text-indigo-100" : "text-gray-400"}`,
+                                children: s.createdAt?.toDate
+                                  ? s.createdAt
+                                      .toDate()
+                                      .toLocaleTimeString([], {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      })
+                                  : "",
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                    },
+                    s.id,
+                  );
+                }),
+            e.jsx("div", { ref: x }),
+          ],
+        }),
+        e.jsxs("div", {
+          className:
+            "p-3 bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700",
+          children: [
+            e.jsxs("form", {
+              onSubmit: u,
+              className: "flex items-end gap-2",
+              children: [
+                e.jsx("div", {
+                  className:
+                    "flex-1 bg-gray-100 dark:bg-slate-900 rounded-2xl px-4 py-2",
+                  children: e.jsx("input", {
+                    type: "text",
+                    value: n,
+                    onChange: (s) => o(s.target.value),
+                    placeholder: "Escribe un mensaje...",
+                    className:
+                      "w-full bg-transparent focus:outline-none text-sm dark:text-white",
+                  }),
+                }),
+                e.jsx(k, {
+                  type: "submit",
+                  loading: g,
+                  disabled: !n.trim(),
+                  className:
+                    "w-10 h-10 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center shadow-md transition-colors disabled:opacity-50 disabled:shadow-none",
+                  children: e.jsx(M, { className: "w-5 h-5 ml-0.5" }),
+                }),
+              ],
+            }),
+            e.jsx("div", {
+              className: "flex justify-center mt-3 mb-1",
+              children: e.jsxs("button", {
+                onClick: h,
+                className:
+                  "text-xs text-gray-400 hover:text-red-500 flex items-center gap-1 transition-colors",
+                children: [e.jsx(D, { className: "w-3 h-3" }), "Cerrar sesión"],
+              }),
+            }),
+          ],
+        }),
+      ],
+    }),
+  });
+};
+export { U as PendingAssignment };

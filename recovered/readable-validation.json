@@ -1,0 +1,170 @@
+[
+  {
+    "file": "App-BPrQ3EPG.js",
+    "original_sha256": "faea9e34836d2226a4060a7832c81fdcef62450cc824fbbe6f7b0b205f8b5025",
+    "readable_sha256": "ca8e9bf74d788a88d719cffc8087910c21ee41b5c8709e47ee0c8e123c5b42dc",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "AppHistory-oOipttKZ.js",
+    "original_sha256": "3478f1554cd5560b3bb28b95db26237086ad9c32dff0483b5b6701d89e5c9aa9",
+    "readable_sha256": "b290cf089f128284db07298dd617879b4abfc7f529d66990e634806b6d9a42f9",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "Attendance-BoRlsPo1.js",
+    "original_sha256": "b3a6442d2814cd31aa56304290f0463a2daf10bb22085b0c9f1c84c7a0ddd8ea",
+    "readable_sha256": "24bf4dc995c18f6b35c5c890de5b4c9b8d65702544caa518c133f8e90a42bda9",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "CameraModal-BwvRT9Xn.js",
+    "original_sha256": "d2248f26394e989674170575c0bbf79d131cea3cc13d8c126b558f5bc4bad0bd",
+    "readable_sha256": "a5d39369280c7d9a1eba5ac5e41baa9c4f2641d2dbddf1480259720e7f25c6fd",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "Dashboard-DN8eeJDA.js",
+    "original_sha256": "93b431d71eb73b8343c34edc786be9337dfa1812eac50aad185add1603933aec",
+    "readable_sha256": "c025e36f3f6df2eeecf96309dc620fdf094e1189d8f3ced08856e96949ab91e3",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "EventDetails-CpDlqXqO.js",
+    "original_sha256": "60b3313ba784f7f18c931012a7afa1a41ead037d0b584d8215738f64241921ff",
+    "readable_sha256": "992608f04657fbeaa5f30f7b405e37ba9a848f4036d20509b7ef2503b133244f",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "Events-CIOfy-8U.js",
+    "original_sha256": "a4448b81e8ab133176c3064233f7c2f1f2f04004958676f1bd19a3bf8e50f7be",
+    "readable_sha256": "c7d76a64ac6adfbc19d8b1d2c33caae8a026b1760a5746f7413c7d82843c8c20",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "EventsGrid-BNb5ngU2.js",
+    "original_sha256": "5903ca3f362d8f5a505a41dc7a824cccfe0f808c4c1093e79012cdcaaf14d09c",
+    "readable_sha256": "1da67ef71835f3d71060ab21f62571adf8b6467aed4cca0b363d01e27b1211a0",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "index-BU_ZgoWo.js",
+    "original_sha256": "9abc2e62e034239b513addd5b9c383dcf280ba8e78f9e65d484e05fc625620ba",
+    "readable_sha256": "3d6391563380dcc19d3c5dd89d20d124042c4a4bf57f63cf0f7b33b3a7f562f2",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "LoadingButton-DoDnirDC.js",
+    "original_sha256": "2595c04ad7a97dc60497ac705170b55d3aee65ce3c095f3a3acd7b53dac71aa0",
+    "readable_sha256": "65251ba80b000c53a3e77f435c3b019877f53a9e14fb609523e2ccd0bfc36bcf",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "LoadingSpinner-DQ5LcqWB.js",
+    "original_sha256": "fec3281ebc8364d3c715dbee14eca7231c3162d02cf9ced3bbc70a4ef2a56427",
+    "readable_sha256": "2af6486a57c331917d0e1f5f1485989db4823d7ee36fa1913e2398a55d73733f",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "ManageMinistriesModal-BO1rzanM.js",
+    "original_sha256": "b99354e1147ff72b0e25157bc7228ca9f8e260bff66678ad10cefd4487cb8027",
+    "readable_sha256": "50d176875cf8e46716ae9078e5eda68a3297889e8ba2a3edaf8177fb44e9276b",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "notifications-BEtI2pcG.js",
+    "original_sha256": "4a0d0b5490e83fda20ed964048330c3f48f9732abd71c51ad0831b59cdeb08e7",
+    "readable_sha256": "36a70ff380f0ba8b59924bbda3ccbc57aa78a2b59932a7da5f410fc8438541ca",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "NotificationsAutoRegister-Dn_C-rjK.js",
+    "original_sha256": "b7cf26d4f8326c30ae6e9cde5ca4f2418cab42553489eba50bead8ca9560e9ff",
+    "readable_sha256": "83cc688ede858ac10dc5246e94a11a15fa181c364c30534937ad6ad22a21286c",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "optimistic-Pk6VB-2G.js",
+    "original_sha256": "36e0baaa6cf2fdd8ba431671dd4cecfa485136e6ea403a699fca30bd68481ccc",
+    "readable_sha256": "96cba329ce8204f6b4c586992a95523ff3785c6b54ee39b9352c84c319111c85",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "PendingAssignment-BisqKKqT.js",
+    "original_sha256": "d92077fbafd4ffaea2c014656b22c43167e06346defc9cd7cbeec2fb4c3debb2",
+    "readable_sha256": "fa5833a936d5a913939ba2add7ade8c50975c143c7b02e4dd62caf16c518e0fb",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "PendingRequests-ofGtBucD.js",
+    "original_sha256": "66065557915d897bb32973ed16711115f19613a0a9e79ff7f694f5213506768a",
+    "readable_sha256": "da61b5c64676408686c36064618de77d2c9cbac4a86f2dc4375c5e648d08981e",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "Roles-23Dg9NXW.js",
+    "original_sha256": "c3c0c7ee8f30c2c4a955982712f0b6dc152ae73f874af0a9786b26c27260a9c9",
+    "readable_sha256": "3df345182e8c237d42e5dba9af0f4b7c0dba082a1cf8920fed8bd7f1a9468659",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "roleUtils-BDLO6O1S.js",
+    "original_sha256": "a6fb6f82ec3cfb91b071bfaf3b274e502fc85773a599191d679872b4e434d47b",
+    "readable_sha256": "ea01fedb08f23d1a4ba8da349cc8104ec74a618d120a6901005da9edf5053e22",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "SelectPicker-D1mnbmt-.js",
+    "original_sha256": "1ceab3c9f49ffeaf05633a3510405f0f1b5de6c9a1b45db812fa30ebc57cd557",
+    "readable_sha256": "769c11f9da1156504702b935f76c00a7569ce0bb25c3da953197254b1cee982f",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "ServiceAreas-CFqvjtqq.js",
+    "original_sha256": "28dcfb925f0700b502420e24497f32601a6737793bd346c09e333560e1cb0693",
+    "readable_sha256": "15bc960793877314ca78c9c42bb17fd120baf5e35d80d390b4188da103e9c047",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "ServiceHistory-k07fUeOW.js",
+    "original_sha256": "4cdcc4d2c3c10a5b027d6c2db6852b1dc59fe437c6af4caaf8b4964e9b50bb2b",
+    "readable_sha256": "23aa4e35d3eb72a8e0e95abe0eadbcc79e45a3ea91ba61c794b46fec55b2f972",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "Settings-BtbU5gHm.js",
+    "original_sha256": "4230aeb13535fd4d52c21a99829bbfdd21d5953cce1b8f5b60e243984e50cf3a",
+    "readable_sha256": "3a8b4ac2b1218a3a282f0c4c95ee142d1c62296b5a1ffd5baa4a7ca40693ba6e",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "TuesdayTeaching-B3nMLJdY.js",
+    "original_sha256": "13ae780fd5f2b6942fd7503946d8507ad8d76d3d85793eae95cbca8e0c9d9bf1",
+    "readable_sha256": "d2ccc7b99ed19957568528a9aeb257d8ee50752248784731d52278c451c191f0",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "Udlv-B63vtmB5.js",
+    "original_sha256": "d391c9b480b5435eff2255a0d284193dec50876d9ac2c7e52ab3f58721d1ccb1",
+    "readable_sha256": "bacd81b246461c0fa2b693280799b935dd98db2cae58b1a2ee7768a3aa26e961",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "useNotifications-fJ3DWoi9.js",
+    "original_sha256": "c1dd661e9560625a5b0502d92d9dd53cca832f42570d02008891035fcf653ab7",
+    "readable_sha256": "1f4a6613ab18f428e5db9ef430ce94c3eb46386096ae287dd2806cef6eb7f69e",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "useOptimizedChat-D_A1-F_L.js",
+    "original_sha256": "1662ce0e88e0cd87cd37d1885d59432192e5c9d1f9073d0c8d0bc3ee00a079fc",
+    "readable_sha256": "f7608c155def21a54fc6a09a13062c097bf3f075fb5e65f20cae16e215e690de",
+    "normalized_ast_equal": true
+  },
+  {
+    "file": "Volunteers-CUDiGEOd.js",
+    "original_sha256": "6e10b28216ff34da39fa4faf99ae68a1da1bba558d3749d1f15cab03ae86e510",
+    "readable_sha256": "c1531e92781f8482bcdf14b1e431b8a6da3acd38bcf0b3ca1a094e5c92fcd4b8",
+    "normalized_ast_equal": true
+  }
+]

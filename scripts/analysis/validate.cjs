@@ -1,0 +1,5 @@
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),acorn=require('acorn');
+const root=path.resolve(__dirname,'../../recovered/hosting/assets'),pretty=path.resolve(__dirname,'../../recovered/readable-assets');const result=[];
+function ast(s){return JSON.stringify(acorn.parse(s,{ecmaVersion:'latest',sourceType:'module'}),(k,v)=>['start','end','raw'].includes(k)?undefined:v)}
+for(const f of fs.readdirSync(pretty).filter(x=>x.endsWith('.js'))){let a=fs.readFileSync(path.join(root,f),'utf8'),b=fs.readFileSync(path.join(pretty,f),'utf8');result.push({file:f,original_sha256:crypto.createHash('sha256').update(a).digest('hex'),readable_sha256:crypto.createHash('sha256').update(b).digest('hex'),normalized_ast_equal:ast(a)===ast(b)})}
+fs.writeFileSync(path.resolve(__dirname,'../../recovered/readable-validation.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({checked:result.length,equal:result.filter(x=>x.normalized_ast_equal).length,failed:result.filter(x=>!x.normalized_ast_equal).map(x=>x.file)}));

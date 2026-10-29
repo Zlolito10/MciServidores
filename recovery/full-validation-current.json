@@ -136,6 +136,12 @@
       "Cloud Scheduler/PubSub delivery",
       "Production IAM/PITR/history resources"
     ],
+    "unverifiedExternalSystemsScope": "Only this emulator execution: these systems were not exercised here. This list does not override the separate real Google, physical camera and FCM evidence reports.",
+    "separateRealServiceEvidenceReports": [
+      "recovery/real-integrations-validation.json",
+      "recovery/fcm-device-validation.json",
+      "docs/CAMERA-GOOGLE-VALIDATION.md"
+    ],
     "setup": "Standard integration seed explicitly authorized for existing demo-mci-servidores emulators; no global Auth reset",
     "previousEvidence": {
       "generatedAt": "2026-10-29T20:32:36.576Z",

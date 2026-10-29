@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-29T20:33:43.745645+00:00",
+  "selectedMethod": "owner-oauth-existing-folder",
+  "folderName": "Respaldo MCI",
+  "ownerVerifiedByFolderMetadata": true,
+  "existingClientReused": true,
+  "authorizedOriginObserved": "http://localhost:5000",
+  "oauthPublishingStatusObserved": "production",
+  "newOAuthClientsCreated": 0,
+  "redirectChanges": 0,
+  "cloudChangesApplied": false,
+  "cloudChangeApproval": "pending",
+  "requiredServiceEnables": [
+    "drive.googleapis.com",
+    "picker.googleapis.com"
+  ],
+  "requiredApiKeyTargetAddition": "picker.googleapis.com",
+  "otherApiKeyRestrictionsPreservedByProposedPatch": true,
+  "requestedDriveScope": "drive.file",
+  "ownerConsentGranted": false,
+  "offlineOwnerCredentialCreated": false,
+  "realDriveWriteTestPerformed": false,
+  "productionStorageReads": 0,
+  "productionStorageDeletes": 0,
+  "iamChanges": 0,
+  "hostingDeployments": 0,
+  "localValidation": {
+    "nodeTestsPassed": 133,
+    "pythonTestsPassed": 15,
+    "emulatorFlowsPassed": 41,
+    "httpAndDpapiChecksPassed": 10,
+    "consentUiLoadedInBrowser": true,
+    "phaseObserved": "awaiting-consent"
+  },
+  "documentation": "docs/DRIVE-OWNER-OAUTH.md"
+}

@@ -7,8 +7,8 @@ const {archiveOldEventFiles}=require('../functions/lib/cleanup.js');
 function googleFixture({folder={id:'folder',mimeType:'application/vnd.google-apps.folder',capabilities:{canAddChildren:true}},email='test@demo.iam.gserviceaccount.com',getError}={}){
  const state={reads:0,writes:0,auth:undefined,oauthCredentials:undefined};
  class GoogleAuth{async getCredentials(){return {client_email:email};}}
- class OAuth2{constructor(id,secret){assert.equal(id,'demo-client');assert.equal(secret,'demo-secret');}setCredentials(credentials){state.oauthCredentials=credentials;}}
- const google={auth:{GoogleAuth,OAuth2},drive:options=>{state.auth=options.auth;return {files:{get:async request=>{state.reads++;assert.equal(request.supportsAllDrives,true);assert.equal(request.fields,'id,mimeType,trashed,driveId,capabilities(canAddChildren)');if(getError)throw getError;return {data:folder};},create:async()=>{state.writes++;return {data:{id:'created'}};}}};}};
+ class OAuth2{constructor(id,secret){assert.equal(id,'demo-client');assert.equal(secret,'demo-secret');}setCredentials(credentials){state.oauthCredentials=credentials;}async getAccessToken(){return {token:'synthetic-access-token'};}async getTokenInfo(){return {aud:'demo-client',expiry_date:Date.now()+3600000,scopes:['https://www.googleapis.com/auth/drive.file']};}}
+ const google={auth:{GoogleAuth,OAuth2},drive:options=>{state.auth=options.auth;return {about:{get:async()=>({data:{user:{emailAddress:'owner@example.test'},storageQuota:{limit:'1000000',usage:'0'}}})},files:{get:async request=>{state.reads++;assert.equal(request.supportsAllDrives,true);assert.equal(request.fields,'id,mimeType,trashed,driveId,capabilities(canAddChildren)');if(getError)throw getError;return {data:folder};},create:async()=>{state.writes++;return {data:{id:'created'}};}}};}};
  return {google,state};
 }
 const request={requestBody:{parents:['folder']},media:{body:Buffer.from('synthetic')}};

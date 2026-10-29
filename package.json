@@ -21,7 +21,9 @@
     "snapshot": "node scripts/serve.mjs --source --port 5177",
     "emulators": "node scripts/start-emulators.mjs",
     "test:integration": "node --test tests/emulator.integration.mjs",
-    "seed:emulators": "node scripts/seed-emulators.mjs"
+    "seed:emulators": "node scripts/seed-emulators.mjs",
+    "drive:authorize": "node scripts/drive-oauth-bootstrap.mjs",
+    "drive:test-owner": "node scripts/test-drive-owner-archive.mjs"
   },
   "devDependencies": {
     "acorn": "8.15.0",

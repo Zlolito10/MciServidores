@@ -19,6 +19,7 @@ __pycache__/
 !.env.example
 **/.secret.local
 credentials*.json
+client_secret*.json
 *service-account*.json
 *serviceAccount*.json
 *firebase-adminsdk*.json

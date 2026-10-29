@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-29T19:46:56.484Z",
+  "generatedAt": "2026-10-29T20:32:36.576Z",
   "project": "demo-mci-servidores",
   "environment": "local Firebase Auth/Firestore/Storage/Functions emulators",
   "productionServicesUsed": false,
@@ -271,7 +271,7 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/events/recovery-event/repertoire/wTl3tsFkbphYNr8e8OXY",
+      "path": "/api/events/recovery-event/repertoire/yYisyt77mOo4Jdx97fnP",
       "status": 200
     },
     {
@@ -313,13 +313,13 @@
     {
       "service": "functions",
       "method": "PATCH",
-      "path": "/api/events/RIRdVBp4GHJAwTpxYXUx",
+      "path": "/api/events/eJFCunedZOVkNCGh0o59",
       "status": 200
     },
     {
       "service": "functions",
       "method": "GET",
-      "path": "/api/events/RIRdVBp4GHJAwTpxYXUx/details",
+      "path": "/api/events/eJFCunedZOVkNCGh0o59/details",
       "status": 200
     },
     {
@@ -331,7 +331,7 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/events/RIRdVBp4GHJAwTpxYXUx",
+      "path": "/api/events/eJFCunedZOVkNCGh0o59",
       "status": 200
     },
     {
@@ -367,7 +367,7 @@
     {
       "service": "functions",
       "method": "PUT",
-      "path": "/api/event_templates/BlPcrXJ0gRdSGtKB0xDY",
+      "path": "/api/event_templates/PPmHq9wpFkET63tGYe9t",
       "status": 200
     },
     {
@@ -379,13 +379,13 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/event_templates/BlPcrXJ0gRdSGtKB0xDY",
+      "path": "/api/event_templates/PPmHq9wpFkET63tGYe9t",
       "status": 403
     },
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/event_templates/BlPcrXJ0gRdSGtKB0xDY",
+      "path": "/api/event_templates/PPmHq9wpFkET63tGYe9t",
       "status": 200
     },
     {
@@ -397,13 +397,13 @@
     {
       "service": "functions",
       "method": "PUT",
-      "path": "/api/service_areas/LmsVAJ0DUkGqqOVqV1d3",
+      "path": "/api/service_areas/SKfJHmUVmd1dCq6KnENO",
       "status": 200
     },
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/service_areas/LmsVAJ0DUkGqqOVqV1d3",
+      "path": "/api/service_areas/SKfJHmUVmd1dCq6KnENO",
       "status": 200
     },
     {
@@ -415,7 +415,7 @@
     {
       "service": "functions",
       "method": "PATCH",
-      "path": "/api/events/recovery-event/repertoire/BBdtg80JEgp9QBA4n1Ea",
+      "path": "/api/events/recovery-event/repertoire/hRhqhJ85YhoLoBZsxJN1",
       "status": 200
     },
     {
@@ -427,7 +427,7 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/events/recovery-event/repertoire/BBdtg80JEgp9QBA4n1Ea",
+      "path": "/api/events/recovery-event/repertoire/hRhqhJ85YhoLoBZsxJN1",
       "status": 200
     },
     {
@@ -439,7 +439,7 @@
     {
       "service": "functions",
       "method": "PATCH",
-      "path": "/api/events/recovery-event/materials/N3FE8UuA6rkiAfJLX1Oe",
+      "path": "/api/events/recovery-event/materials/Vx8C6uxXZQs6TggEu7B7",
       "status": 200
     },
     {
@@ -463,13 +463,13 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/materials_library/dXEnMtAynrRP1IEeoXja",
+      "path": "/api/materials_library/u8G6h3F5aPe1Y0wZdmAx",
       "status": 200
     },
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/events/recovery-event/materials/N3FE8UuA6rkiAfJLX1Oe",
+      "path": "/api/events/recovery-event/materials/Vx8C6uxXZQs6TggEu7B7",
       "status": 200
     },
     {
@@ -481,7 +481,7 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/events/recovery-event/materials/t0R76TGG5W6sMBVWJpz0",
+      "path": "/api/events/recovery-event/materials/wjxjybugSwFPZMBs7cQR",
       "status": 200
     },
     {
@@ -559,13 +559,13 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/comments/0WfcDsk1i2gVaH7EdHMP",
+      "path": "/api/comments/KWQ3OHn6Djn3ntwUx1e7",
       "status": 403
     },
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/comments/0WfcDsk1i2gVaH7EdHMP",
+      "path": "/api/comments/KWQ3OHn6Djn3ntwUx1e7",
       "status": 200
     },
     {
@@ -1021,7 +1021,7 @@
     {
       "service": "firestore-rules",
       "method": "PATCH",
-      "path": "users/jNrbo5LmKQSueEWGQp8vlDISnDQH",
+      "path": "users/VTRlz0HZ9wlWKtoHddSecGH2nj4O",
       "status": 200
     },
     {
@@ -1039,13 +1039,13 @@
     {
       "service": "firestore-rules",
       "method": "PATCH",
-      "path": "users/MjG4eIWGDVJaq4gksbdgDz3PZLYG",
+      "path": "users/gaE6978cfru9yCbhvBD1hajrkw7w",
       "status": 200
     },
     {
       "service": "firestore-rules",
       "method": "PATCH",
-      "path": "pending_assignments/MjG4eIWGDVJaq4gksbdgDz3PZLYG",
+      "path": "pending_assignments/gaE6978cfru9yCbhvBD1hajrkw7w",
       "status": 200
     },
     {

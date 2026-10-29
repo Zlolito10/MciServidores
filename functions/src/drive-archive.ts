@@ -3,6 +3,36 @@ type ArchiveIdentity = "service-account" | "user-oauth";
 
 function failure(code: string): Error { return Object.assign(new Error(code), { code }); }
 
+async function verifyOwnerOAuth(auth: any, drive: any, clientId: string, expectedEmail: string) {
+  let token: string;
+  try { token = (await auth.getAccessToken()).token; }
+  catch { throw failure("DRIVE_OAUTH_REFRESH_FAILED"); }
+  if (!token) throw failure("DRIVE_OAUTH_REFRESH_FAILED");
+  let info: any;
+  try { info = await auth.getTokenInfo(token); }
+  catch { throw failure("DRIVE_OAUTH_TOKEN_NOT_VERIFIED"); }
+  if (info.aud !== clientId) throw failure("DRIVE_OAUTH_CLIENT_MISMATCH");
+  if (!Number.isFinite(info.expiry_date) || info.expiry_date <= Date.now()) throw failure("DRIVE_OAUTH_TOKEN_EXPIRED");
+  const scopes = new Set(Array.isArray(info.scopes) ? info.scopes : []);
+  const perFile = scopes.has("https://www.googleapis.com/auth/drive.file");
+  const allDrive = scopes.has("https://www.googleapis.com/auth/drive");
+  if (!perFile && !allDrive) throw failure("DRIVE_OAUTH_WRITE_SCOPE_MISSING");
+  let about: any;
+  try { ({ data: about } = await drive.about.get({ fields: "user(emailAddress),storageQuota(limit,usage)" })); }
+  catch { throw failure("DRIVE_OAUTH_USER_NOT_VERIFIED"); }
+  const email = String(about?.user?.emailAddress || "").trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+$/.test(email)) throw failure("DRIVE_OAUTH_USER_NOT_VERIFIED");
+  if (expectedEmail && email !== expectedEmail) throw failure("DRIVE_OAUTH_OWNER_MISMATCH");
+  const { limit, usage } = about.storageQuota || {};
+  let quotaChecked = false;
+  if (limit !== undefined && usage !== undefined && /^\d+$/.test(String(limit)) && /^\d+$/.test(String(usage))) {
+    quotaChecked = true;
+    if (BigInt(limit) <= BigInt(usage)) throw failure("DRIVE_OWNER_STORAGE_QUOTA_EXHAUSTED");
+  }
+  // Only safe status flags leave this preflight. Tokens and principal email stay private.
+  return { oauthRefreshVerified: true, ownerMatched: !!expectedEmail, oauthScope: allDrive ? "existing-all-drive-grant" : "per-file", quotaChecked };
+}
+
 export function archiveFolderId(fallback: string, env: Environment = process.env): string {
   const id = (env.MCI_DRIVE_ARCHIVE_FOLDER_ID || fallback).trim();
   if (!/^[A-Za-z0-9_-]{1,200}$/.test(id)) throw failure("INVALID_DRIVE_ARCHIVE_FOLDER_ID");
@@ -30,6 +60,8 @@ export function createArchiveDriveClient(google: any, env: Environment = process
   const mode = env.MCI_DRIVE_AUTH_MODE || "adc";
   const oauthValues = [env.MCI_DRIVE_OAUTH_CLIENT_ID, env.MCI_DRIVE_OAUTH_CLIENT_SECRET, env.MCI_DRIVE_OAUTH_REFRESH_TOKEN];
   if (!["adc", "oauth"].includes(mode)) throw failure("INVALID_DRIVE_AUTH_MODE");
+  const expectedEmail = (env.MCI_DRIVE_OAUTH_EXPECTED_EMAIL || "").trim().toLowerCase();
+  if (expectedEmail && !/^[^@\s]+@[^@\s]+$/.test(expectedEmail)) throw failure("INVALID_DRIVE_EXPECTED_OWNER");
   let auth: any;
   if (mode === "oauth") {
     if (oauthValues.some(value => typeof value !== "string" || !value.trim())) throw failure("DRIVE_OAUTH_CONFIGURATION_INCOMPLETE");
@@ -46,14 +78,15 @@ export function createArchiveDriveClient(google: any, env: Environment = process
     if (!prepared.has(key)) {
       prepared.set(key, (async () => {
         let identity: ArchiveIdentity = "user-oauth";
+        let ownerStatus = {};
         if (mode === "adc") {
           let email: string;
           try { email = (await auth.getCredentials()).client_email || ""; }
           catch { throw failure("DRIVE_ADC_IDENTITY_UNAVAILABLE"); }
           if (!email.endsWith(".gserviceaccount.com")) throw failure("DRIVE_ADC_IDENTITY_UNVERIFIED_USE_EXPLICIT_OAUTH");
           identity = "service-account";
-        }
-        return prepareDriveArchive({ drive, folderId: key, identity });
+        } else ownerStatus = await verifyOwnerOAuth(auth, drive, oauthValues[0] as string, expectedEmail);
+        return { ...(await prepareDriveArchive({ drive, folderId: key, identity })), ...ownerStatus };
       })());
     }
     try { return await prepared.get(key); }

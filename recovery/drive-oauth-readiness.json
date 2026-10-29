@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-29T20:33:43.745645+00:00",
+  "checkedAt": "2026-10-29T23:40:38.441Z",
   "selectedMethod": "owner-oauth-existing-folder",
   "folderName": "Respaldo MCI",
   "ownerVerifiedByFolderMetadata": true,
@@ -8,14 +8,17 @@
   "oauthPublishingStatusObserved": "production",
   "newOAuthClientsCreated": 0,
   "redirectChanges": 0,
-  "cloudChangesApplied": false,
-  "cloudChangeApproval": "pending",
+  "cloudChangesApplied": true,
+  "cloudChangeApproval": "explicit user approval received",
+  "cloudChangesVerified": true,
+  "cloudChangesReport": "recovery/drive-oauth-cloud-validation.json",
   "requiredServiceEnables": [
     "drive.googleapis.com",
     "picker.googleapis.com"
   ],
   "requiredApiKeyTargetAddition": "picker.googleapis.com",
   "otherApiKeyRestrictionsPreservedByProposedPatch": true,
+  "otherApiKeyRestrictionsVerifiedUnchanged": true,
   "requestedDriveScope": "drive.file",
   "ownerConsentGranted": false,
   "offlineOwnerCredentialCreated": false,
@@ -25,12 +28,14 @@
   "iamChanges": 0,
   "hostingDeployments": 0,
   "localValidation": {
-    "nodeTestsPassed": 133,
+    "nodeTestsPassed": 138,
     "pythonTestsPassed": 15,
     "emulatorFlowsPassed": 41,
     "httpAndDpapiChecksPassed": 10,
     "consentUiLoadedInBrowser": true,
-    "phaseObserved": "awaiting-consent"
+    "phaseObserved": "awaiting-consent",
+    "oauthWaitRegressionTestsPassed": 4,
+    "fullValidationReport": "recovery/full-validation-current.json"
   },
   "documentation": "docs/DRIVE-OWNER-OAUTH.md"
 }

@@ -2,9 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { bootDriveOAuthPage, renderDriveOAuthPage } from '../scripts/lib/drive-oauth-page.mjs';
 
-async function fixture({ phase = 'awaiting-consent', origin = 'http://localhost:5000', failRoute } = {}) {
+async function fixture({ phase = 'awaiting-consent', origin = 'http://localhost:5000', failRoute, clock, pauseCode = false } = {}) {
   const elements = new Map(), calls = [], codeClients = [], pickers = [], views = [];
   let currentPhase = phase, starts = 0;
+  let releaseCode;
   const element = (id) => {
     if (!elements.has(id)) elements.set(id, { disabled: true, textContent: '', listeners: {}, addEventListener(type, callback) { this.listeners[type] = callback; } });
     return elements.get(id);
@@ -42,21 +43,32 @@ async function fixture({ phase = 'awaiting-consent', origin = 'http://localhost:
     if (route === failRoute) return { ok: false, json: async () => ({ error: 'fake-secret-owner@example.invalid' }) };
     let body;
     if (route === '/api/status') body = { ...config, phase: currentPhase };
-    else if (route === '/api/oauth/start') body = { state: 'private-state-' + ++starts, expiresAt: Date.now() + 600000 };
-    else if (route === '/api/oauth/code') { currentPhase = 'awaiting-folder'; body = { authorized: true }; }
+    else if (route === '/api/oauth/start') body = { state: 'private-state-' + ++starts, expiresAt: (clock ? clock.now() : Date.now()) + 300000 };
+    else if (route === '/api/oauth/code') { if (pauseCode) await new Promise(resolve => { releaseCode = resolve; }); currentPhase = 'awaiting-folder'; body = { authorized: true }; }
     else if (route === '/api/picker-token') body = { accessToken: 'fake-private-access-token' };
     else if (route === '/api/folder') { currentPhase = 'ready'; body = { ready: true }; }
     else if (route === '/api/save') { currentPhase = 'saved'; body = { saved: true }; }
     else throw Error('Unexpected route');
     return { ok: true, json: async () => body };
   };
-  await bootDriveOAuthPage({ window: browser, document: { getElementById: element }, fetch: request });
+  await bootDriveOAuthPage({ window: browser, document: { getElementById: element }, fetch: request, ...(clock ? { now: clock.now, schedule: clock.schedule, cancel: clock.cancel } : {}) });
   return {
     calls, codeClients, pickers, views, config,
+    releaseCode: () => releaseCode(),
     button: (name) => element('drive-' + name),
     click: (name) => element('drive-' + name).listeners.click(),
     result: () => JSON.parse(element('drive-result').textContent),
     rendered: () => [...elements.values()].map((node) => node.textContent).join('\n'),
+  };
+}
+function fakeClock() {
+  let time = 100000, next = 0;
+  const timers = new Map();
+  return {
+    now: () => time,
+    schedule(callback, delay) { const id = ++next; timers.set(id, { callback, due: time + delay }); return id; },
+    cancel(id) { timers.delete(id); },
+    advance(delay) { const target = time + delay; for (;;) { const pending = [...timers].filter(([, value]) => value.due <= target).sort((a, b) => a[1].due - b[1].due)[0]; if (!pending) break; timers.delete(pending[0]); time = pending[1].due; pending[1].callback(); } time = target; },
   };
 }
 function assertPrivate(app) {
@@ -66,6 +78,7 @@ function assertPostProtection(app) {
   for (const call of app.calls.filter((call) => call.options.method === 'POST')) {
     assert.equal(call.options.credentials, 'same-origin');
     assert.equal(call.options.cache, 'no-store');
+    assert.equal(call.options.referrerPolicy, 'no-referrer');
     assert.equal(call.options.headers['X-Requested-With'], 'XMLHttpRequest');
     assert.equal(call.options.headers['X-MCI-CSRF'], app.config.csrfToken);
   }
@@ -74,6 +87,7 @@ function assertPostProtection(app) {
 test('Drive consent page is static and cannot serialize server credentials', () => {
   const html = renderDriveOAuthPage({ clientSecret: 'never-render-this', refreshToken: 'never-render-that' });
   assert.match(html, /Preparar autorización/); assert.match(html, /Guardar autorización local/);
+  assert.match(html, /<meta name="referrer" content="no-referrer-when-downgrade">/);
   assert.doesNotMatch(html, /never-render|localStorage|sessionStorage|console\./);
 });
 
@@ -164,4 +178,33 @@ test('invalid local origin stays disabled and server error payloads cannot leak 
   await failed.click('prepare');
   assert.equal(failed.result().error, 'LOCAL_AUTHORIZATION_FAILED');
   assert.doesNotMatch(failed.rendered(), /fake-secret-owner/);
+});
+
+test('an unanswered popup shows waiting guidance then expires without opening a second window', async () => {
+  const clock = fakeClock(), app = await fixture({ clock });
+  await app.click('prepare'); const client = app.codeClients[0]; app.click('authorize');
+  clock.advance(15000); assert.match(app.rendered(), /Seguimos esperando/); assert.equal(app.result().error, null); assert.equal(app.button('authorize').disabled, true);
+  clock.advance(285000); assert.equal(app.result().error, 'GOOGLE_AUTHORIZATION_EXPIRED'); assert.equal(app.button('prepare').disabled, false); assert.equal(app.button('authorize').disabled, true); assert.equal(client.requests, 1);
+  await client.options.callback({ code: 'fake-private-code' }); assert.equal(app.calls.some(call => call.route === '/api/oauth/code'), false); assertPrivate(app);
+});
+
+test('official popup errors require a fresh preparation and cannot reopen an expired attempt', async () => {
+  for (const type of ['popup_closed', 'popup_failed_to_open']) {
+    const app = await fixture({ clock: fakeClock() }); await app.click('prepare'); const client = app.codeClients[0]; app.click('authorize'); client.options.error_callback({ type });
+    assert.equal(app.button('prepare').disabled, false); assert.equal(app.button('authorize').disabled, true); app.click('authorize'); assert.equal(client.requests, 1);
+    assert.equal(app.result().error, type === 'popup_closed' ? 'GOOGLE_POPUP_CLOSED' : 'GOOGLE_POPUP_FAILED_TO_OPEN'); assert.equal(app.calls.some(call => call.route === '/api/oauth/code'), false);
+  }
+});
+
+test('an error from an old popup cannot unlock or alter a newer pending attempt', async () => {
+  const clock = fakeClock(), app = await fixture({ clock }); await app.click('prepare'); const old = app.codeClients[0]; await app.click('prepare'); const current = app.codeClients[1]; app.click('authorize');
+  old.options.error_callback({ type: 'popup_closed' }); assert.equal(app.result().error, null); assert.equal(app.button('authorize').disabled, true); assert.equal(current.requests, 1);
+  clock.advance(15000); assert.match(app.rendered(), /Seguimos esperando/); assert.equal(app.codeClients.length, 2);
+});
+
+test('accepting a callback clears expiry and ignores duplicate callbacks or late close errors during exchange', async () => {
+  const clock = fakeClock(), app = await fixture({ clock, pauseCode: true }); await app.click('prepare'); const client = app.codeClients[0]; app.click('authorize');
+  const pending = client.options.callback({ code: 'fake-private-code' }); await client.options.callback({ code: 'fake-private-code' }); client.options.error_callback({ type: 'popup_closed' });
+  clock.advance(600000); assert.equal(app.result().error, null); assert.equal(app.button('prepare').disabled, true); assert.equal(app.calls.filter(call => call.route === '/api/oauth/code').length, 1);
+  app.releaseCode(); await pending; assert.equal(app.result().authorized, true); assert.equal(app.result().phase, 'awaiting-folder'); assert.equal(app.result().error, null); assertPrivate(app);
 });

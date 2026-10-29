@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-29T23:40:38.441Z",
+  "method": "Read-only HTTP GET with SHA-256 comparison",
+  "checks": [
+    {
+      "path": "/app-version.json",
+      "status": 200,
+      "matchesSnapshot": true
+    },
+    {
+      "path": "/index.html",
+      "status": 200,
+      "matchesSnapshot": true
+    }
+  ],
+  "hostingDeployments": 0
+}

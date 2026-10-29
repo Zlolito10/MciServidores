@@ -1,0 +1,165 @@
+{
+  "startedAt": "2026-10-29T23:43:12.730Z",
+  "completedAt": "2026-10-29T23:47:06.903Z",
+  "repository": "Zlolito10/MciServidores",
+  "workingDirectory": "MciServidores nested checkout",
+  "status": "passed",
+  "versions": {
+    "node": "24.21.0",
+    "npm": "11.19.0",
+    "python": "3.14.8",
+    "functionsTargetNode": "22"
+  },
+  "summary": {
+    "node": {
+      "passed": 138,
+      "failed": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "python": {
+      "passed": 15,
+      "failed": 0
+    },
+    "emulatorIntegration": {
+      "subflowsPassed": 41,
+      "failed": 0,
+      "nodeResultsIncludingContainer": 42
+    },
+    "frontendBuild": "passed",
+    "backendTypeScriptBuild": "passed"
+  },
+  "commands": [
+    {
+      "label": "frontend-build",
+      "command": "node scripts/build-frontend.mjs --out-dir dist-validation-1793317392739",
+      "exitCode": 0,
+      "status": "passed",
+      "wallTimeSeconds": 0.8041492
+    },
+    {
+      "label": "backend-build",
+      "command": "npm run build:backend",
+      "exitCode": 0,
+      "status": "passed",
+      "wallTimeSeconds": 3.3638946
+    },
+    {
+      "label": "node-tests",
+      "command": "npm test",
+      "exitCode": 0,
+      "status": "passed",
+      "wallTimeSeconds": 2.1822671,
+      "counts": {
+        "tests": 138,
+        "passed": 138,
+        "failed": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "python-tests",
+      "command": "python -c \"import pathlib,tempfile,unittest,sys; validation_temp=pathlib.Path('recovery/private/python-validation-tmp'); validation_temp.mkdir(parents=True,exist_ok=True); tempfile.tempdir=str(validation_temp.resolve()); suite=unittest.defaultTestLoader.discover('tests',pattern='test_*.py'); result=unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(0 if result.wasSuccessful() else 1)\"",
+      "exitCode": 0,
+      "status": "passed",
+      "wallTimeSeconds": 0.439117,
+      "counts": {
+        "tests": 15,
+        "passed": 15,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "emulator-integration",
+      "command": "npm run test:integration",
+      "exitCode": 0,
+      "status": "passed",
+      "wallTimeSeconds": 9.1923896,
+      "counts": {
+        "tests": 42,
+        "passed": 42,
+        "failed": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "node-tests-final",
+      "command": "npm test",
+      "exitCode": 0,
+      "status": "passed",
+      "wallTimeSeconds": 1.9644045,
+      "counts": {
+        "tests": 138,
+        "passed": 138,
+        "failed": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "frontendBuild": {
+    "environment": "local-emulators",
+    "bff": false,
+    "entry": "dist-validation-1793317392739/app/entry-O7OO5BW7.js",
+    "moduleInputs": 58,
+    "originalJsxRecovered": false,
+    "reconstructedJsx": true,
+    "rebuiltFromEditableRecoveredJavaScript": true,
+    "serviceWorker": {
+      "version": "5.1.18-reconstructed-8e8a0f9288f8",
+      "assets": 84,
+      "automaticRegistration": false
+    },
+    "validationOutputDirectory": "dist-validation-1793317392739",
+    "mainDistReplaced": false
+  },
+  "integration": {
+    "report": "recovery/flow-validation.json",
+    "generatedAt": "2026-10-29T23:44:14.570Z",
+    "project": "demo-mci-servidores",
+    "passed": 41,
+    "failed": 0,
+    "productionServicesUsed": false,
+    "externalAdapterSimulations": [
+      "FCM delivery/topics",
+      "Drive archive"
+    ],
+    "unverifiedExternalSystems": [
+      "Real Google OAuth consent/provider",
+      "Real FCM delivery on a device",
+      "Real camera permission and capture",
+      "Real GPS permission and coordinates",
+      "Real Drive IAM and upload",
+      "Cloud Scheduler/PubSub delivery",
+      "Production IAM/PITR/history resources"
+    ],
+    "setup": "Standard integration seed explicitly authorized for existing demo-mci-servidores emulators; no global Auth reset",
+    "previousEvidence": {
+      "generatedAt": "2026-10-29T20:32:36.576Z",
+      "passed": 41,
+      "failed": 0
+    }
+  },
+  "scope": {
+    "cloudMutationsPerformed": 0,
+    "productionStorageReads": 0,
+    "productionStorageDeletes": 0,
+    "realDriveWritesPerformed": 0,
+    "realCredentialsAccessed": false,
+    "bootstrapProcessModifiedOrRestarted": false,
+    "liveBootstrapRequestsPerformed": false,
+    "serviceLifecycleCommandsIssued": false,
+    "emulatorProject": "demo-mci-servidores",
+    "syntheticWindowsDpapiRoundtripIncluded": true
+  },
+  "notes": [
+    "Final npm test was rerun after the GIS document ReferrerPolicy compatibility change; all 138 current tests passed.",
+    "Python, frontend/backend builds and emulator integration were not repeated because that final change only affects the OAuth page HTTP/document policy.",
+    "The frontend build used an isolated ignored dist-validation directory to preserve the running preview and browser fixtures.",
+    "The integration uses real local Firebase emulators. External FCM/Drive delivery is simulated in this batch; separate real-service evidence is not inferred from these results.",
+    "The frontend build retains the recovered html2canvas duplicate-case warning; compilation succeeded."
+  ]
+}

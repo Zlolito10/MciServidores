@@ -71,7 +71,7 @@
   ],
   "previousCloudCommit": "b84d5a7c990ab7963161e2c1c3c200c031233f44",
   "previousBundleImported": false,
-  "snapshotDescription": "Los campos de primer nivel conservan la validación inicial del 2026-10-19. La evidencia posterior se registra en latestValidation.",
+  "snapshotDescription": "Los campos de primer nivel conservan la validaciÃ³n inicial del 2026-10-19. La evidencia posterior se registra en latestValidation.",
   "latestValidation": {
     "date": "2026-10-29",
     "generatedAt": "2026-10-29T18:43:49.152Z",
@@ -211,11 +211,14 @@
   "driveOwnerOAuthPreparation": {
     "date": "2026-10-29",
     "report": "recovery/drive-oauth-readiness.json",
-    "nodeTestsPassed": 133,
+    "nodeTestsPassed": 138,
     "pythonTestsPassed": 15,
     "emulatorFlowsPassed": 41,
     "realOwnerOAuth": "not yet granted",
-    "cloudChanges": "awaiting explicit approval",
-    "productionDeployments": 0
+    "cloudChanges": "applied and independently verified; only Drive/Picker enablement and Picker key target",
+    "productionDeployments": 0,
+    "cloudChangesReport": "recovery/drive-oauth-cloud-validation.json",
+    "productionHostingRecheck": "recovery/hosting-final-recheck.json",
+    "fullValidationReport": "recovery/full-validation-current.json"
   }
 }

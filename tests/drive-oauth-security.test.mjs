@@ -12,13 +12,13 @@ const origin='http://localhost:5000';
 const raw={origin,web:{client_id:'584384917166-synthetic.apps.googleusercontent.com',client_secret:'sensitive-test-client-secret',javascript_origins:[origin]},expectedOwnerEmail:'owner@example.test',folderId:'original-folder',projectNumber:'584384917166',publicApiKey:'synthetic-public-key',outputFile:'recovery/private/drive-oauth/synthetic-unused.dpapi.json'};
 const tokens={access_token:'sensitive-test-access',refresh_token:'sensitive-test-refresh',id_token:'sensitive-test-id-token'};
 
-async function fixture(t,{tokenOverrides={},payloadOverrides={},exchangeError,holdExchange,folderError,persistError}={}){
+async function fixture(t,{tokenOverrides={},payloadOverrides={},infoOverrides={},exchangeError,holdExchange,folderError,persistError}={}){
  const seen={exchanges:0,preflights:0,persists:0,exchangeOptions:[],persisted:null};
  class OAuth2{
   constructor(id,secret,redirect){assert.equal(id,raw.web.client_id);assert.equal(secret,raw.web.client_secret);assert.equal(redirect,origin);}
   setCredentials(){}
   async getToken(options){seen.exchanges++;seen.exchangeOptions.push(options);if(exchangeError)throw exchangeError;if(holdExchange)await holdExchange;return{tokens:{...tokens,...tokenOverrides}};}
-  async getTokenInfo(value){assert.equal(value,tokens.access_token);return{aud:raw.web.client_id,expiry_date:Date.now()+3600000,scopes:['openid','email','https://www.googleapis.com/auth/drive.file']};}
+  async getTokenInfo(value){assert.equal(value,tokens.access_token);return{aud:raw.web.client_id,expiry_date:Date.now()+3600000,scopes:['openid','email','https://www.googleapis.com/auth/drive.file'],...infoOverrides};}
   async verifyIdToken(options){assert.deepEqual(options,{idToken:tokens.id_token,audience:raw.web.client_id});return{getPayload:()=>({sub:'synthetic-subject',email:'owner@example.test',email_verified:true,...payloadOverrides})};}
   async getAccessToken(){return{token:tokens.access_token};}
  }
@@ -33,7 +33,8 @@ async function fixture(t,{tokenOverrides={},payloadOverrides={},exchangeError,ho
 function assertRedacted(response){for(const value of Object.values(tokens).concat(raw.web.client_secret,'sensitive-code'))assert.equal(response.text.includes(value),false);}
 
 test('loopback bootstrap sets isolated HttpOnly cookie and never serializes credentials in landing/status',async t=>{
- const f=await fixture(t);assert.equal(f.page.status,200);assert.match(f.page.headers['set-cookie'][0],/HttpOnly; SameSite=Strict/);assert.equal(f.page.headers['referrer-policy'],'no-referrer');assert.equal(f.status.headers['cache-control'],'no-store');assertRedacted(f.page);assertRedacted(f.status);
+ const f=await fixture(t);assert.equal(f.page.status,200);assert.match(f.page.headers['set-cookie'][0],/HttpOnly; SameSite=Strict/);assert.equal(f.page.headers['referrer-policy'],'no-referrer-when-downgrade');assert.match(f.page.text,/<meta name="referrer" content="no-referrer-when-downgrade">/);assert.equal(f.status.headers['referrer-policy'],'no-referrer');assert.equal(f.status.headers['cache-control'],'no-store');assertRedacted(f.page);assertRedacted(f.status);
+ const query=await f.request('/?code=sensitive-code&state=sensitive-state&scope=unexpected-scope');assert.equal(query.status,400);assert.equal(query.data.error,'QUERY_NOT_ALLOWED');assert.equal(query.headers['referrer-policy'],'no-referrer');assertRedacted(query);assert.doesNotMatch(query.text,/sensitive-state|unexpected-scope|<!doctype/);
  assert.equal((await f.request('/api/status')).status,400);assert.equal((await f.request('/api/status',{headers:{Cookie:f.cookie,Host:'evil.example'}})).status,400);assert.equal((await f.request('http://evil.example/api/status',{headers:{Cookie:f.cookie}})).status,400);assert.equal(f.seen.exchanges,0);
 });
 
@@ -61,8 +62,8 @@ test('malformed and oversized request bodies are bounded before exchanging or sa
  const f=await fixture(t);for(const body of ['{','x'.repeat(17000)]){const response=await f.request('/api/oauth/code',{method:'POST',headers:f.headers,body});assert.equal(response.status,400);assertRedacted(response);}const form=await f.post('/api/oauth/start',{}, {'Content-Type':'application/x-www-form-urlencoded'});assert.equal(form.data.error,'JSON_REQUIRED');assert.equal(f.seen.exchanges,0);assert.equal(f.seen.persists,0);
 });
 
-test('wrong owner and missing offline refresh never expose a Picker token or persist a credential',async t=>{
- for(const options of [{payloadOverrides:{email:'another@example.test'}},{payloadOverrides:{email_verified:false}},{tokenOverrides:{refresh_token:undefined}}]){const f=await fixture(t,options);const start=(await f.post('/api/oauth/start')).data;const response=await f.post('/api/oauth/code',{state:start.state,code:'sensitive-code'});assert.equal(response.status,400);assertRedacted(response);assert.equal((await f.post('/api/picker-token')).status,400);assert.equal((await f.post('/api/save')).status,400);assert.equal(f.seen.preflights,0);assert.equal(f.seen.persists,0);}
+test('wrong owner, incomplete offline refresh and broad Drive grants never expose a Picker token or persist a credential',async t=>{
+ for(const options of [{payloadOverrides:{email:'another@example.test'}},{payloadOverrides:{email_verified:false}},{tokenOverrides:{refresh_token:undefined}},{infoOverrides:{scopes:['https://www.googleapis.com/auth/drive.file','https://www.googleapis.com/auth/drive']}}]){const f=await fixture(t,options);const start=(await f.post('/api/oauth/start')).data;const response=await f.post('/api/oauth/code',{state:start.state,code:'sensitive-code'});assert.equal(response.status,400);assertRedacted(response);assert.equal((await f.post('/api/picker-token')).status,400);assert.equal((await f.post('/api/save')).status,400);assert.equal(f.seen.preflights,0);assert.equal(f.seen.persists,0);}
 });
 
 test('a verified owner can save only after selecting the exact existing folder and passing runtime preflight',async t=>{

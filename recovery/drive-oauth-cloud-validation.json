@@ -1,0 +1,54 @@
+{
+  "checkedAt": "2026-10-29T23:36:47.753Z",
+  "project": "mcimachala-servidor",
+  "explicitUserApprovalReceived": true,
+  "services": [
+    {
+      "service": "drive.googleapis.com",
+      "httpStatus": 200,
+      "state": "ENABLED"
+    },
+    {
+      "service": "picker.googleapis.com",
+      "httpStatus": 200,
+      "state": "ENABLED"
+    }
+  ],
+  "oauthClientChanges": 0,
+  "iamChanges": 0,
+  "hostingDeployments": 0,
+  "apiKey": {
+    "onlyAddedTarget": "picker.googleapis.com",
+    "pickerAllowed": true,
+    "previousTargetCount": 26,
+    "currentTargetCount": 27,
+    "previousApiTargetsPreserved": true,
+    "otherRestrictionsPreserved": true
+  },
+  "verified": true,
+  "independentlyVerified": true,
+  "independentVerification": {
+    "checkedAt": "2026-10-29T23:37:42.023Z",
+    "method": "Independent offline comparison of redacted CLI GET evidence",
+    "credentialAccess": false,
+    "cloudMutationsPerformedByVerifier": 0,
+    "apiKeyResourceMatched": true,
+    "completeApiTargetObjectsComparedIncludingMethods": true,
+    "previousTargetCount": 26,
+    "currentTargetCount": 27,
+    "onlyAddedTarget": "picker.googleapis.com",
+    "removedOrModifiedPreviousTargets": 0,
+    "otherRestrictionsDeepEqual": true,
+    "driveAndPickerEnablementConfirmed": true,
+    "evidenceSha256": {
+      "before": "aba0ab6b6f67af6aff526d785b1c38f93cf26f81416fe8e843345e767c34891b",
+      "after": "829200c00e689a7c6ec60270051b6dceb0add2515b493b733fa1924a6b00a976",
+      "services": "23e0d72f67f58a5601f0ea1057679b49bee676830d658da02c233be4e9726dd8"
+    },
+    "selectedRegressionTests": {
+      "passed": 21,
+      "failed": 0,
+      "scope": "OAuth HTTP and DPAPI security, owner preflight, synthetic archive cleanup guards"
+    }
+  }
+}

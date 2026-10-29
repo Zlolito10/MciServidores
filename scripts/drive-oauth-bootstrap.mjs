@@ -25,6 +25,9 @@ export async function createDriveOAuthBootstrap(raw,{google=require('googleapis'
    assertLoopbackRequest(req,{origin:config.origin,sessionId,csrfToken,requireSession:url.pathname!=='/',requireCsrf:req.method==='POST'});
    if(Date.now()-lastActivity>900000)throw safeFailure('BOOTSTRAP_SESSION_EXPIRED');lastActivity=Date.now();
    if(req.method==='GET'&&url.pathname==='/'){
+    // GIS documents this policy for HTTP localhost. The document URL is query
+    // free; API responses and explicit fetch calls retain no-referrer.
+    res.setHeader('Referrer-Policy','no-referrer-when-downgrade');
     res.setHeader('Set-Cookie',`mci_drive_oauth=${sessionId}; Path=/; HttpOnly; SameSite=Strict; Max-Age=900`);
     res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.end(render());return;
    }

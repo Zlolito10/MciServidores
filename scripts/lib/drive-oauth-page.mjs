@@ -1,5 +1,5 @@
 /** Local recovery UI only. Client secrets and refresh tokens never enter this page. */
-export async function bootDriveOAuthPage({ window: browser = globalThis, document = browser.document, fetch: request = browser.fetch.bind(browser) } = {}) {
+export async function bootDriveOAuthPage({ window: browser = globalThis, document = browser.document, fetch: request = browser.fetch.bind(browser), now = () => Date.now(), schedule = browser.setTimeout?.bind(browser) || globalThis.setTimeout, cancel = browser.clearTimeout?.bind(browser) || globalThis.clearTimeout } = {}) {
   const elements = {};
   for (const name of ['prepare', 'authorize', 'folder', 'save', 'message', 'result']) elements[name] = document.getElementById('drive-' + name);
   let config;
@@ -9,10 +9,22 @@ export async function bootDriveOAuthPage({ window: browser = globalThis, documen
   let prepared = false;
   let ready = false;
   let picker = null;
+  let expiryTimer = null, waitTimer = null, beginGoogleWait, popupFailure;
   const phases = new Set(['awaiting-consent', 'awaiting-folder', 'ready', 'saved']);
   const proof = { phase: 'loading', mode: 'gis-code-popup', authorized: false, folderSelected: false, saved: false, error: null };
   const safeCode = (value) => typeof value === 'string' && /^[A-Z][A-Z0-9_]{0,79}$/.test(value) ? value : 'LOCAL_AUTHORIZATION_FAILED';
   const failure = (code) => Object.assign(new Error(code), { code });
+
+  function clearAuthorizationTimers() {
+    if (expiryTimer !== null) cancel(expiryTimer);
+    if (waitTimer !== null) cancel(waitTimer);
+    expiryTimer = waitTimer = null;
+  }
+  function authorizationTimer(callback, delay) {
+    const timer = schedule(callback, Math.max(0, delay));
+    timer?.unref?.(); // Node test fixtures must not wait for a real five-minute deadline.
+    return timer;
+  }
 
   function render(message) {
     if (message) elements.message.textContent = message;
@@ -80,13 +92,41 @@ export async function bootDriveOAuthPage({ window: browser = globalThis, documen
     if (!ready || busy || proof.authorized || proof.saved) return;
     busy = true;
     prepared = false;
+    clearAuthorizationTimers();
+    authorizationState = null;
+    codeClient = null;
+    beginGoogleWait = popupFailure = null;
     proof.error = null;
     render('Preparando una autorización local nueva...');
     try {
       const start = await api('/api/oauth/start', {});
-      if (typeof start.state !== 'string' || !start.state) throw failure('INVALID_AUTHORIZATION_STATE');
+      if (typeof start.state !== 'string' || !start.state || !Number.isFinite(start.expiresAt) || start.expiresAt <= now()) throw failure('INVALID_AUTHORIZATION_STATE');
       authorizationState = start.state;
       const boundState = start.state;
+      let responseAccepted = false;
+      const acceptOutcome = () => {
+        if (authorizationState !== boundState || responseAccepted) return false;
+        responseAccepted = true;
+        clearAuthorizationTimers();
+        // A legitimate callback is now exchanging its code. Its timer must not
+        // expire that exchange or permit a second popup while it is pending.
+        authorizationState = null;
+        prepared = false;
+        return true;
+      };
+      popupFailure = (error) => {
+        if (!acceptOutcome()) return;
+        busy = false;
+        codeClient = null;
+        proof.error = error?.type === 'popup_closed' ? 'GOOGLE_POPUP_CLOSED' : error?.type === 'popup_failed_to_open' ? 'GOOGLE_POPUP_FAILED_TO_OPEN' : 'GOOGLE_POPUP_UNAVAILABLE';
+        render('La ventana de Google se cerró o no pudo abrirse. Revisa el permiso de ventanas emergentes y pulsa Preparar autorización para un intento nuevo.');
+      };
+      beginGoogleWait = () => {
+        waitTimer = authorizationTimer(() => {
+          if (authorizationState !== boundState || responseAccepted) return;
+          render('Seguimos esperando la respuesta de Google. Si no ves la ventana, revisa el bloqueo de ventanas emergentes. No abras otra mientras haya una autorización pendiente.');
+        }, 15000);
+      };
       codeClient = browser.google.accounts.oauth2.initCodeClient({
         client_id: config.clientId,
         scope: 'openid email https://www.googleapis.com/auth/drive.file',
@@ -96,7 +136,7 @@ export async function bootDriveOAuthPage({ window: browser = globalThis, documen
         ...(config.expectedOwnerEmail ? { login_hint: config.expectedOwnerEmail } : {}),
         state: boundState,
         callback: async (response) => {
-          if (authorizationState !== boundState) return;
+          if (!acceptOutcome()) return;
           busy = true;
           proof.error = null;
           render('Comprobando la autorización y la cuenta propietaria...');
@@ -110,12 +150,15 @@ export async function bootDriveOAuthPage({ window: browser = globalThis, documen
           } catch (error) { showError(error); }
           finally { busy = false; prepared = false; render(); }
         },
-        error_callback: (error) => {
-          busy = false;
-          proof.error = error?.type === 'popup_closed' ? 'GOOGLE_POPUP_CLOSED' : 'GOOGLE_POPUP_UNAVAILABLE';
-          render('La ventana de Google se cerró o no pudo abrirse. Puedes intentarlo de nuevo.');
-        },
+        error_callback: popupFailure,
       });
+      expiryTimer = authorizationTimer(() => {
+        if (!acceptOutcome()) return;
+        busy = false;
+        codeClient = null;
+        proof.error = 'GOOGLE_AUTHORIZATION_EXPIRED';
+        render('El intento caducó. Cierra cualquier ventana anterior de Google y pulsa Preparar autorización para volver a intentarlo.');
+      }, start.expiresAt - now());
       prepared = true;
       render('Revisa el permiso solicitado. Pulsa «Continuar con Google» y completa tú el consentimiento.');
     } catch (error) { showError(error); }
@@ -128,8 +171,8 @@ export async function bootDriveOAuthPage({ window: browser = globalThis, documen
     busy = true;
     render('Completa el consentimiento en la ventana oficial de Google.');
     // Must remain synchronous inside the click to retain the browser user gesture.
-    try { codeClient.requestCode(); }
-    catch { busy = false; proof.error = 'GOOGLE_POPUP_UNAVAILABLE'; render(); }
+    try { beginGoogleWait(); codeClient.requestCode(); }
+    catch { popupFailure({ type: 'popup_failed_to_open' }); }
   });
 
   elements.folder.addEventListener('click', async () => {
@@ -187,7 +230,7 @@ export async function bootDriveOAuthPage({ window: browser = globalThis, documen
     } catch (error) { showError(error); }
     finally { busy = false; render(); }
   });
-  browser.addEventListener('pagehide', () => { authorizationState = null; codeClient = null; disposePicker(); });
+  browser.addEventListener('pagehide', () => { clearAuthorizationTimers(); authorizationState = null; codeClient = null; beginGoogleWait = popupFailure = null; disposePicker(); });
 
   busy = true;
   render('Cargando la configuración local y la biblioteca oficial de Google...');
@@ -203,5 +246,5 @@ export async function bootDriveOAuthPage({ window: browser = globalThis, documen
 }
 
 export function renderDriveOAuthPage() {
-  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>MCI · Autorización del respaldo</title><style>body{font:16px system-ui;color:#15314a;background:#f5f8fc}main{max-width:850px;margin:32px auto;padding:24px;background:white;border-radius:14px}h1{font-size:26px}p{line-height:1.6}button{padding:12px 16px;margin:6px;background:#245185;color:white;border:0;border-radius:8px;font:inherit;cursor:pointer}button:disabled{opacity:.45;cursor:default}pre{padding:20px;background:#eef3f9;white-space:pre-wrap}</style></head><body><main><h1>Autorizar el respaldo de MCI</h1><p>Usa la cuenta propietaria previamente verificada. Google solicitará acceso a los archivos creados o seleccionados para esta aplicación. La autorización permitirá respaldos sin volver a iniciar sesión cada vez.</p><p>Seleccionarás la carpeta existente <strong>RespaldoMCI</strong>. Esta preparación no mueve, renombra, comparte ni elimina la carpeta. La web publicada no cambia.</p><div><button id="drive-prepare" disabled>Preparar autorización</button><button id="drive-authorize" disabled>Continuar con Google</button><button id="drive-folder" disabled>Seleccionar RespaldoMCI</button><button id="drive-save" disabled>Guardar autorización local</button></div><p id="drive-message" role="status"></p><pre id="drive-result" aria-live="polite"></pre><p>Completa tú el consentimiento en la ventana de Google. Los códigos y tokens no aparecen en esta evidencia; la credencial renovable se guarda localmente solo al pulsar Guardar.</p></main><script>(${bootDriveOAuthPage.toString()})();</script></body></html>\n`;
+  return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer-when-downgrade"><title>MCI · Autorización del respaldo</title><style>body{font:16px system-ui;color:#15314a;background:#f5f8fc}main{max-width:850px;margin:32px auto;padding:24px;background:white;border-radius:14px}h1{font-size:26px}p{line-height:1.6}button{padding:12px 16px;margin:6px;background:#245185;color:white;border:0;border-radius:8px;font:inherit;cursor:pointer}button:disabled{opacity:.45;cursor:default}pre{padding:20px;background:#eef3f9;white-space:pre-wrap}</style></head><body><main><h1>Autorizar el respaldo de MCI</h1><p>Usa la cuenta propietaria previamente verificada. Google solicitará acceso a los archivos creados o seleccionados para esta aplicación. La autorización permitirá respaldos sin volver a iniciar sesión cada vez.</p><p>Seleccionarás la carpeta existente <strong>RespaldoMCI</strong>. Esta preparación no mueve, renombra, comparte ni elimina la carpeta. La web publicada no cambia.</p><div><button id="drive-prepare" disabled>Preparar autorización</button><button id="drive-authorize" disabled>Continuar con Google</button><button id="drive-folder" disabled>Seleccionar RespaldoMCI</button><button id="drive-save" disabled>Guardar autorización local</button></div><p id="drive-message" role="status"></p><pre id="drive-result" aria-live="polite"></pre><p>Completa tú el consentimiento en la ventana de Google. Los códigos y tokens no aparecen en esta evidencia; la credencial renovable se guarda localmente solo al pulsar Guardar.</p></main><script>(${bootDriveOAuthPage.toString()})();</script></body></html>\n`;
 }

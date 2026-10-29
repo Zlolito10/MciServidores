@@ -57,7 +57,8 @@ export async function verifyOwnerTokens(oauthClient,tokens,config){
  if(info.aud!==config.clientId||!Number.isFinite(info.expiry_date)||info.expiry_date<=Date.now())throw safeFailure('OWNER_ACCESS_TOKEN_INVALID');
  if(!Array.isArray(info.scopes)||!info.scopes.includes(DRIVE_FILE_SCOPE))throw safeFailure('DRIVE_FILE_SCOPE_NOT_GRANTED');
  if(info.scopes.some(scope=>scope.startsWith('https://www.googleapis.com/auth/drive')&&scope!==DRIVE_FILE_SCOPE))throw safeFailure('UNEXPECTED_BROAD_DRIVE_SCOPE');
- if(!payload?.sub||payload.email_verified!==true||String(payload.email||'').trim().toLowerCase()!==config.expectedOwnerEmail)throw safeFailure('OAUTH_OWNER_MISMATCH');
+ const emailVerified=payload?.email_verified===true||payload?.email_verified==='true';
+ if(!payload?.sub||!emailVerified||String(payload.email||'').trim().toLowerCase()!==config.expectedOwnerEmail)throw safeFailure('OAUTH_OWNER_MISMATCH');
  return {MCI_DRIVE_AUTH_MODE:'oauth',MCI_DRIVE_OAUTH_CLIENT_ID:config.clientId,MCI_DRIVE_OAUTH_CLIENT_SECRET:config.clientSecret,MCI_DRIVE_OAUTH_REFRESH_TOKEN:tokens.refresh_token,MCI_DRIVE_OAUTH_EXPECTED_EMAIL:config.expectedOwnerEmail,MCI_DRIVE_ARCHIVE_FOLDER_ID:config.folderId};
 }
 

@@ -1,0 +1,1293 @@
+// Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
+import { jsxRuntime } from "../vendor/jsx-runtime.js";
+import { r as React } from "../vendor/vendor-react-BwINE3B3.js";
+import {
+  M as me,
+  A as K,
+  S as xe,
+} from "../vendor/vendor-firebase-BjYbfC3F.js";
+import {
+  useAppDialog,
+  useGlobalData,
+  useAuth,
+  OptimizedImage,
+  Modal,
+  isBffEnabled,
+  bffFetch,
+  firestoreDb,
+} from "../app/App.jsx";
+import { LoadingSpinner } from "../components/LoadingSpinner.jsx";
+import {
+  f as UsersIcon,
+  w as SearchIcon,
+  S as ShieldIcon,
+  x as ChevronDownIcon,
+  C as CheckIcon,
+  e as LayersIcon,
+  y as SquarePenIcon,
+  r as Trash2Icon,
+  T as TriangleAlertIcon,
+  L as LoaderCircleIcon,
+} from "../vendor/vendor-ui-CnvYSvQL.js";
+import "../vendor/vendor-pdf-Cf03QSry.js";
+const Volunteers = () => {
+  const y = useAppDialog(),
+    { users: T, serviceAreas: S, roles: L } = useGlobalData(),
+    [U, se] = React.useState(""),
+    [c, te] = React.useState("All"),
+    [v, R] = React.useState([]),
+    [re] = React.useState(!1),
+    [j, w] = React.useState(null),
+    [t, m] = React.useState(null),
+    [A, z] = React.useState(""),
+    {
+      userProfile: M,
+      isMinistryRestricted: E,
+      getAssignedMinistries: P,
+    } = useAuth(),
+    [x, q] = React.useState("All"),
+    [u, ae] = React.useState([]),
+    [b, ie] = React.useState([]),
+    [$, _] = React.useState(!1),
+    [I, k] = React.useState(!1),
+    [D, N] = React.useState(!1),
+    [B, G] = React.useState(!1),
+    [H, V] = React.useState(!1),
+    [h, C] = React.useState({
+      isOpen: !1,
+      userId: null,
+      userName: "",
+    });
+  React.useEffect(() => {
+    const s = E() ? P() : [];
+    ae(S);
+    const n = L.filter(
+      (r) =>
+        String(r?.id || "").startsWith("ministry_admin_") ||
+        String(r?.id || "").startsWith("ministry_subadmin_"),
+    );
+    ie(n);
+    let l = [];
+    s.length > 0 &&
+      (l = S.filter((r) => s.includes(String(r?.id)))
+        .map((r) => String(r?.name || ""))
+        .filter(Boolean));
+    let a = T.map((r) => {
+      const i = r.areas || (r.area ? [r.area] : []);
+      return {
+        id: String(r?.id || ""),
+        ...r,
+        areas: i,
+        serviceAreas: i,
+        assignedMinistries: r.assignedMinistries || [],
+      };
+    });
+    (E() &&
+      l.length > 0 &&
+      (a = a.filter((r) => r.areas && r.areas.some((i) => l.includes(i)))),
+      R(a));
+  }, [T, S, L, E, P]);
+  const le = (s, n) => {
+      const l = s || "";
+      if (l.startsWith("ministry_admin_")) {
+        const a = l.replace("ministry_admin_", "").trim();
+        return a ? [a] : [];
+      }
+      if (l.startsWith("ministry_subadmin_")) {
+        const a = l.replace("ministry_subadmin_", "").trim();
+        return a ? [a] : [];
+      }
+      return l === "ministry_admin" || l === "ministry_subadmin" ? n || [] : [];
+    },
+    ne = async (s) => {
+      if ((s.preventDefault(), !t || !j)) return;
+      const n = t.role || "",
+        l = le(n, t.assignedMinistries);
+      if (
+        (n === "ministry_admin" || n === "ministry_subadmin") &&
+        l.length === 0
+      ) {
+        y.showError("Para este rol debes asignar al menos un ministerio.");
+        return;
+      }
+      if (
+        (n.startsWith("ministry_admin_") ||
+          n.startsWith("ministry_subadmin_")) &&
+        l.length === 0
+      ) {
+        y.showError("No se pudo determinar el ministerio de este rol.");
+        return;
+      }
+      G(!0);
+      try {
+        (isBffEnabled()
+          ? await bffFetch(`/api/users/${encodeURIComponent(j)}`, {
+              method: "PATCH",
+              json: {
+                name: t.name,
+                role: t.role,
+                areas: t.serviceAreas,
+                ministryRoles: t.ministryRoles || {},
+                assignedMinistries: l,
+                ...(A.trim()
+                  ? {
+                      password: A.trim(),
+                    }
+                  : {}),
+              },
+            })
+          : (A.trim() &&
+              y.showError(
+                "En modo sin servidor, solo el usuario puede cambiar su contraseña.",
+              ),
+            await xe(K(firestoreDb, "users", j), {
+              name: t.name,
+              role: t.role,
+              areas: t.serviceAreas,
+              ministryRoles: t.ministryRoles || {},
+              assignedMinistries: l,
+              isAssigned:
+                (t.serviceAreas && t.serviceAreas.length > 0) ||
+                (l && l.length > 0),
+            })),
+          R(
+            v.map((a) =>
+              a.id === j
+                ? {
+                    ...a,
+                    name: t.name,
+                    role: t.role,
+                    areas: t.serviceAreas,
+                    serviceAreas: t.serviceAreas,
+                    ministryRoles: t.ministryRoles,
+                    assignedMinistries: l,
+                  }
+                : a,
+            ),
+          ),
+          w(null),
+          m(null));
+      } catch (a) {
+        (console.error("Error updating user:", a),
+          y.showError("Error al actualizar el usuario"));
+      } finally {
+        G(!1);
+      }
+    },
+    de = async () => {
+      if (h.userId) {
+        V(!0);
+        try {
+          (isBffEnabled()
+            ? await bffFetch(`/api/users/${encodeURIComponent(h.userId)}`, {
+                method: "DELETE",
+                json: {},
+              })
+            : await me(K(firestoreDb, "users", h.userId)),
+            R(v.filter((s) => s.id !== h.userId)),
+            C({
+              isOpen: !1,
+              userId: null,
+              userName: "",
+            }));
+        } catch (s) {
+          (console.error("Error deleting user:", s),
+            y.showError("Error al eliminar el usuario"));
+        } finally {
+          V(!1);
+        }
+      }
+    },
+    oe = (s) => {
+      C({
+        isOpen: !0,
+        userId: s.id,
+        userName: s.name || "este usuario",
+      });
+    },
+    J = v.filter((s) => {
+      const n = (U ?? "").toLowerCase(),
+        l = (s.name ?? "").toLowerCase(),
+        a = (s.email ?? "").toLowerCase(),
+        r = l.includes(n) || a.includes(n),
+        i = c === "All" || s.role === c,
+        o = x === "All" || (s.areas && s.areas.includes(x));
+      return r && i && o;
+    }),
+    ce = M?.role === "master_admin";
+  return re ? (
+    <LoadingSpinner text="Cargando servidores..." />
+  ) : (
+    <div className="space-y-6">
+      {[
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            {[
+              <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                <UsersIcon size={24} />
+              </div>,
+              <div>
+                {[
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {"Servidores"}
+                  </h1>,
+                  <p className="text-gray-500 dark:text-slate-400 text-sm">
+                    {[v.length, " miembros en tu equipo"]}
+                  </p>,
+                ]}
+              </div>,
+            ]}
+          </div>
+        </div>,
+        <div className="flex flex-col gap-4 bg-white dark:bg-slate-800 p-3 lg:p-4 rounded-xl border border-gray-100 dark:border-slate-700 shadow-sm transition-colors">
+          {[
+            <div className="relative w-full">
+              {[
+                <SearchIcon
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={20}
+                />,
+                <input
+                  type="text"
+                  placeholder="Buscar por nombre o email..."
+                  className="w-full pl-10 pr-4 py-3 text-sm sm:text-base rounded-lg border border-gray-200 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-colors"
+                  value={U}
+                  onChange={(s) => se(s.target.value)}
+                />,
+              ]}
+            </div>,
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              {[
+                <div className="relative w-full sm:w-auto">
+                  {[
+                    <button
+                      onClick={() => {
+                        (_(!$), k(!1));
+                      }}
+                      className="flex items-center gap-2 px-4 py-3 sm:py-2 rounded-xl border-2 border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 transition-all w-full sm:min-w-[160px]"
+                    >
+                      {[
+                        <ShieldIcon
+                          size={16}
+                          className={`${c === "master_admin" ? "text-purple-500" : c === "admin" ? "text-blue-500" : c === "user" ? "text-green-500" : "text-gray-400"}`}
+                        />,
+                        <span className="font-medium text-gray-700 dark:text-white flex-1 text-left">
+                          {c === "All"
+                            ? "Todos los Roles"
+                            : c === "master_admin"
+                              ? "Master Admin"
+                              : c === "admin"
+                                ? "Admin"
+                                : "Servidor"}
+                        </span>,
+                        <ChevronDownIcon
+                          size={16}
+                          className={`text-gray-400 transition-transform ${$ ? "rotate-180" : ""}`}
+                        />,
+                      ]}
+                    </button>,
+                    $ && (
+                      <jsxRuntime.Fragment>
+                        {[
+                          <div
+                            className="fixed inset-0 z-[9990]"
+                            onClick={() => _(!1)}
+                          />,
+                          <div className="absolute top-full left-0 mt-2 w-full bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-lg z-[9991] overflow-hidden">
+                            {[
+                              {
+                                value: "All",
+                                label: "Todos los Roles",
+                                icon: "text-gray-400",
+                              },
+                              {
+                                value: "master_admin",
+                                label: "Master Admin",
+                                icon: "text-purple-500",
+                              },
+                              {
+                                value: "admin",
+                                label: "Admin",
+                                icon: "text-blue-500",
+                              },
+                              {
+                                value: "user",
+                                label: "Servidor",
+                                icon: "text-green-500",
+                              },
+                            ].map((s) =>
+                              jsxRuntime.jsxs(
+                                "button",
+                                {
+                                  onClick: () => {
+                                    (te(s.value), _(!1));
+                                  },
+                                  className: `w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${c === s.value ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700"}`,
+                                  children: [
+                                    <ShieldIcon size={16} className={s.icon} />,
+                                    <span className="font-medium">
+                                      {s.label}
+                                    </span>,
+                                    c === s.value && (
+                                      <CheckIcon
+                                        size={16}
+                                        className="ml-auto text-indigo-600 dark:text-indigo-400"
+                                      />
+                                    ),
+                                  ],
+                                },
+                                s.value,
+                              ),
+                            )}
+                          </div>,
+                        ]}
+                      </jsxRuntime.Fragment>
+                    ),
+                  ]}
+                </div>,
+                <div className="relative w-full sm:w-auto">
+                  {[
+                    <button
+                      onClick={() => {
+                        (k(!I), _(!1));
+                      }}
+                      className="flex items-center gap-2 px-4 py-3 sm:py-2 rounded-xl border-2 border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 transition-all w-full sm:min-w-[180px]"
+                    >
+                      {[
+                        <LayersIcon
+                          size={16}
+                          className={
+                            x === "All" ? "text-gray-400" : "text-indigo-500"
+                          }
+                        />,
+                        <span className="font-medium text-gray-700 dark:text-white flex-1 text-left truncate">
+                          {x === "All" ? "Todos los Ministerios" : x}
+                        </span>,
+                        <ChevronDownIcon
+                          size={16}
+                          className={`text-gray-400 transition-transform ${I ? "rotate-180" : ""}`}
+                        />,
+                      ]}
+                    </button>,
+                    I && (
+                      <jsxRuntime.Fragment>
+                        {[
+                          <div
+                            className="fixed inset-0 z-[9990]"
+                            onClick={() => k(!1)}
+                          />,
+                          <div className="absolute top-full left-0 mt-2 w-full bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-lg z-[9991] overflow-hidden max-h-64 overflow-y-auto">
+                            {[
+                              <button
+                                onClick={() => {
+                                  (q("All"), k(!1));
+                                }}
+                                className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${x === "All" ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700"}`}
+                              >
+                                {[
+                                  <LayersIcon
+                                    size={16}
+                                    className="text-gray-400"
+                                  />,
+                                  <span className="font-medium">
+                                    {"Todos los Ministerios"}
+                                  </span>,
+                                  x === "All" && (
+                                    <CheckIcon
+                                      size={16}
+                                      className="ml-auto text-indigo-600 dark:text-indigo-400"
+                                    />
+                                  ),
+                                ]}
+                              </button>,
+                              u.map((s) =>
+                                jsxRuntime.jsxs(
+                                  "button",
+                                  {
+                                    onClick: () => {
+                                      (q(s.name), k(!1));
+                                    },
+                                    className: `w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${x === s.name ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700"}`,
+                                    children: [
+                                      <LayersIcon
+                                        size={16}
+                                        className="text-indigo-500"
+                                      />,
+                                      <span className="font-medium">
+                                        {s.name}
+                                      </span>,
+                                      x === s.name && (
+                                        <CheckIcon
+                                          size={16}
+                                          className="ml-auto text-indigo-600 dark:text-indigo-400"
+                                        />
+                                      ),
+                                    ],
+                                  },
+                                  s.id,
+                                ),
+                              ),
+                            ]}
+                          </div>,
+                        ]}
+                      </jsxRuntime.Fragment>
+                    ),
+                  ]}
+                </div>,
+              ]}
+            </div>,
+          ]}
+        </div>,
+        <div className="grid gap-3 sm:gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+          {J.map((s) => {
+            const n = {
+                master_admin: {
+                  bg: "from-purple-500 to-violet-600",
+                  badge:
+                    "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300",
+                  ring: "ring-purple-500/20",
+                },
+                admin: {
+                  bg: "from-blue-500 to-indigo-600",
+                  badge:
+                    "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
+                  ring: "ring-blue-500/20",
+                },
+                ministry_admin: {
+                  bg: "from-cyan-500 to-blue-600",
+                  badge:
+                    "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300",
+                  ring: "ring-cyan-500/20",
+                },
+                ministry_subadmin: {
+                  bg: "from-violet-500 to-fuchsia-600",
+                  badge:
+                    "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300",
+                  ring: "ring-violet-500/20",
+                },
+                user: {
+                  bg: "from-emerald-500 to-teal-600",
+                  badge:
+                    "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300",
+                  ring: "ring-emerald-500/20",
+                },
+              },
+              a = ((r) => {
+                const i = r ?? "";
+                return i.startsWith("ministry_admin_")
+                  ? {
+                      bg: "from-teal-500 to-cyan-600",
+                      badge:
+                        "bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300",
+                      ring: "ring-teal-500/20",
+                    }
+                  : i.startsWith("ministry_subadmin_")
+                    ? {
+                        bg: "from-rose-500 to-pink-600",
+                        badge:
+                          "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300",
+                        ring: "ring-rose-500/20",
+                      }
+                    : n[i] || n.user;
+              })(s.role);
+            return jsxRuntime.jsxs(
+              "div",
+              {
+                className:
+                  "bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 shadow-sm overflow-hidden hover:shadow-md transition-all group",
+                children: [
+                  <div className={`relative h-16 bg-gradient-to-r ${a.bg}`}>
+                    {[
+                      <div className="absolute -bottom-8 left-4">
+                        <div
+                          className={`h-16 w-16 rounded-xl flex items-center justify-center text-lg font-bold bg-white dark:bg-slate-800 ring-4 ${a.ring} shadow-lg overflow-hidden`}
+                        >
+                          {(() => {
+                            const r = s.photoThumbURL || s.photoURL;
+                            return r ? (
+                              <OptimizedImage
+                                src={r}
+                                alt={s.name}
+                                className="w-full h-full"
+                                fallbackIcon={
+                                  <span
+                                    className={`bg-gradient-to-br ${a.bg} bg-clip-text text-transparent text-lg font-bold`}
+                                  >
+                                    {s.name
+                                      ? s.name.charAt(0).toUpperCase()
+                                      : "?"}
+                                  </span>
+                                }
+                              />
+                            ) : (
+                              <span
+                                className={`bg-gradient-to-br ${a.bg} bg-clip-text text-transparent`}
+                              >
+                                {s.name ? s.name.charAt(0).toUpperCase() : "?"}
+                              </span>
+                            );
+                          })()}
+                        </div>
+                      </div>,
+                      ce && (
+                        <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          {[
+                            <button
+                              onClick={() => {
+                                (w(s.id),
+                                  z(""),
+                                  m({
+                                    ...s,
+                                    serviceAreas: s.areas || [],
+                                    assignedMinistries:
+                                      s.assignedMinistries || [],
+                                  }));
+                              }}
+                              className="p-1.5 bg-white/20 backdrop-blur-sm text-white rounded-lg hover:bg-white/30 transition-colors"
+                              title="Editar"
+                            >
+                              <SquarePenIcon size={14} />
+                            </button>,
+                            <button
+                              onClick={() => oe(s)}
+                              className="p-1.5 bg-white/20 backdrop-blur-sm text-white rounded-lg hover:bg-red-500/80 transition-colors"
+                              title="Eliminar"
+                            >
+                              <Trash2Icon size={14} />
+                            </button>,
+                          ]}
+                        </div>
+                      ),
+                    ]}
+                  </div>,
+                  <div className="pt-10 pb-4 px-4">
+                    {[
+                      <div className="flex items-start justify-between mb-1">
+                        {[
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+                              {s.name || "Sin nombre"}
+                            </h3>
+                          </div>,
+                          <span
+                            className={`shrink-0 ml-2 inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${s.status === "Inactivo" ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300" : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"}`}
+                          >
+                            {s.status || "Activo"}
+                          </span>,
+                        ]}
+                      </div>,
+                      <div className="flex items-center gap-1.5 mb-3">
+                        {(s.email ?? "")
+                          .toLowerCase()
+                          .endsWith("@church.app") ? (
+                          <span className="text-xs text-gray-500 dark:text-slate-400 truncate">
+                            {[
+                              "@",
+                              (s.email ?? "").replace(/@church\.app$/i, ""),
+                            ]}
+                          </span>
+                        ) : (
+                          <jsxRuntime.Fragment>
+                            {[
+                              <span className="text-xs text-gray-500 dark:text-slate-400 truncate">
+                                {s.email || "Sin email"}
+                              </span>,
+                              <span className="shrink-0 inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-gradient-to-r from-blue-500 via-red-500 to-yellow-500 text-white rounded text-[10px] font-bold">
+                                <svg
+                                  className="w-2.5 h-2.5"
+                                  viewBox="0 0 24 24"
+                                  fill="currentColor"
+                                >
+                                  {[
+                                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />,
+                                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />,
+                                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />,
+                                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />,
+                                  ]}
+                                </svg>
+                              </span>,
+                            ]}
+                          </jsxRuntime.Fragment>
+                        )}
+                      </div>,
+                      <div className="mb-3">
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${a.badge}`}
+                        >
+                          {[
+                            <ShieldIcon size={12} />,
+                            s.role === "master_admin"
+                              ? "Master Admin"
+                              : s.role === "admin"
+                                ? "Admin"
+                                : s.role === "ministry_admin"
+                                  ? "Admin de Ministerio"
+                                  : s.role === "ministry_subadmin"
+                                    ? "Sub-Admin"
+                                    : s.role === "user"
+                                      ? "Servidor"
+                                      : b.find((r) => r.id === s.role)?.name ||
+                                        s.role ||
+                                        "Servidor",
+                          ]}
+                        </span>
+                      </div>,
+                      ((s.role ?? "").startsWith("ministry_admin_") ||
+                        (s.role ?? "").startsWith("ministry_subadmin_")) &&
+                        (() => {
+                          const r = b.find((o) => o.id === s.role),
+                            i = u.find((o) => o.id === r?.ministryId);
+                          return i ? (
+                            <div className="mb-3 p-2 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
+                              {[
+                                <p className="text-xs font-medium text-teal-600 dark:text-teal-400 mb-1">
+                                  {"Ministerio:"}
+                                </p>,
+                                <span className="text-xs px-2 py-0.5 bg-teal-100 dark:bg-teal-800/40 text-teal-700 dark:text-teal-300 rounded-full">
+                                  {i.name}
+                                </span>,
+                              ]}
+                            </div>
+                          ) : null;
+                        })(),
+                      (s.role === "ministry_admin" ||
+                        s.role === "ministry_subadmin") &&
+                        s.assignedMinistries &&
+                        s.assignedMinistries.length > 0 && (
+                          <div className="mb-3 p-2 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg border border-cyan-200 dark:border-cyan-800">
+                            {[
+                              <p className="text-xs font-medium text-cyan-600 dark:text-cyan-400 mb-1">
+                                {"Administra:"}
+                              </p>,
+                              <div className="flex flex-wrap gap-1">
+                                {s.assignedMinistries.map((r) => {
+                                  const i = u.find((o) => o.id === r);
+                                  return i ? (
+                                    <span
+                                      className="text-xs px-2 py-0.5 bg-cyan-100 dark:bg-cyan-800/40 text-cyan-700 dark:text-cyan-300 rounded-full"
+                                      key={r}
+                                    >
+                                      {i.name}
+                                    </span>
+                                  ) : null;
+                                })}
+                              </div>,
+                            ]}
+                          </div>
+                        ),
+                      s.areas && s.areas.length > 0 && (
+                        <div className="space-y-2">
+                          {[
+                            <p className="text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide">
+                              {"Ministerios"}
+                            </p>,
+                            <div className="flex flex-wrap gap-1">
+                              {s.areas
+                                .filter((r) => u.some((i) => i.name === r))
+                                .map((r, i) => (
+                                  <span
+                                    className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
+                                    key={i}
+                                  >
+                                    {r}
+                                  </span>
+                                ))}
+                            </div>,
+                            s.areas.some(
+                              (r) => (s.ministryRoles?.[r]?.length ?? 0) > 0,
+                            ) && (
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {s.areas
+                                  .filter((r) => u.some((i) => i.name === r))
+                                  .map((r) => {
+                                    const i = s.ministryRoles?.[r];
+                                    return !i || i.length === 0
+                                      ? null
+                                      : i.map((o, W) => (
+                                          <span
+                                            className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-slate-300"
+                                            key={`${r}-${W}`}
+                                          >
+                                            {o}
+                                          </span>
+                                        ));
+                                  })}
+                              </div>
+                            ),
+                          ]}
+                        </div>
+                      ),
+                    ]}
+                  </div>,
+                ],
+              },
+              s.id,
+            );
+          })}
+        </div>,
+        J.length === 0 && (
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-12 text-center">
+            {[
+              <div className="w-16 h-16 bg-gray-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <UsersIcon size={32} className="text-gray-400" />
+              </div>,
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                {"No se encontraron servidores"}
+              </h3>,
+              <p className="text-gray-500 dark:text-slate-400 text-sm">
+                {"Intenta con otros filtros de búsqueda"}
+              </p>,
+            ]}
+          </div>
+        ),
+        <Modal
+          isOpen={h.isOpen}
+          onClose={() =>
+            C({
+              isOpen: !1,
+              userId: null,
+              userName: "",
+            })
+          }
+          title="Eliminar Servidor"
+          maxWidth="max-w-sm"
+        >
+          <div className="text-center">
+            {[
+              <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <TriangleAlertIcon size={32} className="text-red-500" />
+              </div>,
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                {["¿Eliminar a ", h.userName, "?"]}
+              </h3>,
+              <p className="text-gray-500 dark:text-slate-400 text-sm mb-6">
+                {
+                  "Esta acción no se puede deshacer. El servidor será eliminado permanentemente del sistema."
+                }
+              </p>,
+              <div className="flex gap-3 justify-center">
+                {[
+                  <button
+                    onClick={() =>
+                      C({
+                        isOpen: !1,
+                        userId: null,
+                        userName: "",
+                      })
+                    }
+                    className="px-4 py-2 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg font-medium transition-colors"
+                  >
+                    {"Cancelar"}
+                  </button>,
+                  <button
+                    onClick={de}
+                    disabled={H}
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {H ? (
+                      <jsxRuntime.Fragment>
+                        {[
+                          <LoaderCircleIcon
+                            size={16}
+                            className="animate-spin"
+                          />,
+                          "Eliminando...",
+                        ]}
+                      </jsxRuntime.Fragment>
+                    ) : (
+                      "Sí, eliminar"
+                    )}
+                  </button>,
+                ]}
+              </div>,
+            ]}
+          </div>
+        </Modal>,
+        <Modal
+          isOpen={!!j}
+          onClose={() => {
+            (w(null), m(null), z(""));
+          }}
+          title="Editar Servidor"
+          maxWidth="max-w-md"
+        >
+          {t && (
+            <form onSubmit={ne} className="space-y-4">
+              {[
+                <div>
+                  {[
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+                      {"Nombre Completo"}
+                    </label>,
+                    <input
+                      type="text"
+                      value={t.name}
+                      onChange={(s) =>
+                        m({
+                          ...t,
+                          name: s.target.value,
+                        })
+                      }
+                      className="w-full rounded-lg border border-gray-200 dark:border-slate-600 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-slate-700 dark:text-white transition-colors"
+                      required={!0}
+                    />,
+                  ]}
+                </div>,
+                (M?.role === "master_admin" || M?.role === "admin") && (
+                  <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800/50">
+                    {[
+                      <div className="flex items-center gap-2 mb-2 text-amber-800 dark:text-amber-200">
+                        {[
+                          <ShieldIcon size={16} />,
+                          <span className="text-sm font-semibold">
+                            {"Restablecer Contraseña"}
+                          </span>,
+                        ]}
+                      </div>,
+                      <p className="text-xs text-amber-700 dark:text-amber-300 mb-3">
+                        {
+                          "Por seguridad, la contraseña actual no es visible. Puedes establecer una nueva si el usuario la ha olvidado."
+                        }
+                      </p>,
+                      <input
+                        type="text"
+                        placeholder="Nueva contraseña (mínimo 6 caracteres)"
+                        value={A}
+                        onChange={(s) => z(s.target.value)}
+                        className="w-full rounded-lg border border-amber-200 dark:border-amber-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors"
+                      />,
+                    ]}
+                  </div>
+                ),
+                <div>
+                  {[
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
+                      {"Rol"}
+                    </label>,
+                    <div className="relative">
+                      {[
+                        <button
+                          type="button"
+                          onClick={() => N(!D)}
+                          className="w-full flex items-center justify-between gap-2 px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 transition-all"
+                        >
+                          {[
+                            <div className="flex items-center gap-3">
+                              {[
+                                <ShieldIcon
+                                  size={18}
+                                  className={
+                                    t.role === "master_admin"
+                                      ? "text-purple-500"
+                                      : t.role === "admin"
+                                        ? "text-blue-500"
+                                        : (t.role || "").startsWith(
+                                              "ministry_admin_",
+                                            )
+                                          ? "text-teal-500"
+                                          : (t.role || "").startsWith(
+                                                "ministry_subadmin_",
+                                              )
+                                            ? "text-rose-500"
+                                            : t.role === "user"
+                                              ? "text-green-500"
+                                              : "text-gray-300"
+                                  }
+                                />,
+                                <span className="font-medium text-gray-700 dark:text-white">
+                                  {t.role === "master_admin"
+                                    ? "Master Admin"
+                                    : t.role === "admin"
+                                      ? "Admin"
+                                      : t.role === "user"
+                                        ? "Servidor"
+                                        : b.find((s) => s.id === t.role)
+                                            ?.name || "Seleccionar Rol"}
+                                </span>,
+                              ]}
+                            </div>,
+                            <ChevronDownIcon
+                              size={18}
+                              className={`text-gray-400 transition-transform ${D ? "rotate-180" : ""}`}
+                            />,
+                          ]}
+                        </button>,
+                        D && (
+                          <jsxRuntime.Fragment>
+                            {[
+                              <div
+                                className="fixed inset-0 z-[9990]"
+                                onClick={() => N(!1)}
+                              />,
+                              <div className="absolute top-full left-0 mt-2 w-full bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-lg z-[9991] overflow-hidden max-h-80 overflow-y-auto">
+                                {[
+                                  <div className="px-3 py-2 bg-gray-50 dark:bg-slate-700/50 text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                                    {"Roles del Sistema"}
+                                  </div>,
+                                  [
+                                    {
+                                      value: "master_admin",
+                                      label: "Master Admin",
+                                      color: "text-purple-500",
+                                      desc: "Acceso total al sistema",
+                                    },
+                                    {
+                                      value: "admin",
+                                      label: "Admin",
+                                      color: "text-blue-500",
+                                      desc: "Gestión de eventos y usuarios",
+                                    },
+                                    {
+                                      value: "user",
+                                      label: "Servidor",
+                                      color: "text-green-500",
+                                      desc: "Acceso básico como voluntario",
+                                    },
+                                  ].map((s) =>
+                                    jsxRuntime.jsxs(
+                                      "button",
+                                      {
+                                        type: "button",
+                                        onClick: () => {
+                                          (m({
+                                            ...t,
+                                            role: s.value,
+                                            assignedMinistries: [],
+                                          }),
+                                            N(!1));
+                                        },
+                                        className: `w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${t.role === s.value ? "bg-indigo-50 dark:bg-indigo-900/30" : "hover:bg-gray-50 dark:hover:bg-slate-700"}`,
+                                        children: [
+                                          <ShieldIcon
+                                            size={18}
+                                            className={s.color}
+                                          />,
+                                          <div className="flex-1">
+                                            {[
+                                              <p
+                                                className={`font-medium ${t.role === s.value ? "text-indigo-600 dark:text-indigo-400" : "text-gray-700 dark:text-white"}`}
+                                              >
+                                                {s.label}
+                                              </p>,
+                                              <p className="text-xs text-gray-500 dark:text-slate-400">
+                                                {s.desc}
+                                              </p>,
+                                            ]}
+                                          </div>,
+                                          t.role === s.value && (
+                                            <CheckIcon
+                                              size={18}
+                                              className="text-indigo-600 dark:text-indigo-400"
+                                            />
+                                          ),
+                                        ],
+                                      },
+                                      s.value,
+                                    ),
+                                  ),
+                                  b.length > 0 && (
+                                    <jsxRuntime.Fragment>
+                                      {[
+                                        <div className="px-3 py-2 bg-teal-50 dark:bg-teal-900/30 text-xs font-semibold text-teal-600 dark:text-teal-400 uppercase tracking-wider border-t border-gray-200 dark:border-slate-600">
+                                          {"Administradores de Ministerio"}
+                                        </div>,
+                                        b
+                                          .filter(
+                                            (s) =>
+                                              s.roleType === "ministry_admin",
+                                          )
+                                          .map((s) =>
+                                            jsxRuntime.jsxs(
+                                              "button",
+                                              {
+                                                type: "button",
+                                                onClick: () => {
+                                                  (m({
+                                                    ...t,
+                                                    role: s.id,
+                                                    assignedMinistries: [
+                                                      s.ministryId,
+                                                    ],
+                                                  }),
+                                                    N(!1));
+                                                },
+                                                className: `w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${t.role === s.id ? "bg-teal-50 dark:bg-teal-900/30" : "hover:bg-gray-50 dark:hover:bg-slate-700"}`,
+                                                children: [
+                                                  <LayersIcon
+                                                    size={18}
+                                                    className="text-teal-500"
+                                                  />,
+                                                  <div className="flex-1">
+                                                    {[
+                                                      <p
+                                                        className={`font-medium ${t.role === s.id ? "text-teal-600 dark:text-teal-400" : "text-gray-700 dark:text-white"}`}
+                                                      >
+                                                        {s.name}
+                                                      </p>,
+                                                      <p className="text-xs text-gray-500 dark:text-slate-400">
+                                                        {s.description}
+                                                      </p>,
+                                                    ]}
+                                                  </div>,
+                                                  t.role === s.id && (
+                                                    <CheckIcon
+                                                      size={18}
+                                                      className="text-teal-600 dark:text-teal-400"
+                                                    />
+                                                  ),
+                                                ],
+                                              },
+                                              s.id,
+                                            ),
+                                          ),
+                                        <div className="px-3 py-2 bg-rose-50 dark:bg-rose-900/30 text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider border-t border-gray-200 dark:border-slate-600">
+                                          {"Sub-Administradores de Ministerio"}
+                                        </div>,
+                                        b
+                                          .filter(
+                                            (s) =>
+                                              s.roleType ===
+                                              "ministry_subadmin",
+                                          )
+                                          .map((s) =>
+                                            jsxRuntime.jsxs(
+                                              "button",
+                                              {
+                                                type: "button",
+                                                onClick: () => {
+                                                  (m({
+                                                    ...t,
+                                                    role: s.id,
+                                                    assignedMinistries: [
+                                                      s.ministryId,
+                                                    ],
+                                                  }),
+                                                    N(!1));
+                                                },
+                                                className: `w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${t.role === s.id ? "bg-rose-50 dark:bg-rose-900/30" : "hover:bg-gray-50 dark:hover:bg-slate-700"}`,
+                                                children: [
+                                                  <UsersIcon
+                                                    size={18}
+                                                    className="text-rose-500"
+                                                  />,
+                                                  <div className="flex-1">
+                                                    {[
+                                                      <p
+                                                        className={`font-medium ${t.role === s.id ? "text-rose-600 dark:text-rose-400" : "text-gray-700 dark:text-white"}`}
+                                                      >
+                                                        {s.name}
+                                                      </p>,
+                                                      <p className="text-xs text-gray-500 dark:text-slate-400">
+                                                        {s.description}
+                                                      </p>,
+                                                    ]}
+                                                  </div>,
+                                                  t.role === s.id && (
+                                                    <CheckIcon
+                                                      size={18}
+                                                      className="text-rose-600 dark:text-rose-400"
+                                                    />
+                                                  ),
+                                                ],
+                                              },
+                                              s.id,
+                                            ),
+                                          ),
+                                      ]}
+                                    </jsxRuntime.Fragment>
+                                  ),
+                                ]}
+                              </div>,
+                            ]}
+                          </jsxRuntime.Fragment>
+                        ),
+                      ]}
+                    </div>,
+                  ]}
+                </div>,
+                ((t.role || "").startsWith("ministry_admin_") ||
+                  (t.role || "").startsWith("ministry_subadmin_")) && (
+                  <div className="p-4 bg-teal-50 dark:bg-teal-900/20 rounded-xl border-2 border-teal-200 dark:border-teal-800">
+                    <div className="flex items-center gap-2 text-teal-700 dark:text-teal-300">
+                      {[
+                        <LayersIcon size={16} />,
+                        <span className="text-sm font-medium">
+                          {[
+                            "Este rol tiene acceso exclusivo al ministerio:",
+                            " ",
+                            <span className="font-bold">
+                              {b.find((s) => s.id === t.role)?.ministryName ||
+                                ""}
+                            </span>,
+                          ]}
+                        </span>,
+                      ]}
+                    </div>
+                  </div>
+                ),
+                <div>
+                  {[
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-3">
+                      {"Ministerios Asignados"}
+                    </label>,
+                    <div className="space-y-3 max-h-64 overflow-y-auto p-1">
+                      {u.map((s) => {
+                        const n = t.serviceAreas?.includes(s.name);
+                        return jsxRuntime.jsxs(
+                          "div",
+                          {
+                            className: `rounded-xl border-2 transition-all duration-200 ${n ? "bg-indigo-50 border-indigo-500 dark:bg-indigo-900/20 dark:border-indigo-500" : "border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500"}`,
+                            children: [
+                              <label className="flex items-center gap-3 p-4 cursor-pointer">
+                                {[
+                                  <div
+                                    className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${n ? "bg-indigo-600 border-indigo-600" : "border-gray-300 dark:border-slate-500"}`}
+                                  >
+                                    {n && (
+                                      <CheckIcon
+                                        size={14}
+                                        className="text-white"
+                                      />
+                                    )}
+                                  </div>,
+                                  <input
+                                    type="checkbox"
+                                    checked={n}
+                                    onChange={(l) => {
+                                      const a = t.serviceAreas || [],
+                                        r = l.target.checked
+                                          ? [...a, s.name]
+                                          : a.filter((i) => i !== s.name);
+                                      m({
+                                        ...t,
+                                        serviceAreas: r,
+                                      });
+                                    }}
+                                    className="sr-only"
+                                  />,
+                                  <span
+                                    className={`font-semibold ${n ? "text-indigo-700 dark:text-indigo-300" : "text-gray-700 dark:text-white"}`}
+                                  >
+                                    {s.name}
+                                  </span>,
+                                ]}
+                              </label>,
+                              n && s.roles && s.roles.length > 0 && (
+                                <div className="px-4 pb-4">
+                                  <div className="bg-white dark:bg-slate-800 rounded-lg p-3 border border-indigo-200 dark:border-indigo-800">
+                                    {[
+                                      <p className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-3 uppercase tracking-wider flex items-center gap-1">
+                                        {[
+                                          <LayersIcon size={12} />,
+                                          "Roles del Ministerio",
+                                        ]}
+                                      </p>,
+                                      <div className="flex flex-wrap gap-2">
+                                        {s.roles.map((l) => {
+                                          const a =
+                                            t.ministryRoles?.[s.name]?.includes(
+                                              l,
+                                            );
+                                          return (
+                                            <label
+                                              className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-lg border-2 transition-all ${a ? "bg-indigo-100 border-indigo-400 dark:bg-indigo-900/40 dark:border-indigo-500" : "bg-gray-50 border-gray-200 dark:bg-slate-700 dark:border-slate-600 hover:border-indigo-300 dark:hover:border-indigo-600"}`}
+                                              key={l}
+                                            >
+                                              {[
+                                                <div
+                                                  className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${a ? "bg-indigo-600 border-indigo-600" : "border-gray-300 dark:border-slate-500"}`}
+                                                >
+                                                  {a && (
+                                                    <CheckIcon
+                                                      size={10}
+                                                      className="text-white"
+                                                    />
+                                                  )}
+                                                </div>,
+                                                <input
+                                                  type="checkbox"
+                                                  checked={a}
+                                                  onChange={(r) => {
+                                                    const i =
+                                                      t.ministryRoles?.[
+                                                        s.name
+                                                      ] || [];
+                                                    let o;
+                                                    (r.target.checked
+                                                      ? (o = [...i, l])
+                                                      : (o = i.filter(
+                                                          (W) => W !== l,
+                                                        )),
+                                                      m({
+                                                        ...t,
+                                                        ministryRoles: {
+                                                          ...t.ministryRoles,
+                                                          [s.name]: o,
+                                                        },
+                                                      }));
+                                                  }}
+                                                  className="sr-only"
+                                                />,
+                                                <span
+                                                  className={`text-sm font-medium ${a ? "text-indigo-700 dark:text-indigo-300" : "text-gray-600 dark:text-slate-300"}`}
+                                                >
+                                                  {l}
+                                                </span>,
+                                              ]}
+                                            </label>
+                                          );
+                                        })}
+                                      </div>,
+                                    ]}
+                                  </div>
+                                </div>
+                              ),
+                            ],
+                          },
+                          s.id,
+                        );
+                      })}
+                    </div>,
+                  ]}
+                </div>,
+                <div className="pt-4 flex justify-end gap-3">
+                  {[
+                    <button
+                      type="button"
+                      onClick={() => {
+                        (w(null), m(null));
+                      }}
+                      className="px-4 py-2 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg font-medium transition-colors"
+                    >
+                      {"Cancelar"}
+                    </button>,
+                    <button
+                      type="submit"
+                      disabled={B}
+                      className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                      {B ? (
+                        <jsxRuntime.Fragment>
+                          {[
+                            <LoaderCircleIcon
+                              size={16}
+                              className="animate-spin"
+                            />,
+                            "Guardando...",
+                          ]}
+                        </jsxRuntime.Fragment>
+                      ) : (
+                        "Guardar Cambios"
+                      )}
+                    </button>,
+                  ]}
+                </div>,
+              ]}
+            </form>
+          )}
+        </Modal>,
+      ]}
+    </div>
+  );
+};
+export { Volunteers };

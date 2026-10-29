@@ -7,8 +7,8 @@ export const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 
 export function requireSupportedNode() {
   const [major, minor] = process.versions.node.split('.').map(Number);
-  if (major < 24 || (major === 24 && minor < 5)) {
-    throw new Error('Frontend recovery tools require Node.js 24.5 or newer. Functions use Node.js 22.');
+  if (major < 24 || (major === 24 && minor < 11)) {
+    throw new Error('Frontend recovery tools require Node.js 24.11 or newer. Functions use Node.js 22.');
   }
 }
 

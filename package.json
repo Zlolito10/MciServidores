@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Reproducible local restoration of the recovered MCI Machala Hosting frontend.",
   "engines": {
-    "node": ">=24.5"
+    "node": ">=24.11"
   },
   "scripts": {
     "dev": "node scripts/serve.mjs --dist --port 5176 --api-origin http://127.0.0.1:5001/demo-mci-servidores/us-central1/serverApi",
@@ -26,6 +26,10 @@
   "devDependencies": {
     "acorn": "8.15.0",
     "esbuild": "0.25.11",
-    "prettier": "3.8.0"
+    "prettier": "3.8.0",
+    "@babel/parser": "8.0.7",
+    "@babel/traverse": "8.0.7",
+    "@babel/generator": "8.0.6",
+    "@babel/types": "8.0.6"
   }
 }

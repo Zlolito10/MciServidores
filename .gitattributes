@@ -2,5 +2,11 @@
 recovered/hosting/** -text
 recovered/readable-assets/** -text
 recovered/backend-snapshots/** -text
+frontend/src/vendor/face-api.js -whitespace
+frontend/src/vendor/react-dom.js -whitespace
+frontend/src/vendor/vendor-*.js -whitespace
+frontend/src/vendor/html2canvas*.js -whitespace
+frontend/src/vendor/index.es-*.js -whitespace
+frontend/src/vendor/purify.es-*.js -whitespace
 *.png binary
 *.zip binary

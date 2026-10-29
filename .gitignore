@@ -1,11 +1,13 @@
 node_modules/
 **/node_modules/
 dist/
+dist-*/
 **/dist/
 .dist-staging-*/
 .firebase/
 **/.firebase/
 recovery/private/
+recovery/frontend-build.dist-*.json
 *.private.json
 *.partial
 *-debug.log*

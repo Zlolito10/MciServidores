@@ -1,0 +1,1089 @@
+{
+  "generatedAt": "2026-10-29T18:43:49.152Z",
+  "project": "demo-mci-servidores",
+  "environment": "local Firebase Auth/Firestore/Storage/Functions emulators",
+  "productionServicesUsed": false,
+  "passed": 41,
+  "failed": 0,
+  "flows": [
+    {
+      "name": "all 30 deployed functions can be loaded",
+      "status": "passed"
+    },
+    {
+      "name": "public probe and protected route behave correctly",
+      "status": "passed"
+    },
+    {
+      "name": "actual emulator sign-in exchanges tokens for session cookies",
+      "status": "passed"
+    },
+    {
+      "name": "writes reject missing CSRF and insufficient role",
+      "status": "passed"
+    },
+    {
+      "name": "administrator can create, read, edit and delete roles",
+      "status": "passed"
+    },
+    {
+      "name": "event details include assignments and repertoire",
+      "status": "passed"
+    },
+    {
+      "name": "repertoire edits persist through the recovered API",
+      "status": "passed"
+    },
+    {
+      "name": "attendance accepts the assigned user and rejects another user",
+      "status": "passed"
+    },
+    {
+      "name": "comments persist and reject invalid command types",
+      "status": "passed"
+    },
+    {
+      "name": "Firestore rules reject anonymous profile reads and privilege escalation",
+      "status": "passed"
+    },
+    {
+      "name": "Storage rules allow an owner image upload and reject other owners",
+      "status": "passed"
+    },
+    {
+      "name": "updated sharp dependency decodes, resizes and exports images",
+      "status": "passed"
+    },
+    {
+      "name": "events can be created, edited, listed and deleted by an administrator",
+      "status": "passed"
+    },
+    {
+      "name": "ministry assignment permissions are restricted to the matching area",
+      "status": "passed"
+    },
+    {
+      "name": "event templates can be created, edited and deleted",
+      "status": "passed"
+    },
+    {
+      "name": "ministries can be created, edited and deleted",
+      "status": "passed"
+    },
+    {
+      "name": "repertoire update and reordering persist exact order",
+      "status": "passed"
+    },
+    {
+      "name": "link materials and the shared material library support CRUD",
+      "status": "passed"
+    },
+    {
+      "name": "multipart material upload stores bytes and download returns the same content",
+      "status": "passed"
+    },
+    {
+      "name": "file downloads reject traversal and unsupported prefixes",
+      "status": "passed"
+    },
+    {
+      "name": "profile edits whitelist fields and preserve nested preferences",
+      "status": "passed"
+    },
+    {
+      "name": "profile photo upload rejects non-images and persists a managed photo path",
+      "status": "passed"
+    },
+    {
+      "name": "profile upload enforces the recovered three MiB size limit",
+      "status": "passed"
+    },
+    {
+      "name": "comments support reaction toggling and author/admin delete permissions",
+      "status": "passed"
+    },
+    {
+      "name": "attendance check-out and reporting include the persisted assignment",
+      "status": "passed"
+    },
+    {
+      "name": "service history and dashboard aggregate local data",
+      "status": "passed"
+    },
+    {
+      "name": "private chats permit owner/admin and reject another user",
+      "status": "passed"
+    },
+    {
+      "name": "Tuesday teaching session and attendance permissions match recovered rules",
+      "status": "passed"
+    },
+    {
+      "name": "U de la Vida course, section, class and attendance respect ministry access",
+      "status": "passed"
+    },
+    {
+      "name": "pending request ownership and admin-only reads match recovered rules",
+      "status": "passed"
+    },
+    {
+      "name": "session restoration returns a custom token accepted by the Auth emulator",
+      "status": "passed"
+    },
+    {
+      "name": "disposable user password change and self-delete affect local Auth only",
+      "status": "passed"
+    },
+    {
+      "name": "direct backend password login uses local Auth and rejects invalid credentials",
+      "status": "passed"
+    },
+    {
+      "name": "admin history and telemetry routes enforce master access and return stored records",
+      "status": "passed"
+    },
+    {
+      "name": "notification registration and delivery record a local outbox without sending FCM",
+      "status": "passed"
+    },
+    {
+      "name": "scheduled reminder runs against synthetic events and records simulated delivery",
+      "status": "passed"
+    },
+    {
+      "name": "Drive archive adapter preserves bytes locally before cleanup deletes the source",
+      "status": "passed"
+    },
+    {
+      "name": "Google provider emulation creates a client profile and usable backend session",
+      "status": "passed"
+    },
+    {
+      "name": "email registration creates a least-privilege profile and pending request through client rules",
+      "status": "passed"
+    },
+    {
+      "name": "attendance photo and synthetic location persist for all roles and enforce download access",
+      "status": "passed"
+    },
+    {
+      "name": "logout clears session cookies",
+      "status": "passed"
+    }
+  ],
+  "requests": [
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/hello",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/me",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/events",
+      "status": 401
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/sessionLogin",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/sessionLogin",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/sessionLogin",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/sessionLogin",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/me",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "PUT",
+      "path": "/api/roles/recovery-test",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "PUT",
+      "path": "/api/roles/recovery-test",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "PUT",
+      "path": "/api/roles/recovery-test",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/roles/recovery-test",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "PUT",
+      "path": "/api/roles/recovery-test",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/roles/recovery-test",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/events/recovery-event/details",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/events/recovery-event/repertoire",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/events/recovery-event/repertoire/RxHtG8hZqBx58UOOdPmp",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/events/recovery-event/assignments/recovery-assignment/attendance",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/events/recovery-event/assignments/recovery-assignment/attendance",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/comments",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/commands",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/events",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/events",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "PATCH",
+      "path": "/api/events/nnL82q4KPKup9N8VppMP",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/events/nnL82q4KPKup9N8VppMP/details",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/events",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/events/nnL82q4KPKup9N8VppMP",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "PUT",
+      "path": "/api/events/recovery-event/assignments/recovery-ministry-assignment",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "PUT",
+      "path": "/api/events/recovery-event/assignments/recovery-ministry-assignment",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/events/recovery-event/assignments/recovery-ministry-assignment",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/events/recovery-event/assignments/recovery-ministry-assignment",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/event_templates",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "PUT",
+      "path": "/api/event_templates/oq1ztFMxykmJNQyvf4VM",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/event_templates",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/event_templates/oq1ztFMxykmJNQyvf4VM",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/event_templates/oq1ztFMxykmJNQyvf4VM",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/service_areas",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "PUT",
+      "path": "/api/service_areas/lN9ncQbe1uTHR3jwU0P2",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/service_areas/lN9ncQbe1uTHR3jwU0P2",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/events/recovery-event/repertoire",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "PATCH",
+      "path": "/api/events/recovery-event/repertoire/hN9fcwpybPQxwlZg0Wu7",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/events/recovery-event/repertoire/reorder",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/events/recovery-event/repertoire/hN9fcwpybPQxwlZg0Wu7",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/events/recovery-event/materials",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "PATCH",
+      "path": "/api/events/recovery-event/materials/ZVjtVubqjTjeAI3caOQD",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/events/recovery-event/materials",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/materials_library",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/materials_library",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/materials_library/6VyBiraiM6V7XPTv1o46",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/events/recovery-event/materials/ZVjtVubqjTjeAI3caOQD",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/events/recovery-event/materials/upload",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/events/recovery-event/materials/RtGUhwZsFKuailbGd3nY",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/download",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/download",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/download",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/download",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "PATCH",
+      "path": "/api/users/me",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "PATCH",
+      "path": "/api/users/me",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/users/me/photo",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/users/me/photo",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/users/me/photo",
+      "status": 413
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/comments",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/comments/react",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/comments/react",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/comments/NNBPWebvI3LvTHSTB04h",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "DELETE",
+      "path": "/api/comments/NNBPWebvI3LvTHSTB04h",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/events/recovery-event/assignments/recovery-assignment/attendance",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/attendance/events",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/attendance/records",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/attendance/peopleStatsData",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/attendance/events",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/attendance/events",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/service-history",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/dashboard",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/changes/meta",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "private_chats/recovery-user/messages/recovery-test",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "private_chats/recovery-user/messages/recovery-test",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "private_chats/recovery-user/messages/recovery-test",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "DELETE",
+      "path": "private_chats/recovery-user/messages/recovery-test",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "teaching_sessions/recovery-teaching",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "teaching_sessions/recovery-teaching",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "teaching_attendance_records/recovery-teaching-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "teaching_sessions/recovery-teaching",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "teaching_attendance_records/recovery-teaching-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "DELETE",
+      "path": "teaching_attendance_records/recovery-teaching-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "DELETE",
+      "path": "teaching_sessions/recovery-teaching",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "udlv_courses/recovery-course",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "udlv_courses/recovery-course",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "udlv_courses/recovery-course",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "udlv_sections/recovery-section",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "udlv_sections/recovery-section",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "udlv_sections/recovery-section",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "udlv_classes/recovery-class",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "udlv_classes/recovery-class",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "udlv_classes/recovery-class",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "udlv_class_records/recovery-class-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "udlv_class_records/recovery-class-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "udlv_class_records/recovery-class-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "DELETE",
+      "path": "udlv_class_records/recovery-class-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "DELETE",
+      "path": "udlv_classes/recovery-class",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "DELETE",
+      "path": "udlv_sections/recovery-section",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "DELETE",
+      "path": "udlv_courses/recovery-course",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/sessionLogin",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "pending_assignments/recovery-pending",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "pending_assignments/recovery-pending",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "pending_assignments/recovery-pending",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "DELETE",
+      "path": "pending_assignments/recovery-pending",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/session/refresh",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/sessionLogin",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/users/me/password",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/users/me/password",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/users/me/delete",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/passwordLogin",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/passwordLogin",
+      "status": 401
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/passwordLogin",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/app-history",
+      "status": 401
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/app-history",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/app-history",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/app-history/meta",
+      "status": 401
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/app-history/meta",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/app-history/meta",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/telemetry/latest",
+      "status": 401
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/telemetry/latest",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/telemetry/latest",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/telemetry/daily",
+      "status": 401
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/telemetry/daily",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/telemetry/daily",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/telemetry/daily/routes",
+      "status": 401
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/telemetry/daily/routes",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/telemetry/daily/routes",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/firestore-reads",
+      "status": 401
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/firestore-reads",
+      "status": 403
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/firestore-reads",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/app-history",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/telemetry/latest",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/firestore-reads",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/app-history",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/admin/telemetry/daily/routes",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/notifications/register",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/notify/user",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/notifications/unregister",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/AVOuARjLz7d5WNVmCS7A9cJoZIyf",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/sessionLogin",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/me",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/d68sXOucJbrW90Zvbl7loRaC8M0k",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "pending_assignments/d68sXOucJbrW90Zvbl7loRaC8M0k",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/sessionLogin",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/me",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/events/recovery-event/assignments/recovery-assignment/attendance/photo",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
+      "path": "/api/sessionLogout",
+      "status": 200
+    }
+  ],
+  "externalAdapterSimulations": [
+    "FCM delivery/topics",
+    "Drive archive"
+  ],
+  "unverifiedExternalSystems": [
+    "Real Google OAuth consent/provider",
+    "Real FCM delivery on a device",
+    "Real camera permission and capture",
+    "Real GPS permission and coordinates",
+    "Real Drive IAM and upload",
+    "Cloud Scheduler/PubSub delivery",
+    "Production IAM/PITR/history resources"
+  ]
+}

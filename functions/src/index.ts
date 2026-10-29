@@ -41,6 +41,10 @@ const os = require("os");
 const fs = require("fs/promises");
 const sharp = require("sharp");
 const { google } = require("googleapis");
+const { isLocalDemoRuntime, passwordSignInUrl, normalizeLoginEmail, createRuntimeMessaging, createRuntimeDrive } = require("./runtime-services");
+const { normalizeFcmData, getEcuadorDateString, parseLocalEcuadorDateTimeToUtcMs, shouldRunInWindow } = require("./notification-utils");
+const { archiveOldEventFiles } = require("./cleanup");
+const runtimeMessaging = () => createRuntimeMessaging(admin);
 const stream = require("stream");
 
 // ID de la carpeta de Drive para respaldos (ARCHIVE)
@@ -50,6 +54,7 @@ const DRIVE_ARCHIVE_FOLDER_ID = "1d2k7PKav0bCPfGZng6tDqAhIhqT_0mqp";
 const crypto_1 = require("crypto");
 admin.initializeApp();
 const getRuntimeServiceAccountEmail = async () => {
+  if (isLocalDemoRuntime()) return "local-demo-emulator";
   // En Cloud Functions, podemos consultar el metadata server para saber
   // qué service account está usando el runtime.
   // Esto ayuda a diagnosticar errores de createCustomToken (signBlob).
@@ -692,7 +697,7 @@ const passwordLoginHandler = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("Pragma", "no-cache");
   const apiKey = String(process.env.MCI_FIREBASE_WEB_API_KEY || "").trim();
-  if (!apiKey) {
+  if (!apiKey && !isLocalDemoRuntime()) {
     return res.status(500).json({
       error: "MISSING_MCI_FIREBASE_WEB_API_KEY",
       message:
@@ -717,24 +722,12 @@ const passwordLoginHandler = async (req, res) => {
       ? req.body.password
       : "";
   if (!password) return res.status(400).json({ error: "MISSING_PASSWORD" });
-  const email = (() => {
-    const e = String(emailRaw || "")
-      .trim()
-      .toLowerCase();
-    if (e.includes("@")) return e;
-    const u = String(username || "")
-      .trim()
-      .toLowerCase();
-    if (!u) return "";
-    return `${u}@church.app`;
-  })();
+  const email = normalizeLoginEmail(emailRaw, username);
   if (!email || !email.includes("@")) {
     return res.status(400).json({ error: "MISSING_EMAIL" });
   }
   try {
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${encodeURIComponent(
-      apiKey,
-    )}`;
+    const url = passwordSignInUrl(apiKey);
     const itRes = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -3298,10 +3291,10 @@ app.patch("/api/users/me", requireSession, requireCsrf, async (req, res) => {
   if (body.preferences && typeof body.preferences === "object") {
     const prefs = body.preferences;
     if (typeof prefs.notifications === "boolean") {
-      updates["preferences.notifications"] = prefs.notifications;
+      updates.preferences = { ...(updates.preferences || {}), notifications: prefs.notifications };
     }
     if (typeof prefs.darkMode === "boolean") {
-      updates["preferences.darkMode"] = prefs.darkMode;
+      updates.preferences = { ...(updates.preferences || {}), darkMode: prefs.darkMode };
     }
   }
   await db.collection("users").doc(uid).set(updates, { merge: true });
@@ -3545,8 +3538,8 @@ app.post(
     // y a all_users para recibir notificaciones globales (comentarios, anuncios, etc.)
     try {
       await Promise.all([
-        admin.messaging().subscribeToTopic(pushKey, `user_${uid}`),
-        admin.messaging().subscribeToTopic(pushKey, "all_users"),
+        runtimeMessaging().subscribeToTopic(pushKey, `user_${uid}`),
+        runtimeMessaging().subscribeToTopic(pushKey, "all_users"),
       ]);
     } catch (e) {
       console.error("Error subscribing to topics", e);
@@ -3585,8 +3578,8 @@ app.post(
       );
     try {
       await Promise.all([
-        admin.messaging().unsubscribeFromTopic(token, `user_${uid}`),
-        admin.messaging().unsubscribeFromTopic(token, "all_users"),
+        runtimeMessaging().unsubscribeFromTopic(token, `user_${uid}`),
+        runtimeMessaging().unsubscribeFromTopic(token, "all_users"),
       ]);
     } catch (e) {
       // ignore
@@ -3625,8 +3618,8 @@ app.post(
       );
     try {
       await Promise.all([
-        admin.messaging().unsubscribeFromTopic(pushKey, `user_${uid}`),
-        admin.messaging().unsubscribeFromTopic(pushKey, "all_users"),
+        runtimeMessaging().unsubscribeFromTopic(pushKey, `user_${uid}`),
+        runtimeMessaging().unsubscribeFromTopic(pushKey, "all_users"),
       ]);
     } catch (e) {
       // ignore
@@ -3935,7 +3928,7 @@ app.delete(
   },
 );
 const db = admin.firestore();
-const messaging = admin.messaging();
+const messaging = runtimeMessaging();
 const storage = admin.storage();
 // --- Attendance sync ---
 // Para que web/PWA/móvil vean los mismos conteos sin recargar, publicamos un
@@ -4558,27 +4551,6 @@ exports.onImageFinalizeGenerateThumb = (0, storage_1.onObjectFinalized)(
 );
 // FCM (Admin SDK) requiere que message.data sea un mapa de strings.
 // En requests/Firestore es común tener boolean/number/object, así que normalizamos.
-const normalizeFcmData = (input) => {
-  const out = {};
-  for (const [key, value] of Object.entries(input || {})) {
-    if (value === undefined || value === null) continue;
-    if (typeof value === "string") {
-      out[key] = value;
-      continue;
-    }
-    if (typeof value === "number" || typeof value === "boolean") {
-      out[key] = String(value);
-      continue;
-    }
-    // Objetos/arrays: serializar (evita errores del SDK y preserva data)
-    try {
-      out[key] = JSON.stringify(value);
-    } catch (_a) {
-      out[key] = String(value);
-    }
-  }
-  return out;
-};
 const getAbsoluteLink = (pathOrUrl) => {
   // Hosting default de Firebase para este proyecto
   const origin = "https://mcimachala-servidor.web.app";
@@ -4592,49 +4564,6 @@ const truncateForNotification = (text, maxLen) => {
   const t = (text || "").trim();
   if (t.length <= maxLen) return t;
   return t.slice(0, Math.max(0, maxLen - 1)) + "…";
-};
-// Ecuador (Guayaquil) no tiene DST: UTC-5.
-// Convertimos horas locales (almacenadas en Firestore) a UTC sumando +5h.
-const ECUADOR_UTC_OFFSET_HOURS = 5;
-const ECUADOR_UTC_OFFSET_MS = ECUADOR_UTC_OFFSET_HOURS * 60 * 60 * 1000;
-const pad2 = (n) => String(n).padStart(2, "0");
-// Fecha YYYY-MM-DD en hora local Ecuador, calculada desde Date.now().
-const getEcuadorDateString = (deltaDays) => {
-  const base = new Date(
-    Date.now() - ECUADOR_UTC_OFFSET_MS + deltaDays * 86400000,
-  );
-  const y = base.getUTCFullYear();
-  const m = base.getUTCMonth() + 1;
-  const d = base.getUTCDate();
-  return `${y}-${pad2(m)}-${pad2(d)}`;
-};
-const parseLocalEcuadorDateTimeToUtcMs = (dateStr, timeStr) => {
-  if (!dateStr || !timeStr) return Number.NaN;
-  const [y, m, d] = String(dateStr)
-    .split("-")
-    .map((v) => parseInt(v, 10));
-  const [hh, mm] = String(timeStr)
-    .split(":")
-    .map((v) => parseInt(v, 10));
-  if (
-    !Number.isFinite(y) ||
-    !Number.isFinite(m) ||
-    !Number.isFinite(d) ||
-    !Number.isFinite(hh) ||
-    !Number.isFinite(mm)
-  ) {
-    return Number.NaN;
-  }
-  // UTC = local + 5h
-  return Date.UTC(
-    y,
-    (m || 1) - 1,
-    d || 1,
-    (hh || 0) + ECUADOR_UTC_OFFSET_HOURS,
-    mm || 0,
-    0,
-    0,
-  );
 };
 const getTokenEntriesForUsers = async (userIds) => {
   var _a;
@@ -4730,11 +4659,6 @@ const sendFcmToTokenEntries = async (params) => {
     success: entries.length - tokensToRemoveByUser.size,
     failure: tokensToRemoveByUser.size,
   };
-};
-const shouldRunInWindow = (nowMs, windowStartMs, windowEndMs) => {
-  if (!Number.isFinite(windowStartMs) || !Number.isFinite(windowEndMs))
-    return false;
-  return nowMs >= windowStartMs && nowMs < windowEndMs;
 };
 const buildEventTimeLabel = (event) => {
   const date =
@@ -5022,7 +4946,7 @@ const downloadFileHandler = async (req, res) => {
         }
       }
     }
-    const bucket = storage.bucket("mcimachala-servidor.firebasestorage.app");
+    const bucket = storage.bucket(isLocalDemoRuntime() ? undefined : "mcimachala-servidor.firebasestorage.app");
     const file = bucket.file(path);
     // Verificar que el archivo existe
     const [exists] = await file.exists();
@@ -5212,7 +5136,7 @@ const downloadMaterialHandler = async (req, res) => {
       }
     }
 
-    const bucket = storage.bucket("mcimachala-servidor.firebasestorage.app");
+    const bucket = storage.bucket(isLocalDemoRuntime() ? undefined : "mcimachala-servidor.firebasestorage.app");
     const file = bucket.file(path);
     const [exists] = await file.exists();
     if (!exists) {
@@ -6467,8 +6391,7 @@ exports.onEventWritten = functions.firestore
             eventId: change.before.id,
           },
         };
-        await admin
-          .messaging()
+        await runtimeMessaging()
           .send(message)
           .catch(() => null);
       } else {
@@ -6498,8 +6421,7 @@ exports.onEventWritten = functions.firestore
               eventId: change.after.id,
             },
           };
-          await admin
-            .messaging()
+          await runtimeMessaging()
             .send(message)
             .catch(() => null);
         }
@@ -6663,7 +6585,7 @@ exports.onAssignmentWritten = functions.firestore
         },
       };
 
-      const response = await admin.messaging().sendEachForMulticast(message);
+      const response = await runtimeMessaging().sendEachForMulticast(message);
 
       // Cleanup invalid tokens
       if (response.failureCount > 0) {
@@ -6859,10 +6781,10 @@ exports.onUserTokenWritten = functions.firestore
     try {
       // Suscribir a topic user_UID
       allPromises.push(
-        admin.messaging().subscribeToTopic(tokens, `user_${userId}`),
+        runtimeMessaging().subscribeToTopic(tokens, `user_${userId}`),
       );
       // Suscribir a topic all_users
-      allPromises.push(admin.messaging().subscribeToTopic(tokens, "all_users"));
+      allPromises.push(runtimeMessaging().subscribeToTopic(tokens, "all_users"));
 
       await Promise.all(allPromises);
     } catch (e) {
@@ -6995,8 +6917,7 @@ exports.onCommentWritten = functions.firestore
           authorName,
         }),
       };
-      await admin
-        .messaging()
+      await runtimeMessaging()
         .send(message)
         .catch(() => null);
     } catch (e) {
@@ -7073,7 +6994,7 @@ exports.onRepertoireWritten = functions.firestore
             songId: context.params.songId,
           }),
         };
-        const response = await admin.messaging().sendEachForMulticast(message);
+        const response = await runtimeMessaging().sendEachForMulticast(message);
 
         // CLEANUP TOKENS INVALIDOS
         if (response.failureCount > 0) {
@@ -7176,7 +7097,7 @@ exports.onMaterialWritten = functions.firestore
             materialId: context.params.materialId,
           }),
         };
-        const response = await admin.messaging().sendEachForMulticast(message);
+        const response = await runtimeMessaging().sendEachForMulticast(message);
 
         // CLEANUP TOKENS INVALIDOS
         if (response.failureCount > 0) {
@@ -7495,7 +7416,7 @@ exports.fixStorageCors = functions.https.onRequest(async (req, res) => {
   try {
     const bucket = admin
       .storage()
-      .bucket("mcimachala-servidor.firebasestorage.app");
+      .bucket(isLocalDemoRuntime() ? undefined : "mcimachala-servidor.firebasestorage.app");
 
     const [currentCors] = await bucket.getCorsConfiguration();
     console.log("Current CORS Config:", JSON.stringify(currentCors, null, 2));
@@ -7576,7 +7497,7 @@ exports.onChatMessageWritten = functions.firestore
           },
         };
 
-        const response = await admin.messaging().sendEachForMulticast(payload);
+        const response = await runtimeMessaging().sendEachForMulticast(payload);
 
         // Limpieza de tokens inválidos
         if (response.failureCount > 0) {
@@ -7671,116 +7592,15 @@ exports.onChatMessageWritten = functions.firestore
     }
   });
 
-// --- Scheduled Cleanup (runs every Sunday at 3am) ---
+// Scheduled archive/cleanup keeps the deployed schedule; local demo uses a retained archive in Storage Emulator.
 exports.cleanupOldFiles = functions.pubsub
   .schedule("every sunday 03:00")
   .timeZone("America/Mexico_City")
-  .onRun(async (context) => {
-    console.log(
-      "[Cleanup] Iniciando limpieza automática de archivos viejos...",
-    );
-
-    // Configuración: borrar archivos más viejos de 2 semanas (14 días)
-    const MAX_AGE_DAYS = 14;
-    const now = new Date();
-    const cutoffDate = new Date(
-      now.getTime() - MAX_AGE_DAYS * 24 * 60 * 60 * 1000,
-    );
-
-    const bucket = admin.storage().bucket();
-    // Carpetas a limpiar: 'events' (materiales)
-    const foldersToClean = ["events/"];
-
-    // Setup Google Drive Client
-    let drive = null;
-    try {
-      const auth = new google.auth.GoogleAuth({
-        scopes: ["https://www.googleapis.com/auth/drive"],
-      });
-      drive = google.drive({ version: "v3", auth });
-    } catch (e) {
-      console.error(
-        "[Cleanup] No se pudo inicializar Google Drive. Los archivos NO se respaldarán, solo se borrarán si se desea (o se aborta). abortando para seguridad.",
-        e,
-      );
-      return null;
-    }
-
-    let deletedCount = 0;
-    let archivedCount = 0;
-    let errorsCount = 0;
-
-    try {
-      // 1. Listar todos los archivos en el bucket
-      const [files] = await bucket.getFiles();
-
-      for (const file of files) {
-        // Filtrar solo las carpetas que nos interesan
-        // file.name es la ruta completa, e.g. "events/event123/materials/song.pdf"
-        const isInTargetFolder = foldersToClean.some((folder) =>
-          file.name.startsWith(folder),
-        );
-
-        // Protección extra: No borrar la raíz ni archivos críticos fuera de carpetas conocidas
-        if (!isInTargetFolder) continue;
-
-        // Obtener metadatos para ver la fecha de creación
-        const [metadata] = await file.getMetadata();
-        const timeCreated = new Date(metadata.timeCreated);
-
-        if (timeCreated < cutoffDate) {
-          console.log(
-            `[Cleanup] Procesando archivo viejo: ${file.name} (Creado: ${timeCreated.toISOString()})`,
-          );
-
-          try {
-            if (DRIVE_ARCHIVE_FOLDER_ID === "YOUR_DRIVE_FOLDER_ID_HERE") {
-              console.warn(
-                "[Cleanup] SKIPPING: ID de carpeta Drive no configurado. No se borra nada por seguridad.",
-              );
-              continue;
-            }
-
-            // 1. Descargar de Firebase Storage
-            const [buffer] = await file.download();
-            const bufferStream = new stream.PassThrough();
-            bufferStream.end(buffer);
-
-            // 2. Subir a Google Drive (Respaldo)
-            const driveRes = await drive.files.create({
-              requestBody: {
-                name: file.name.split("/").pop(), // Nombre original del archivo
-                parents: [DRIVE_ARCHIVE_FOLDER_ID],
-                description: `Respaldo automático Church App. Ruta original: ${file.name}. Fecha: ${timeCreated.toISOString()}`,
-              },
-              media: {
-                mimeType: metadata.contentType || "application/octet-stream",
-                body: bufferStream,
-              },
-            });
-
-            console.log(
-              `[Cleanup] Respaldo creado en Drive ID: ${driveRes.data.id}`,
-            );
-            archivedCount++;
-
-            // 3. SOLO SI EL RESPALDO FUE EXITOSO -> Borrar de Firebase
-            await file.delete();
-            deletedCount++;
-          } catch (err) {
-            console.error(
-              `[Cleanup] Error al procesar (respaldar/borrar) ${file.name}:`,
-              err,
-            );
-            errorsCount++;
-          }
-        }
-      }
-      console.log(
-        `[Cleanup] Finalizado. Respaldados: ${archivedCount}. Borrados: ${deletedCount}. Errores: ${errorsCount}.`,
-      );
-    } catch (error) {
-      console.error("[Cleanup] Error fatal en el proceso de limpieza:", error);
-    }
+  .onRun(async () => {
+    const drive = createRuntimeDrive(admin, google);
+    await archiveOldEventFiles({ bucket: admin.storage().bucket(), drive, folderId: DRIVE_ARCHIVE_FOLDER_ID });
     return null;
   });
+
+// Read-only admin endpoints referenced by the recovered AppHistory screen.
+require("./admin-read-routes").registerAdminReadRoutes(app, { db, requireSession });

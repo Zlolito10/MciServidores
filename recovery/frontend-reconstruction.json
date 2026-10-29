@@ -1,0 +1,351 @@
+{
+  "originalSourcesRecovered": false,
+  "method": "AST reconstruction with semantic module/export names and JSX derived from published calls; dependencies preserved",
+  "modules": [
+    {
+      "publishedFile": "App-BPrQ3EPG.js",
+      "reconstructedFile": "app/App.jsx",
+      "jsxExpressions": 324,
+      "retainedRuntimeCalls": 4
+    },
+    {
+      "publishedFile": "index-BU_ZgoWo.js",
+      "reconstructedFile": "main.jsx",
+      "jsxExpressions": 2,
+      "retainedRuntimeCalls": 0
+    },
+    {
+      "publishedFile": "CameraModal-BwvRT9Xn.js",
+      "reconstructedFile": "components/CameraModal.jsx",
+      "jsxExpressions": 48,
+      "retainedRuntimeCalls": 0
+    },
+    {
+      "publishedFile": "EventsGrid-BNb5ngU2.js",
+      "reconstructedFile": "components/EventsGrid.jsx",
+      "jsxExpressions": 63,
+      "retainedRuntimeCalls": 11
+    },
+    {
+      "publishedFile": "LoadingButton-DoDnirDC.js",
+      "reconstructedFile": "components/LoadingButton.jsx",
+      "jsxExpressions": 5,
+      "retainedRuntimeCalls": 0
+    },
+    {
+      "publishedFile": "LoadingSpinner-DQ5LcqWB.js",
+      "reconstructedFile": "components/LoadingSpinner.jsx",
+      "jsxExpressions": 5,
+      "retainedRuntimeCalls": 0
+    },
+    {
+      "publishedFile": "ManageMinistriesModal-BO1rzanM.js",
+      "reconstructedFile": "components/ManageMinistriesModal.jsx",
+      "jsxExpressions": 22,
+      "retainedRuntimeCalls": 4
+    },
+    {
+      "publishedFile": "SelectPicker-D1mnbmt-.js",
+      "reconstructedFile": "components/SelectPicker.jsx",
+      "jsxExpressions": 8,
+      "retainedRuntimeCalls": 3
+    },
+    {
+      "publishedFile": "NotificationsAutoRegister-Dn_C-rjK.js",
+      "reconstructedFile": "components/NotificationsAutoRegister.jsx",
+      "jsxExpressions": 0,
+      "retainedRuntimeCalls": 0
+    },
+    {
+      "publishedFile": "AppHistory-oOipttKZ.js",
+      "reconstructedFile": "pages/AppHistory.jsx",
+      "jsxExpressions": 252,
+      "retainedRuntimeCalls": 60
+    },
+    {
+      "publishedFile": "Attendance-BoRlsPo1.js",
+      "reconstructedFile": "pages/Attendance.jsx",
+      "jsxExpressions": 596,
+      "retainedRuntimeCalls": 28
+    },
+    {
+      "publishedFile": "Dashboard-DN8eeJDA.js",
+      "reconstructedFile": "pages/Dashboard.jsx",
+      "jsxExpressions": 262,
+      "retainedRuntimeCalls": 25
+    },
+    {
+      "publishedFile": "EventDetails-CpDlqXqO.js",
+      "reconstructedFile": "pages/EventDetails.jsx",
+      "jsxExpressions": 567,
+      "retainedRuntimeCalls": 72
+    },
+    {
+      "publishedFile": "Events-CIOfy-8U.js",
+      "reconstructedFile": "pages/Events.jsx",
+      "jsxExpressions": 322,
+      "retainedRuntimeCalls": 17
+    },
+    {
+      "publishedFile": "PendingAssignment-BisqKKqT.js",
+      "reconstructedFile": "pages/PendingAssignment.jsx",
+      "jsxExpressions": 32,
+      "retainedRuntimeCalls": 4
+    },
+    {
+      "publishedFile": "PendingRequests-ofGtBucD.js",
+      "reconstructedFile": "pages/PendingRequests.jsx",
+      "jsxExpressions": 46,
+      "retainedRuntimeCalls": 9
+    },
+    {
+      "publishedFile": "Roles-23Dg9NXW.js",
+      "reconstructedFile": "pages/Roles.jsx",
+      "jsxExpressions": 92,
+      "retainedRuntimeCalls": 9
+    },
+    {
+      "publishedFile": "ServiceAreas-CFqvjtqq.js",
+      "reconstructedFile": "pages/ServiceAreas.jsx",
+      "jsxExpressions": 82,
+      "retainedRuntimeCalls": 3
+    },
+    {
+      "publishedFile": "ServiceHistory-k07fUeOW.js",
+      "reconstructedFile": "pages/ServiceHistory.jsx",
+      "jsxExpressions": 123,
+      "retainedRuntimeCalls": 10
+    },
+    {
+      "publishedFile": "Settings-BtbU5gHm.js",
+      "reconstructedFile": "pages/Settings.jsx",
+      "jsxExpressions": 191,
+      "retainedRuntimeCalls": 0
+    },
+    {
+      "publishedFile": "TuesdayTeaching-B3nMLJdY.js",
+      "reconstructedFile": "pages/TuesdayTeaching.jsx",
+      "jsxExpressions": 102,
+      "retainedRuntimeCalls": 25
+    },
+    {
+      "publishedFile": "Udlv-B63vtmB5.js",
+      "reconstructedFile": "pages/Udlv.jsx",
+      "jsxExpressions": 320,
+      "retainedRuntimeCalls": 89
+    },
+    {
+      "publishedFile": "Volunteers-CUDiGEOd.js",
+      "reconstructedFile": "pages/Volunteers.jsx",
+      "jsxExpressions": 168,
+      "retainedRuntimeCalls": 49
+    }
+  ],
+  "generatedBaseline": [
+    {
+      "path": "frontend/src/app/App.jsx",
+      "sha256": "c380d7cc9e9112906c36453441f842f9dbc897d76a3a6ba1fbe23416aac6b5c4"
+    },
+    {
+      "path": "frontend/src/main.jsx",
+      "sha256": "a7b94354c54703fc801db5b2f3a6fa4bac5e1a1cbe573cdf70cc9bbdae60f7d8"
+    },
+    {
+      "path": "frontend/src/components/CameraModal.jsx",
+      "sha256": "23310159727a394c629dae9bbef3ac235a480d29f7557fb905396061b919e5ef"
+    },
+    {
+      "path": "frontend/src/components/EventsGrid.jsx",
+      "sha256": "3d117b8f4320a3fe435256237c63e977ff7e070ce654c2a4234ef7022d749f94"
+    },
+    {
+      "path": "frontend/src/components/LoadingButton.jsx",
+      "sha256": "31858774662d50878f257f4d3b9f18a766b2f971dbcf8f428b669fbb1ede5b1e"
+    },
+    {
+      "path": "frontend/src/components/LoadingSpinner.jsx",
+      "sha256": "dcf2176379f67249c50744262e592c41a79a38c0bfc6c823d2d0b4071955d255"
+    },
+    {
+      "path": "frontend/src/components/ManageMinistriesModal.jsx",
+      "sha256": "0761a5f847c7a4825dd3d7a75c5e90b3883486bafcab8d7c959599d956e34019"
+    },
+    {
+      "path": "frontend/src/components/SelectPicker.jsx",
+      "sha256": "7ebfb67ad6767b931968250fafc38bea69d6821cf8e187b0ca37ca106020c413"
+    },
+    {
+      "path": "frontend/src/components/NotificationsAutoRegister.jsx",
+      "sha256": "89fb05d3a94e51bed45893da24eab794dced6e2e84305dc42af562d08539a293"
+    },
+    {
+      "path": "frontend/src/services/notifications.js",
+      "sha256": "575cda6531445f8efe9e8bdebf108fdfa8cf009319a6e6ec91741f9e6d08ec25"
+    },
+    {
+      "path": "frontend/src/services/optimisticAssignments.js",
+      "sha256": "ea8b024fb52da599e8979c68f7d647058a9abd0e76e4256a6cb883be10b19557"
+    },
+    {
+      "path": "frontend/src/utils/roles.js",
+      "sha256": "603ad340a77f53bd266a9120a5ef69a0c44a41f3b1e7d3ac2d1352115928a834"
+    },
+    {
+      "path": "frontend/src/hooks/useNotifications.js",
+      "sha256": "b3fbb410b35c62fa0039dbe23d019e692c317de540c36df7e223e0862b8fb0dd"
+    },
+    {
+      "path": "frontend/src/hooks/useOptimizedChat.js",
+      "sha256": "10d3efe63a3cf2f2da51ba1004b4b942d057b12d9b919fb88690425f6fdf13a5"
+    },
+    {
+      "path": "frontend/src/pages/AppHistory.jsx",
+      "sha256": "e402ea7aae135281eabb1bc6bce44e1a38a2bb7e237b7ed505a4f460e3c91913"
+    },
+    {
+      "path": "frontend/src/pages/Attendance.jsx",
+      "sha256": "c1667dde2e1aa0b3f540efc4292da4b3b02d87bb5d88775ba50cd70f08031e1c"
+    },
+    {
+      "path": "frontend/src/pages/Dashboard.jsx",
+      "sha256": "66ddd0c20e64cf25988de4db39996e2dac99a4c6acd6dd28c556b2c4ddec30f1"
+    },
+    {
+      "path": "frontend/src/pages/EventDetails.jsx",
+      "sha256": "25c0ef8c71d0688ec23e85e78104b6cdb6fd8b27ff5ece8bfab4cc1460dedcb4"
+    },
+    {
+      "path": "frontend/src/pages/Events.jsx",
+      "sha256": "308875b6c95e16d216a9f50477bba5fd26bd1c7bb112eb3ca2e34643ae2a32b8"
+    },
+    {
+      "path": "frontend/src/vendor/html2canvas.esm-Ge7aVWlp.js",
+      "sha256": "f998418255159980f45d87097e25e2bc6b75c11424c3960c7950dda67a86e46a"
+    },
+    {
+      "path": "frontend/src/vendor/index.es-DmxuMTI-.js",
+      "sha256": "5e6586739e25c1cfcdda09f734c56c64da74b55b49bee724b4ac1b2516b5bf23"
+    },
+    {
+      "path": "frontend/src/pages/PendingAssignment.jsx",
+      "sha256": "c56abc3a72a1c0b4554633ffacdb9152c9ab2924c50d37fc468799375a8b6a28"
+    },
+    {
+      "path": "frontend/src/pages/PendingRequests.jsx",
+      "sha256": "6fd1228002cd4b9c47149b9138bcab3ba957e8ba5c3d0921aad8747bf3ab5f6f"
+    },
+    {
+      "path": "frontend/src/vendor/purify.es-C65SP4u9.js",
+      "sha256": "db390b1c7ebe99228bf797aac9af5ef479788e8bf1611a8f3df1534080b3b56e"
+    },
+    {
+      "path": "frontend/src/pages/Roles.jsx",
+      "sha256": "53421e9dacb4c533a0e984aec69ddd13ba6c247d880a26501c5fa6e82f68dff4"
+    },
+    {
+      "path": "frontend/src/pages/ServiceAreas.jsx",
+      "sha256": "8bfc29a3d3b5c891b6ed083b559785a212cb810ca47dc2b512921aee93b627cb"
+    },
+    {
+      "path": "frontend/src/pages/ServiceHistory.jsx",
+      "sha256": "35eb598fcf12b2fd76bb3608a3ea0b9c288b657b0337ac977057aa9e7d7d7efc"
+    },
+    {
+      "path": "frontend/src/pages/Settings.jsx",
+      "sha256": "095667bdb6b48d96bb98e216cfbc01bad88bd266ce631aa09e651971a2e3cec7"
+    },
+    {
+      "path": "frontend/src/pages/TuesdayTeaching.jsx",
+      "sha256": "ca52b84fcc7390403cee6987be95b0ee2d09672634a7f06ec520b4ce040f74e5"
+    },
+    {
+      "path": "frontend/src/pages/Udlv.jsx",
+      "sha256": "605d9cb904d3898b3a812d449eaf8ab8af187a2d64fa8759dd1eb806117b0dfd"
+    },
+    {
+      "path": "frontend/src/vendor/vendor-firebase-BjYbfC3F.js",
+      "sha256": "ea4d5d2bf63051c413a3620d61033d38ec55e6cf7b4396b1a73512c8496ac701"
+    },
+    {
+      "path": "frontend/src/vendor/vendor-pdf-Cf03QSry.js",
+      "sha256": "aa5c9ab3e7e17af664d133e04631a0623334e83956a4f93674513efdccd557ab"
+    },
+    {
+      "path": "frontend/src/vendor/vendor-react-BwINE3B3.js",
+      "sha256": "ffe729a14461d2247f5f851573c1b884b956b81893fcefb23a4a21d745ae4c4d"
+    },
+    {
+      "path": "frontend/src/vendor/vendor-ui-CnvYSvQL.js",
+      "sha256": "caaee5359832312dfd0a09e0be370c0f224dae3f272089d0256c45e53cfff0c2"
+    },
+    {
+      "path": "frontend/src/pages/Volunteers.jsx",
+      "sha256": "1daa72daf06daddad90cdb7a14f86035e79efc95b840c4b3c91798bb83e2b5ec"
+    },
+    {
+      "path": "frontend/src/vendor/react-dom.js",
+      "sha256": "fe9865e9719f0633511d93e8f9b629b236dd29f19ae7bb9fcd1122fb13583f3a"
+    },
+    {
+      "path": "frontend/src/vendor/face-api.js",
+      "sha256": "87891e925145a27724f24129896e6ecbb4d840bad9d24a45d9282c4c8210270f"
+    },
+    {
+      "path": "frontend/src/app/runtime.jsx",
+      "sha256": "7b3147c8d4621cadcd34a685dcb517cda4d6ea4274b14a5665b9617ba4c77044"
+    },
+    {
+      "path": "frontend/src/firebase/functions-sdk.js",
+      "sha256": "905c69e22e120d3fedf471f06dc485dd49ee1358c1babd82cd37d89c42c4c1c3"
+    },
+    {
+      "path": "frontend/src/firebase/client.js",
+      "sha256": "6aed81c1184450a786b545e4088510c938d8561771836b5ea3871bb86bd4da2a"
+    },
+    {
+      "path": "frontend/src/auth/AuthProvider.jsx",
+      "sha256": "45c7db80c07866e90dde876eb90b27740b29cbc3e885a4427a90eb1818f2c8f6"
+    },
+    {
+      "path": "frontend/src/pages/Login.jsx",
+      "sha256": "3d5fb500a71c8cce81c81e42ec62517f877d249662fc66ce3f30d0c6f9d52f2a"
+    },
+    {
+      "path": "frontend/src/pages/Register.jsx",
+      "sha256": "7a8ff0431707b9d1312aedd7cc251a0d12bdf3925c249946f2c198e8bc814a9f"
+    },
+    {
+      "path": "frontend/src/utils/images.js",
+      "sha256": "da52b51b716d26da3872d0cc24ff1fc42573e8062d5226516e65bfa0f706b820"
+    },
+    {
+      "path": "frontend/src/data/GlobalDataProvider.jsx",
+      "sha256": "4dca49df6e41d29e71e325c2db40e687db80c6b1147e6ff520ed40f6a81501f1"
+    },
+    {
+      "path": "frontend/src/utils/ministries.js",
+      "sha256": "ae36e7e44cb185117f8493d47c02fd287bb05ccac3560e60457892dab07724ff"
+    },
+    {
+      "path": "frontend/src/components/OptimizedImage.jsx",
+      "sha256": "4b674fe6976941b8f8545b6b6aabcc0f599cf8bec9f45cdb9d0702c647a4779c"
+    },
+    {
+      "path": "frontend/src/app/DashboardLayout.jsx",
+      "sha256": "3a3e37665f92bda52d03aed954d0453f7356b2dda56a0560b7c7c60f26e6c348"
+    },
+    {
+      "path": "frontend/src/app/ProtectedRoute.jsx",
+      "sha256": "47a547f07dc2a12a424d59118300877a4316604dd24a8a8659e60f40670e08f3"
+    },
+    {
+      "path": "frontend/src/components/Modal.jsx",
+      "sha256": "befa5cef3676d9e2f7c259c8ca58fb7f2c12bddd04b91312e113f893f06c34bf"
+    },
+    {
+      "path": "frontend/src/dialogs/AppDialogProvider.jsx",
+      "sha256": "f4f11df8effd96fc6a8dbe160e6ccc1f713ba13592fa2007b37a3f9083bb0917"
+    }
+  ],
+  "entry": "frontend/src/main.jsx"
+}

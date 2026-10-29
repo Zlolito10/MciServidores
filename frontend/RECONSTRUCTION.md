@@ -1,0 +1,17 @@
+# Frontend reconstruido a JSX
+
+Esta carpeta contiene una reconstrucción nueva de la lógica publicada, no los JSX/TSX originales. Las copias sin modificar y sus hashes permanecen en `recovered/hosting/` y `recovered/readable-assets/`.
+
+El código activo ahora entra por `src/main.jsx`. Las pantallas están en `src/pages/`; la composición de rutas y protección en `src/app/`; sesión y proveedor de autenticación en `src/auth/`; configuración Firebase en `src/firebase/` y `src/config/`; diálogos, datos globales, hooks y utilidades tienen carpetas propias. Los exports/imports públicos ya usan nombres como `useAuth`, `bffFetch`, `firebaseAuth`, `firestoreDb`, `Modal` y `OptimizedImage`.
+
+Se reconstruyeron 3.632 expresiones JSX desde llamadas publicadas de `jsx/jsxs`. Se preservaron los props, el orden de sus evaluaciones, las claves y el comportamiento del runtime React publicado. Los casos cuya conversión no era segura permanecen como llamadas explícitas al runtime. Los nombres de variables locales que no se pueden deducir con certeza siguen siendo los compilados; no se inventó información de fuentes originales.
+
+React DOM y Face API/TensorFlow estaban incrustados en la entrada y el modal de cámara. Se separaron en `src/vendor/`, junto con las otras bibliotecas publicadas, para que no se confundan con los componentes propios. Google OAuth y el modal de cámara conservan sus contratos originales.
+
+`npm run build:frontend` compila estas fuentes, sin volver a generarlas. El proyecto demo local es el destino predeterminado. `--production-services` selecciona explícitamente servicios de producción para una compilación; no despliega. `--bff --out-dir dist-bff` activa explícitamente el cliente BFF en una compilación aparte, para comprobar la variante de sesión y el historial administrativo sin reemplazar `dist`. El registro automático del worker permanece desactivado en demo salvo `--pwa-test`. El build también incorpora el worker reconstruido de `frontend/public/`.
+
+`scripts/reconstruct-frontend.mjs` documenta y reproduce la transformación inicial desde los artefactos recuperados. `node scripts/reconstruct-frontend.mjs --check` verifica la reproducibilidad sin escribir archivos. La reconstrucción requiere `--overwrite` cuando las fuentes ya existen: no es un comando de desarrollo habitual y reemplaza las ediciones posteriores. El reporte `recovery/frontend-reconstruction.json` conserva los SHA-256 del baseline generado.
+
+Las pruebas `tests/frontend-reconstruction.test.mjs` contrastan el runtime JSX con el publicado, verifican las rutas originales y la resolución de todos los imports/lazy imports, y ejecutan los helpers de roles, ministerios e imágenes. Las pruebas de navegador y backend están documentadas en el estado general de la recuperación.
+
+El ajuste demo de `utils/storage-path.js` reconoce las URLs de objetos del Storage Emulator local para que el botón de material use la descarga autenticada del backend. La transformación de `EventDetails` incorpora este ajuste de forma reproducible; las URLs externas y de producción no se reclasifican mediante ese parser.

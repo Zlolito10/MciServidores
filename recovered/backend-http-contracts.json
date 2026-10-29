@@ -1,5 +1,8 @@
 {
-  "source": "functions/lib/index.js compiled from the recovered TypeScript source and documented SDK compatibility import",
+  "source": [
+    "functions/lib/index.js",
+    "functions/lib/admin-read-routes.js"
+  ],
   "registeredRoutes": [
     {
       "method": "GET",
@@ -380,6 +383,30 @@
     {
       "method": "POST",
       "path": "/api/notify/week"
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/app-history"
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/app-history/meta"
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/telemetry/latest"
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/telemetry/daily"
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/telemetry/daily/routes"
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/firestore-reads"
     }
   ],
   "frontendReferences": [
@@ -431,7 +458,7 @@
     {
       "method": "GET",
       "path": "/api/admin/telemetry/daily/routes",
-      "registeredInRecoveredBackend": false
+      "registeredInRecoveredBackend": true
     },
     {
       "method": "GET",
@@ -681,27 +708,27 @@
     {
       "method": "GET",
       "path": "/api/admin/telemetry/latest",
-      "registeredInRecoveredBackend": false
+      "registeredInRecoveredBackend": true
     },
     {
       "method": "GET",
       "path": "/api/admin/telemetry/daily",
-      "registeredInRecoveredBackend": false
+      "registeredInRecoveredBackend": true
     },
     {
       "method": "GET",
       "path": "/api/admin/firestore-reads",
-      "registeredInRecoveredBackend": false
+      "registeredInRecoveredBackend": true
     },
     {
       "method": "GET",
       "path": "/api/admin/app-history",
-      "registeredInRecoveredBackend": false
+      "registeredInRecoveredBackend": true
     },
     {
       "method": "GET",
       "path": "/api/admin/app-history/meta",
-      "registeredInRecoveredBackend": false
+      "registeredInRecoveredBackend": true
     },
     {
       "method": "POST",
@@ -741,6 +768,7 @@
   ],
   "notes": [
     "Static registration comparison; excludes Firestore client operations and does not prove endpoint authorization or response compatibility.",
-    "Frontend BFF flags were disabled in the published bundle."
+    "Frontend BFF flags were disabled in the published bundle.",
+    "Six admin read contracts were reconstructed from client call sites and are registered through registerAdminReadRoutes."
   ]
 }

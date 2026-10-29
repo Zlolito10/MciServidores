@@ -1,7 +1,14 @@
 {
   "environment": "local-emulators",
-  "entry": "dist/app/entry-66TMWRHP.js",
-  "moduleInputs": 37,
+  "bff": false,
+  "entry": "dist/app/entry-52E6LZZT.js",
+  "moduleInputs": 55,
   "originalJsxRecovered": false,
-  "rebuiltFromEditableRecoveredJavaScript": true
+  "reconstructedJsx": true,
+  "rebuiltFromEditableRecoveredJavaScript": true,
+  "serviceWorker": {
+    "version": "5.1.18-reconstructed-d5dd190d0bfc",
+    "assets": 82,
+    "automaticRegistration": false
+  }
 }

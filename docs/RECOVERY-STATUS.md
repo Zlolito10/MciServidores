@@ -1,4 +1,6 @@
-# Recuperación comprobada — 19 de octubre de 2026
+# Estado de recuperación — 29 de octubre de 2026
+
+La recuperación inicial del 19 de octubre se conserva como base. Esta continuación añade fuentes JSX reconstruidas, correcciones de backend, más cobertura local y una implementación nueva del worker que faltaba. La web publicada no se desplegó ni se modificó durante estos trabajos.
 
 ## Continuidad
 
@@ -8,9 +10,9 @@ El proyecto local está en `MciServidores/`, separado del portal Visit Santa Ros
 
 ## Accesos comprobados
 
-El conector GitHub con la identidad `Zlolito10` devuelve permisos `push: true` y `admin: true` para `Zlolito10/MciServidores`. Se seleccionó expresamente esa conexión y no la identidad `BlazeDerk` que produjo el 403 del entorno anterior.
+En la recuperación inicial, el conector GitHub con la identidad `Zlolito10` devolvió permisos `push: true` y `admin: true` para `Zlolito10/MciServidores`. Se seleccionó expresamente esa conexión y no la identidad `BlazeDerk` que produjo el 403 del entorno anterior.
 
-La CLI local conserva una sesión Google autorizada con el correo `apolonetworsyt@gmail.com` (esa es la grafía exacta que devuelve la sesión). La API confirmó que tiene acceso a `mcimachala-servidor`. No se solicitó un nuevo token ni una contraseña. Los valores de credenciales y las URLs firmadas no forman parte de este repositorio.
+La sesión Google utilizada para recuperar las fuentes devolvió el correo `apolonetworsyt@gmail.com` (esa es su grafía exacta). La API confirmó acceso a `mcimachala-servidor`. No se solicitó un nuevo token ni una contraseña. En la continuación se confirmó mediante lecturas administrativas que la cuenta `AdmMCI` existe activa y tiene el rol `master_admin`; no se inició sesión en producción con su contraseña ni se guardó esa contraseña. Los valores de credenciales y las URLs firmadas no forman parte de este repositorio.
 
 ## Backend realmente disponible
 
@@ -34,20 +36,30 @@ Se recuperaron las reglas activas Firestore/Storage, cinco índices compuestos y
 
 ## Cambios mantenibles
 
-El nuevo build recompila JavaScript ESM recuperado mediante esbuild y recompila Functions mediante TypeScript. El modo anterior que solo verifica/copia permanece en `build:snapshot`. Se conservan los nombres de los módulos y las copias originales; no se atribuyen archivos JSX/TSX ni comentarios originales inexistentes.
+El build compila una reconstrucción nueva en JSX mediante esbuild y recompila Functions mediante TypeScript. Las pantallas, composición de rutas, autenticación, componentes, hooks y servicios tienen carpetas propias. Se reconstruyeron 3.632 expresiones JSX y se asignaron nombres de módulos y exports donde el código publicado permite deducirlos. Se preservan llamadas al runtime cuando su conversión no es segura y nombres locales compilados cuya intención no se puede deducir. React DOM y Face API/TensorFlow se separaron en `frontend/src/vendor/`. **No son los JSX/TSX originales.** `frontend/RECONSTRUCTION.md` y `recovery/frontend-reconstruction.json` describen la transformación y sus hashes.
 
-La adaptación del frontend cambia la configuración Firebase por una configuración explícita de emuladores, dirige los fallbacks de Functions a localhost y desactiva el registro automático del SW en ese modo. Esos cambios se localizan en `recovery-environment.js`, los dos módulos de entrada/App y el script de build. El CSS editable procede del despliegue.
+`build:snapshot` conserva el modo de copia exacta. `npm run build:frontend` compila las fuentes editables sin regenerarlas. El script de reconstrucción inicial admite `--check` sin escrituras; regenerar encima de fuentes existentes exige `--overwrite` porque reemplaza ediciones posteriores. Las copias originales de Hosting y los módulos formateados permanecen sin modificar.
 
-En Functions se sustituyeron las referencias `admin.firestore.FieldValue/FieldPath/Timestamp` por imports explícitos desde `firebase-admin/firestore`. Las primeras pruebas emuladas produjeron errores 500 al usar esos símbolos en el namespace interceptado por la CLI; con el cambio pasan las escrituras y los disparadores observados. No se cambiaron los contratos de negocio.
+La configuración demo se centraliza en `frontend/src/config/` y Firebase en `frontend/src/firebase/`. Auth, Firestore, Storage y Functions apuntan a emuladores, incluidos los fallbacks HTTP. El cliente BFF y el registro automático del worker conservan sus flags explícitos. `--bff --out-dir dist-bff` permite comprobar sesiones BFF en una compilación aparte; `--pwa-test` habilita el worker en demo. El CSS editable procede del despliegue.
 
-El lockfile recibió actualizaciones compatibles y Sharp pasó a 0.35.5 para resolver avisos de sus bibliotecas de imágenes. Una prueba genera, redimensiona y convierte una imagen a WebP. Los snapshots conservan las versiones anteriores; `recovered/dependency-review.json` registra la auditoría restante.
+En Functions se mantuvieron los imports explícitos de `FieldValue`, `FieldPath` y `Timestamp` que resolvieron errores del emulador. Esta continuación corrigió dos fallos hallados por las nuevas pruebas: preferencias escritas como claves literales con puntos y descargas que consultaban el bucket de producción después de subir al bucket demo. `passwordLogin` ahora se puede ejercer contra Auth Emulator sin una API key real. Se extrajeron adaptadores de integraciones, utilidades de notificaciones, limpieza y rutas administrativas en cuatro módulos. El paquete conserva sus 30 exportaciones.
+
+Se implementaron los seis GET administrativos que AppHistory referenciaba y el paquete desplegado no registraba. Solo `master_admin` puede consultarlos; tienen límites, filtros y cursor para el historial. Leen registros existentes, sin activar ingestión de telemetría ni auditoría de mutaciones. La métrica de lecturas facturables devuelve `METRICS_NOT_COLLECTED` en vez de presentar valores inventados.
+
+El archivo original `firebase-messaging-logic.js` seguía ausente del inventario. Se escribió una implementación nueva en `frontend/public/`, identificada como reconstruida. Los mensajes silenciosos actualizan clientes sin mostrar avisos vacíos; los mensajes Firebase mantienen su envelope foreground; los clics solo navegan dentro del origen. La caché instala archivos estáticos con `credentials:omit` y rechazo de redirecciones, respuestas privadas, cookies y MIME no HTML para el shell. No incluye API, comentarios, rutas privadas ni symlinks. Su versión deriva del release y del hash del shell, assets y fuentes del worker.
+
+El lockfile recibió actualizaciones compatibles y Sharp conserva la versión 0.35.5 ya probada. La consulta npm del 29 de octubre encontró un aviso alto nuevo en body-parser y avisos moderados transitivos. Se corrigieron con versiones compatibles y overrides limitados para `qs` y `uuid`, manteniendo el major de Firebase Admin admitido por Firebase Functions. Las auditorías repetidas del frontend y Functions terminaron ambas con cero vulnerabilidades. `recovered/dependency-review.json` conserva la auditoría histórica anterior; `functions/RECOVERY-CHANGES.md` explica las decisiones actuales.
 
 ## Comprobaciones y límites
 
-Pasaron 9 pruebas Node del servidor, 12 pruebas Python del recuperador y 13 subpruebas de integración (14 resultados Node contando su contenedor). Incluyen las 30 exportaciones, autenticación real del emulador y cookies, CSRF y roles, CRUD de roles, detalles de eventos, repertorio, asistencia, comentarios, validación de comandos, reglas Firestore/Storage, imágenes y cierre de sesión.
+La revisión consolidada del 29 de octubre pasa **50/50 pruebas Node**: 12 de adaptadores/lógica backend, cinco de reconstrucción JSX, dos de rutas Storage Emulator, tres del alta de administrador demo, nueve del servidor y 19 del service worker. Pasan también **12/12 pruebas Python**, la compilación TypeScript de Functions y la verificación SHA-256/tamaño de los 47 archivos Hosting. El sandbox bloqueó inicialmente sockets loopback y temporales Python; se repitieron con conexiones locales permitidas y un temporal privado dentro del workspace, sin cambiar lógica para ocultar fallos.
 
-La interfaz inicia sesión contra Auth emulado y muestra datos Firestore locales. Se creó un evento desde su formulario y se verificó su ficha. Cargaron Ministerios, Servidores, Solicitudes, Asistencias, Enseñanza de martes, U de la Vida, Roles y Configuración, esperando el encabezado de cada pantalla. Se capturaron vistas de escritorio y móvil; el ancho del documento móvil no excedió el viewport de 390 px. No se observaron errores ni advertencias de consola durante esos recorridos. Todos los datos de prueba son sintéticos.
+La integración ampliada pasó **41/41 subpruebas** (42 resultados Node contando el contenedor). Incluye Auth y proveedores emulados, sesiones/cookies/CSRF/roles, CRUD de eventos/ministerios/plantillas/asignaciones/repertorio/materiales, preferencias/fotos, descargas privadas, asistencia/historial, comentarios/reacciones, solicitudes/chat, Enseñanza y U de la Vida, reglas y los seis GET administrativos. `docs/FLOW-COVERAGE.md` detalla cada flujo y `recovery/flow-validation.json` conserva resultados sin cuerpos, cookies ni credenciales. La revisión consolidada de documentación no volvió a sembrar ni modificó el estado de los emuladores usados por el navegador.
 
-No se probaron llamadas de pago ni servicios externos, migraciones/backfills, OAuth de Google, notificaciones FCM, Drive, cámara/GPS ni tareas Pub/Sub. No se enviaron notificaciones reales. La lógica SW ausente y los originales JSX/TSX siguen sin estar disponibles. El `case` duplicado de html2canvas permanece como aviso de compilación del vendor original. El código sigue necesitando revisión funcional de esos flujos antes de un despliegue autorizado.
+Los recorridos de navegador de la recuperación inicial comprobaron login, dashboard, creación/detalles de un evento y las ocho pantallas administrativas, además del viewport móvil de 390 px sin desbordamiento. No observaron errores ni advertencias de consola durante esos recorridos. Todos los datos de prueba son sintéticos; la cobertura HTTP/reglas ampliada no se confunde con una comprobación visual de cada interacción.
+
+El modo demo usa un outbox explícito para FCM y conserva bytes en Storage Emulator para simular el archivo Drive antes de borrar originales. Se probó la lógica del recordatorio programado y de la limpieza con esos adaptadores. Esto no demuestra entrega FCM en dispositivos, acceso real Drive ni entrega de Cloud Scheduler/PubSub. Google se prueba con identidad emulada, las fotos son generadas y las coordenadas son sintéticas; no demuestran consentimiento OAuth ni cámara/GPS físicos. Los tests del worker son locales y no acreditan recepción Web Push desde FCM real.
+
+No se ejecutaron migraciones/backfills, restauraciones PITR ni llamadas de pago sobre datos reales. Los originales JSX/TSX y la lógica SW original siguen sin estar disponibles. El `case` duplicado de html2canvas permanece como aviso del vendor publicado. El README contiene el comando de alta demo con contraseña por stdin, sin una contraseña real ni persistencia en archivos. Los servicios externos requieren una validación separada antes de un despliegue autorizado.
 
 Ningún despliegue a producción fue ejecutado durante esta recuperación.

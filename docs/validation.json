@@ -70,5 +70,127 @@
     "original frontend source unavailable"
   ],
   "previousCloudCommit": "b84d5a7c990ab7963161e2c1c3c200c031233f44",
-  "previousBundleImported": false
+  "previousBundleImported": false,
+  "snapshotDescription": "Los campos de primer nivel conservan la validación inicial del 2026-10-19. La evidencia posterior se registra en latestValidation.",
+  "latestValidation": {
+    "date": "2026-10-29",
+    "generatedAt": "2026-10-29T18:43:49.152Z",
+    "project": "demo-mci-servidores",
+    "environment": "local Firebase Auth/Firestore/Storage/Functions emulators",
+    "productionServicesUsed": false,
+    "emulatorIntegration": {
+      "checksPassed": 41,
+      "failed": 0,
+      "nodeResultsIncludingContainer": 42,
+      "report": "recovery/flow-validation.json",
+      "coverage": "docs/FLOW-COVERAGE.md"
+    },
+    "frontendReconstruction": {
+      "description": "JSX reconstruido a partir del JavaScript publicado; no son fuentes originales recuperadas",
+      "report": "recovery/frontend-reconstruction.json"
+    },
+    "externalAdapterSimulations": [
+      "FCM delivery/topics",
+      "Drive archive"
+    ],
+    "unverifiedExternalSystems": [
+      "Real Google OAuth consent/provider",
+      "Real FCM delivery on a device",
+      "Real camera permission and capture",
+      "Real GPS permission and coordinates",
+      "Real Drive IAM and upload",
+      "Cloud Scheduler/PubSub delivery",
+      "Production IAM/PITR/history resources"
+    ],
+    "frontendBuild": {
+      "status": "passed",
+      "report": "recovery/frontend-build.json",
+      "environment": "local-emulators"
+    },
+    "frontendChecks": {
+      "reproducibleReconstruction": "passed",
+      "focusedTestsPassed": 7,
+      "failed": 0
+    },
+    "browser": {
+      "reportedBy": "root agent browser observations on 2026-10-29",
+      "environment": "local demo preview",
+      "pagesVisited": 9,
+      "eventCreation": "passed",
+      "assignmentCreation": "passed",
+      "repertoireCreation": "passed",
+      "materialUpload": "passed",
+      "materialDownload": {
+        "status": "passed",
+        "browserDownloadEvent": true,
+        "decodedBytesMatchInput": true,
+        "consoleWarningsOrErrors": 0
+      },
+      "camera": {
+        "source": "synthetic stream",
+        "captureCallback": "passed",
+        "jpegBytes": 5853,
+        "stopCalls": 1,
+        "finalTrackState": "ended",
+        "physicalCameraPermissionVerified": false
+      },
+      "bffAppHistory": "loads",
+      "mobile": {
+        "viewportWidth": 390,
+        "documentScrollWidth": 390,
+        "horizontalDocumentOverflow": false,
+        "page": "event details"
+      },
+      "pwa": {
+        "variant": "isolated pwa-test build",
+        "status": "passed",
+        "activatedWorkerVersion": "5.1.18-reconstructed-4049469b241f",
+        "cachedStaticAssets": 82,
+        "apiOrAuthCached": false,
+        "offlineShellAndLogin": "passed",
+        "privateDataAvailableOffline": false,
+        "workerAndCachesRemovedAfterTest": true
+      },
+      "login": "passed after final build",
+      "logout": "passed; returned to login"
+    },
+    "additionalChecksCompletedAt": "2026-10-29T19:09:16.712Z",
+    "nodeTests": {
+      "command": "npm test",
+      "passed": 50,
+      "failed": 0
+    },
+    "hostingSnapshot": {
+      "command": "node scripts/verify.mjs",
+      "status": "passed",
+      "filesVerified": 47,
+      "integrity": "SHA-256 and size"
+    },
+    "backendHttpContracts": {
+      "command": "node scripts/compare-contracts.mjs",
+      "status": "passed",
+      "registrations": 101,
+      "frontendReferencesCompared": 71
+    },
+    "dependencyAudit": {
+      "frontend": {
+        "total": 0
+      },
+      "functions": {
+        "total": 0
+      },
+      "date": "2026-10-29"
+    },
+    "freshDependencyInstallation": {
+      "status": "passed",
+      "report": "recovery/dependency-install-validation.json"
+    },
+    "productionHostingRecheck": {
+      "date": "2026-10-29",
+      "indexHtmlMatchesSnapshot": true,
+      "appVersionMatchesSnapshot": true,
+      "writesPerformed": false,
+      "deploymentPerformed": false
+    }
+  }
 }

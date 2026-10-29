@@ -152,7 +152,7 @@
     },
     {
       "path": "frontend/src/components/CameraModal.jsx",
-      "sha256": "23310159727a394c629dae9bbef3ac235a480d29f7557fb905396061b919e5ef"
+      "sha256": "a92bf937e5ba107b6a2255a3bfe9fd313bdc6f1390a78524625b8f604a5b3696"
     },
     {
       "path": "frontend/src/components/EventsGrid.jsx",
@@ -180,7 +180,7 @@
     },
     {
       "path": "frontend/src/services/notifications.js",
-      "sha256": "575cda6531445f8efe9e8bdebf108fdfa8cf009319a6e6ec91741f9e6d08ec25"
+      "sha256": "1bb013a4cadab37cdc2e84b154f9373ad76ba24cd9196099de41823dce9c88aa"
     },
     {
       "path": "frontend/src/services/optimisticAssignments.js",
@@ -192,7 +192,7 @@
     },
     {
       "path": "frontend/src/hooks/useNotifications.js",
-      "sha256": "b3fbb410b35c62fa0039dbe23d019e692c317de540c36df7e223e0862b8fb0dd"
+      "sha256": "4f03c530f7a523e3fb98d8d537bdf1af6fa0a93d98d8e6d1cd4a8c6d75f79fc8"
     },
     {
       "path": "frontend/src/hooks/useOptimizedChat.js",
@@ -304,7 +304,7 @@
     },
     {
       "path": "frontend/src/auth/AuthProvider.jsx",
-      "sha256": "45c7db80c07866e90dde876eb90b27740b29cbc3e885a4427a90eb1818f2c8f6"
+      "sha256": "89e2ec59cb04ecb346cffd2145b1bd323012f563d4287495bdc567d9e418efd8"
     },
     {
       "path": "frontend/src/pages/Login.jsx",

@@ -231,6 +231,52 @@ for(const [file,ast]of asts){
   ast.program.body.unshift(t.importDeclaration([t.importSpecifier(t.identifier('extractEmulatorStoragePath'),t.identifier('extractEmulatorStoragePath'))],t.stringLiteral('../utils/storage-path.js')));
   traverse(ast,{VariableDeclarator(p){if(p.node.id.name==='Gt'&&t.isArrowFunctionExpression(p.node.init)&&t.isBlockStatement(p.node.init.body))p.node.init.body.body.unshift(...parseJs('function adapter(){const emulatorPath = extractEmulatorStoragePath(t); if (emulatorPath) return emulatorPath;}').program.body[0].body.body);}});
  }
+ // Bound worker activation, share the SDK's single foreground callback, and
+ // keep passive token refresh from requesting permission outside a user action.
+ if(from==='services/notifications.js'){
+  ast.program.body=ast.program.body.flatMap(node=>t.isImportDeclaration(node)&&node.source.value==='../app/App.jsx'?[t.importDeclaration(node.specifiers.filter(spec=>['firebaseApp','firestoreDb'].includes(spec.local.name)),t.stringLiteral('../firebase/client.js')),t.importDeclaration(node.specifiers.filter(spec=>['isBffEnabled','bffFetch'].includes(spec.local.name)),t.stringLiteral('../app/runtime.jsx'))]:[node]);
+  ast.program.body.unshift(t.importDeclaration(['ensureMessagingWorker','createMessageSubscription','createTokenRequest','requestNotificationPermission','revokeBrowserRegistration'].map(name=>t.importSpecifier(t.identifier(name),t.identifier(name))),t.stringLiteral('./notification-runtime.js')));
+  const replacements={Sn:'() => requestNotificationPermission(Notification)',vn:'() => ensureMessagingWorker(navigator.serviceWorker)',On:'createMessageSubscription(Oe, (messaging, callback) => hn(messaging, callback))',An:'createTokenRequest({getPermission: () => Notification.permission, getMessaging: Oe, getRegistration: vn, requestToken: (messaging, registration) => wn(messaging, {vapidKey: mn, serviceWorkerRegistration: registration})})'};
+  traverse(ast,{VariableDeclarator(p){const source=replacements[p.node.id.name];if(source)p.node.init=parseJs('const adapter = '+source+';').program.body[0].declarations[0].init;}});
+  const cleanup=parseJs(`async function revokeBrowserNotifications(uid){
+   if(!uid||!("serviceWorker" in navigator))return {hadToken:false};
+   const messaging=await Oe();if(!messaging)return {hadToken:false};
+   const dependencies=messaging.firebaseDependencies;
+   return revokeBrowserRegistration({getStoredToken:()=>$t(dependencies),unregisterToken:async token=>{if(isBffEnabled())await bffFetch('/api/notifications/unregister',{method:'POST',json:{pushKey:token}});else{try{await je(te(firestoreDb,'userTokens',uid),{tokens:qe(token),updatedAt:new Date().toISOString()});}catch(error){if(error?.code!=='not-found')throw error;}}},deleteToken:token=>Bt(dependencies,token),clearStoredToken:async()=>{const tx=(await Ae()).transaction(b,'readwrite');await tx.objectStore(b).delete(Ee(dependencies));await tx.done;},unsubscribePush:async scope=>{for(const registration of await navigator.serviceWorker.getRegistrations()){if(scope?registration.scope!==scope:!registration.active?.scriptURL?.endsWith('/firebase-messaging-sw.js'))continue;const subscription=await registration.pushManager.getSubscription();if(subscription)await subscription.unsubscribe();}}});
+  }`).program.body[0];
+  ast.program.body.push(cleanup,t.exportNamedDeclaration(null,[t.exportSpecifier(t.identifier('revokeBrowserNotifications'),t.identifier('revokeBrowserNotifications'))]));
+  traverse(ast,{VariableDeclarator(p){if(p.node.id.name==='Mn')p.get('init').traverse({CatchClause(q){q.node.body.body.unshift(...parseJs('function permissionError(){if (t?.message === "NOTIFICATION_PERMISSION_PENDING") return {success:false,error:"El navegador no respondió al permiso. Revisa su indicador de notificaciones y vuelve a intentarlo."};}').program.body[0].body.body);}});}});
+ }
+ if(from==='auth/AuthProvider.jsx'){
+  traverse(ast,{VariableDeclarator(p){if(p.node.id.name!=='L'||!t.isCallExpression(p.node.init)||!t.isArrowFunctionExpression(p.node.init.arguments[0]))return;
+   p.node.init.arguments[0].body.body.unshift(...parseJs('async function cleanup(){try{const uid=firebaseAuth.currentUser?.uid||r?.uid||a?.uid;if(uid){const notifications=await import("../services/notifications.js");await notifications.revokeBrowserNotifications(uid);}}catch{console.warn("No se completó la retirada local de notificaciones al cerrar sesión.");}}').program.body[0].body.body);
+   p.node.init.arguments[1]=t.arrayExpression([t.identifier('r'),t.identifier('a')]);
+  }});
+ }
+ if(from==='hooks/useNotifications.js'){
+  traverse(ast,{LogicalExpression(p){
+   const node=p.node;
+   if(node.operator==='&&'&&t.isCallExpression(node.right)&&node.right.callee.name==='c'&&t.isLogicalExpression(node.left)&&t.isBinaryExpression(node.left.right)&&node.left.right.left.name==='r'&&node.left.right.right.value==='granted')p.replaceWith(parseJs('const enabled = r !== "granted" && c(false);').program.body[0].declarations[0].init);
+  }});
+ }
+ // Keep the published camera view; replace its unsafe stream/timer lifecycle with
+ // explicit, tested recovery logic. The hook is new code, not recovered source.
+ if(from==='components/CameraModal.jsx'){
+  traverse(ast,{VariableDeclarator(p){
+   if(p.node.id.name!=='CameraModal'||!t.isArrowFunctionExpression(p.node.init))return;
+   const component=p.get('init');component.scope.crawl();
+   const bindings={r:'isOpen',t:'onClose',e:'onCapture',n:'title',o:'videoRef',a:'canvasRef',f:'error',d:'isStarting',v:'modelsReady',x:'manualMode',y:'videoReady',C:'faceDetected',k:'countdown',I:'phase',B:'startCamera',O:'capturePhoto',W:'closeCamera',V:'statusGradient',z:'statusLabel'};
+   for(const [old,name]of Object.entries(bindings))component.scope.rename(old,name);
+   const body=component.node.body.body;
+   const viewStart=body.findIndex(node=>t.isIfStatement(node)&&t.isUnaryExpression(node.test)&&node.test.operator==='!'&&node.test.argument.name==='isOpen');
+   if(viewStart<0)throw new Error('Cannot identify published CameraModal view boundary');
+   const hook=parseJs('function view(){const {videoRef,canvasRef,error,isStarting,modelsReady,manualMode,videoReady,faceDetected,countdown,phase,startCamera,capturePhoto,closeCamera}=useCamera({isOpen,onClose,onCapture});}').program.body[0].body.body;
+   component.node.body.body=[...hook,...body.slice(viewStart)];
+  }});
+  ast.program.body=ast.program.body.filter(node=>t.isImportDeclaration(node)||t.isExportNamedDeclaration(node)||(t.isVariableDeclaration(node)&&node.declarations.some(d=>d.id.name==='CameraModal')));
+  ast.program.body=ast.program.body.filter(node=>!(t.isImportDeclaration(node)&&node.source.value==='../vendor/face-api.js'));
+  ast.program.body.unshift(t.importDeclaration([t.importSpecifier(t.identifier('useCamera'),t.identifier('useCamera'))],t.stringLiteral('../hooks/useCamera.js')));
+ }
  let code=generate(ast,{comments:true,jsescOption:{minimal:true}}).code;
  if(from.endsWith('.jsx'))code=await prettier.format(code,{parser:'babel',filepath:from});
  await emit(path.join('frontend/src',from),'// '+header+code.trimEnd()+'\n');

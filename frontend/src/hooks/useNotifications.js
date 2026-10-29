@@ -38,7 +38,7 @@ const useNotifications = () => {
         if (e) return;
         o || (w(!1), c(!1), s("Firebase Messaging (FCM) no está soportado en este navegador. En iPhone/iPad (Safari) normalmente no funciona; prueba Android/Chrome o implementa Web Push sin FCM."));
       } catch {}
-    })(), t && r === "granted" && c(!0), () => {
+    })(), r !== "granted" && c(false), () => {
       e = !0;
     };
   }, [r, A, m]), React.useEffect(() => {

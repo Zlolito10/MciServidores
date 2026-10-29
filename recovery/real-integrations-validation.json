@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-29",
+  "checkedAt": "2026-10-29T19:55:20.051699+00:00",
+  "productionDeployments": 0,
+  "productionApplicationDataWrites": 0,
+  "tests": {
+    "node": {
+      "passed": 101,
+      "failed": 0
+    },
+    "python": {
+      "passed": 15,
+      "failed": 0
+    },
+    "emulatorFlows": {
+      "passed": 41,
+      "failed": 0,
+      "nodeResultsIncludingContainer": 42
+    }
+  },
+  "google": {
+    "providerEnabled": true,
+    "localhostAuthorized": true,
+    "loopbackIpAuthorizedForOAuth": false,
+    "existingGoogleLinkedAccountVerifiedBeforeSignIn": true,
+    "realSignInSucceeded": true,
+    "provider": "google.com",
+    "persistence": "memory",
+    "realSignOutSucceeded": true,
+    "applicationProvidersLoaded": false,
+    "firestoreOrBffCalls": false,
+    "normalAuthSignInMetadataUpdated": true,
+    "identityOrCredentialsInEvidence": false
+  },
+  "camera": {
+    "physicalDevice": true,
+    "nativeAcquisitions": 3,
+    "trackStopCalls": 3,
+    "finalTrackState": "ended",
+    "captureCallbacks": 1,
+    "jpegBytes": 30875,
+    "restartAndEscapeCloseVerified": true,
+    "audioRequested": false,
+    "imagePersistedOrUploaded": false
+  },
+  "notifications": {
+    "realForegroundDeliveryVerified": true,
+    "realForegroundNativeNotificationVerified": true,
+    "messagesReceivedOnFinalRun": 1,
+    "nativeNotificationsOnFinalRun": 1,
+    "backgroundApiAccepted": true,
+    "backgroundDisplayVerified": false,
+    "nativeClickVerified": false,
+    "report": "recovery/fcm-device-validation.json",
+    "noApplicationTokenRegistration": true,
+    "cleanup": "verified: token and worker retired; native notifications remaining 0"
+  },
+  "drive": {
+    "runtimeServiceAccount": "mcimachala-servidor@appspot.gserviceaccount.com",
+    "readOnlyImpersonationStatus": 403,
+    "missingPermission": "iam.serviceAccounts.getAccessToken",
+    "folderObservedThroughHumanConnector": true,
+    "humanFolderType": "My Drive",
+    "runtimeReadOrWriteVerified": false,
+    "compatibleConfigurationRequired": [
+      "explicit owner OAuth",
+      "shared-drive folder with runtime access"
+    ],
+    "preflightAndArchiveIntegrityTestsPassed": true,
+    "iamChangesPerformed": false,
+    "realArchiveWritesPerformed": false,
+    "report": "recovery/drive-readiness.json"
+  },
+  "remaining": [
+    "Drive runtime credentials/access and compatible destination configuration",
+    "FCM background native display and native click observation",
+    "Physical GPS",
+    "Cloud Scheduler/PubSub external delivery"
+  ],
+  "productionHostingRecheck": {
+    "indexHtmlMatchesRecovered": true,
+    "appVersionMatchesRecovered": true
+  },
+  "finalBuild": {
+    "status": "passed",
+    "moduleInputs": 58,
+    "publicStaticAssets": 84,
+    "automaticDemoServiceWorkerRegistration": false,
+    "mainApplicationLogoutAndRelogin": "passed in browser",
+    "mainApplicationConsoleWarningsOrErrors": 0
+  }
+}

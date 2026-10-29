@@ -1,5 +1,6 @@
 /** Recovery adapters. External FCM/Drive calls are replaced only in a demo emulator runtime. */
 import { createHash, randomUUID } from "node:crypto";
+import { createArchiveDriveClient } from "./drive-archive";
 
 type Environment = NodeJS.ProcessEnv;
 
@@ -74,8 +75,7 @@ export function createRuntimeMessaging(admin: any, env: Environment = process.en
 
 export function createRuntimeDrive(admin: any, google: any, env: Environment = process.env): any {
   if (!isLocalDemoRuntime(env)) {
-    const auth = new google.auth.GoogleAuth({ scopes: ["https://www.googleapis.com/auth/drive"] });
-    return google.drive({ version: "v3", auth });
+    return createArchiveDriveClient(google, env);
   }
   const storageHost = (env.FIREBASE_STORAGE_EMULATOR_HOST || env.STORAGE_EMULATOR_HOST || "").replace(/^http:\/\//, "");
   if (!loopbackHost(storageHost)) throw new Error("STORAGE_EMULATOR_NOT_CONFIGURED");
@@ -92,6 +92,6 @@ export function createRuntimeDrive(admin: any, google: any, env: Environment = p
       name: originalName, bytes: bytes.length, sha256: createHash("sha256").update(bytes).digest("hex"),
       createdAt: new Date().toISOString(),
     });
-    return { data: { id, simulated: true, archivePath } };
+    return { data: { id, size: String(bytes.length), md5Checksum: createHash("md5").update(bytes).digest("hex"), simulated: true, archivePath } };
   } } };
 }

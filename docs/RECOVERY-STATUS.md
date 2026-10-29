@@ -63,3 +63,15 @@ El modo demo usa un outbox explícito para FCM y conserva bytes en Storage Emula
 No se ejecutaron migraciones/backfills, restauraciones PITR ni llamadas de pago sobre datos reales. Los originales JSX/TSX y la lógica SW original siguen sin estar disponibles. El `case` duplicado de html2canvas permanece como aviso del vendor publicado. El README contiene el comando de alta demo con contraseña por stdin, sin una contraseña real ni persistencia en archivos. Los servicios externos requieren una validación separada antes de un despliegue autorizado.
 
 Ningún despliegue a producción fue ejecutado durante esta recuperación.
+
+## Ampliación posterior: integraciones reales
+
+La validación posterior del mismo 29 de octubre sustituye los recuentos y pendientes anteriores: **101 pruebas Node, 15 Python y 41 flujos de emuladores** aprobados. Se recompiló TypeScript y se volvió a verificar el snapshot. `recovery/real-integrations-validation.json` separa la evidencia real de las simulaciones.
+
+Google Auth completó acceso y cierre con una cuenta existente y previamente comprobada, usando exclusivamente Auth con persistencia en memoria. Ese acceso normal actualiza el último inicio de sesión de Auth; no cargó AuthProvider, perfiles, Firestore ni BFF. La cámara física capturó JPEG, reinició y cerró con Escape; tres adquisiciones terminaron con tres pistas detenidas, sin almacenar imágenes ni solicitar micrófono.
+
+FCM confirmó entrega real al navegador. Al repetir el envío con la misma función de aviso foreground de la aplicación, se observaron un mensaje recibido y una notificación nativa registrada. Se conserva un primer rechazo 404 de causa no determinada y un envío background aceptado sin observación concluyente del aviso. La evidencia no confunde aceptación HTTP con entrega ni con un clic nativo verificado.
+
+Se corrigieron fugas de cámara, esperas de permiso, listeners compartidos, estado de registro y retirada de tokens al cerrar sesión. El backend desuscribe tokens retirados y comprueba el destino Drive, tamaño, checksum y generación antes de borrar originales.
+
+Drive continúa pendiente de configuración: la carpeta observada por el conector humano pertenece a Mi unidad, mientras Functions usa una cuenta de servicio. Se necesita OAuth de usuario explícito o una unidad compartida con acceso del runtime. La sesión de recuperación recibió IAM 403 al solicitar un token de lectura de esa identidad. No se cambiaron permisos IAM, secretos ni carpetas. Los pasos precisos están en `docs/DRIVE-READINESS.md`.

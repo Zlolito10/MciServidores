@@ -1,0 +1,31 @@
+# Cámara y acceso Google
+
+La vista de `CameraModal.jsx` deriva del JavaScript publicado; `useCamera.js` y `camera-session.js` son código nuevo de reconstrucción. No se recuperaron las fuentes JSX originales. La nueva lógica conserva cámara frontal, audio desactivado, vista reflejada, JPEG con calidad 0,85, detección Tiny Face Detector, tres detecciones consecutivas y cuenta regresiva de tres pasos.
+
+Se corrigieron riesgos presentes en la lógica publicada: streams anteriores sin detener al reiniciar, respuestas tardías de `getUserMedia` que podían reemplazar una cámara reabierta, temporizadores pendientes tras cerrar, detecciones simultáneas y rechazos de la descarga compartida de modelos sin manejar. Una captura requiere un frame de video decodificado con dimensiones reales. Un fallo de reproducción o captura libera la cámara. La descarga de modelos se comparte y puede reintentarse tras un fallo; si no está disponible, permanece la captura manual.
+
+## Verificación automatizada
+
+`node --test tests/camera-hook.test.mjs tests/camera-session.test.mjs tests/google-login.test.mjs tests/frontend-reconstruction.test.mjs` verifica 24 casos. Las pruebas de cámara ejecutan el hook activo y sus helpers con streams y temporizadores controlados; no acceden a una cámara física. Las de Google ejecutan el controlador reconstruido con un popup y servidor simulados; prueban selección de cuenta, sesión BFF y CSRF, rechazo de cookie ausente, BFF estricto y cancelación/bloqueo del popup. No demuestran un inicio de sesión real con Google.
+
+## Prueba con cámara física
+
+Se comprobó el componente activo en `localhost:5176` con la cámara física del equipo y permiso aceptado por el usuario. El fixture registró una solicitud nativa `getUserMedia`, una pista de video que pasó de `live` a `ended`, una captura JPEG de 30.875 bytes, una llamada a `stop` y ningún error. Solo se conservaron esos metadatos: no se guardaron, enviaron ni retuvieron píxeles. Esto acredita apertura, captura y liberación de esa sesión física; las comprobaciones adicionales de Reiniciar/cerrar mediante los botones se registran por separado. No demuestra equivalencia completa con todos los flujos originales.
+
+Usar `localhost` o HTTPS y un navegador con permiso de cámara. Windows también debe permitir el acceso a la cámara para aplicaciones de escritorio; la cámara no debe estar ocupada por otra aplicación. No se solicita micrófono (`audio: false`).
+
+En un fixture local que use el componente real, comprobar apertura, frame con `videoWidth` y `videoHeight` mayores que cero y track de video `live`; reiniciar y comprobar que el track anterior pasa a `ended`; cerrar y comprobar que todos los tracks terminan; reabrir y capturar. Para la evidencia basta con dimensiones, tipo JPEG y tamaño de la imagen en memoria. No conservar fotografías, contenido base64 ni datos biométricos. La detección automática requiere descargar los modelos publicados; también debe probarse el modo manual si falla la red. Un detector de rostro no identifica a la persona.
+
+## Acceso Google
+
+El login mantiene `signInWithPopup`, el `GoogleAuthProvider` del SDK publicado y `prompt: select_account`. El build normal usa Auth Emulator; un éxito en ese entorno no acredita OAuth real. Los servicios originales requieren el flag explícito `--production-services`. No se cambian proveedores, dominios ni despliegues desde este trabajo.
+
+Completar Google en servicios originales puede provocar escrituras: `AuthProvider` sincroniza sesión y perfil, incluida la foto de Google cuando falta. Por ello una comprobación del popup real sin autorización para escribir debe detenerse antes de confirmar el acceso. Las pruebas completas de éxito y permisos se ejecutan con emuladores. La comprobación de configuración del proveedor y los dominios autorizados debe registrarse por separado, sin secretos ni credenciales.
+
+Para una prueba real de Auth independiente de esos efectos, `node scripts/build-google-real-fixture.mjs` crea `/__browser-tests/google-real.html` en el build local. Importa únicamente el SDK Firebase publicado, inicializa una app con nombre propio y persistencia en memoria, y no carga `AuthProvider`, Firestore ni rutas BFF. La sugerencia de cuenta está vacía por defecto. La cuenta debe existir y estar verificada previamente; un acceso normal de Auth sí actualiza su último inicio de sesión y puede solicitar un permiso Google. La pantalla solo muestra proveedor, confirmación de usuario existente y estado de cierre; nunca email, UID, perfil o tokens. Finalizar mediante «Cerrar sesión de prueba». Preparar este fixture no demuestra que se haya completado OAuth real.
+
+`node --test tests/google-real-fixture.test.mjs` añade seis comprobaciones simuladas del aislamiento, ausencia de identificadores en la evidencia, cierre explícito, metadatos opcionales y rechazo de un origen diferente de `localhost`. El script de build comprueba que sus únicos dos módulos son el fixture y el SDK Firebase preservado. Un `isNewUser` omitido se interpreta como `false` solo si la respuesta interna es un objeto válido; los tipos malformados se mantienen como desconocidos y no invalidan un acceso que sí se completó.
+
+La prueba real del fixture completó Google Auth y mostró `provider: google.com`, `signedIn: true`, `persistence: memory` y `errorCode: null`. No cargó los proveedores de la aplicación ni llamó Firestore o BFF. La existencia previa, cuenta habilitada y vínculo Google se comprobaron antes mediante una consulta autorizada independiente; esos datos no se deducen de la pantalla de acceso. En la primera observación el campo opcional `isNewUser` no estaba presente y el fixture mostró los metadatos como desconocidos; esto se corrigió sin cambiar el mecanismo de autenticación. Se pulsó «Cerrar sesión de prueba» y se verificaron `phase: signed-out`, `signedIn: false`, `signOutCompleted: true` y ausencia de error.
+
+La comprobación física adicional abrió la cámara, esperó el estado de búsqueda de rostro, pulsó Reiniciar y cerró con Escape. Tras finalizar se observaron tres adquisiciones nativas acumuladas y tres llamadas a `stop`, con todas las pistas terminadas. También se liberó la adquisición que resolvió después del cierre. La captura permaneció solo en memoria; la evidencia guardada contiene exclusivamente los contadores y estados.

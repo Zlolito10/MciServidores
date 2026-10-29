@@ -44,6 +44,8 @@ const { google } = require("googleapis");
 const { isLocalDemoRuntime, passwordSignInUrl, normalizeLoginEmail, createRuntimeMessaging, createRuntimeDrive } = require("./runtime-services");
 const { normalizeFcmData, getEcuadorDateString, parseLocalEcuadorDateTimeToUtcMs, shouldRunInWindow } = require("./notification-utils");
 const { archiveOldEventFiles } = require("./cleanup");
+const { archiveFolderId } = require("./drive-archive");
+const { syncUserTokenTopics } = require("./notification-topics");
 const runtimeMessaging = () => createRuntimeMessaging(admin);
 const stream = require("stream");
 
@@ -6761,35 +6763,13 @@ exports.backfillPendingUsers = functions.https.onRequest(async (req, res) => {
 exports.onUserTokenWritten = functions.firestore
   .document("userTokens/{userId}")
   .onWrite(async (change, context) => {
-    // Si no es un usuario autenticado, o se borra, no hacemos nada (automátic cleanup)
-    if (!change.after.exists) return;
-
-    const data = change.after.data();
-    if (!data || !data.tokens) return;
-    const userId = context.params.userId;
-
-    // Aseguramos que sea array
-    const tokens = Array.isArray(data.tokens) ? data.tokens : [data.tokens];
-    if (tokens.length === 0) return;
-
-    // Suscribir los tokens a sus topics correspondientes
-    // user_{userId} para notificaciones personales
-    // all_users para notificaciones globales
-    const allPromises = [];
-
-    // Dividir en chunks de 1000 si fuera necesario, pero raramente un usuario tiene 1000 devices.
-    try {
-      // Suscribir a topic user_UID
-      allPromises.push(
-        runtimeMessaging().subscribeToTopic(tokens, `user_${userId}`),
-      );
-      // Suscribir a topic all_users
-      allPromises.push(runtimeMessaging().subscribeToTopic(tokens, "all_users"));
-
-      await Promise.all(allPromises);
-    } catch (e) {
-      console.error(`Error subscribing tokens for user ${userId}:`, e);
-    }
+    const result = await syncUserTokenTopics({
+      messaging: runtimeMessaging(), userId: context.params.userId,
+      before: change.before.exists ? change.before.data() : undefined,
+      after: change.after.exists ? change.after.data() : undefined,
+    });
+    if (result.failedSubscriptions) console.warn("[FCM] Topic changes partially rejected", { failedSubscriptions: result.failedSubscriptions });
+    return result;
   });
 
 exports.onUserWritten = functions.firestore
@@ -7598,7 +7578,7 @@ exports.cleanupOldFiles = functions.pubsub
   .timeZone("America/Mexico_City")
   .onRun(async () => {
     const drive = createRuntimeDrive(admin, google);
-    await archiveOldEventFiles({ bucket: admin.storage().bucket(), drive, folderId: DRIVE_ARCHIVE_FOLDER_ID });
+    await archiveOldEventFiles({ bucket: admin.storage().bucket(), drive, folderId: archiveFolderId(DRIVE_ARCHIVE_FOLDER_ID) });
     return null;
   });
 

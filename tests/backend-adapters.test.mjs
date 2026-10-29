@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {Readable} from 'node:stream';
+import {createHash} from 'node:crypto';
 const require=createRequire(new URL('../functions/package.json',import.meta.url));
 const {isLocalDemoRuntime,passwordSignInUrl,normalizeLoginEmail,createRuntimeMessaging,createRuntimeDrive}=require('../functions/lib/runtime-services.js');
 const {normalizeFcmData,getEcuadorDateString,parseLocalEcuadorDateTimeToUtcMs,shouldRunInWindow}=require('../functions/lib/notification-utils.js');
@@ -69,12 +70,12 @@ test('attendance scheduler uses Ecuador local date and exact five-minute boundar
  assert.equal(shouldRunInWindow(100,100,200),true);assert.equal(shouldRunInWindow(200,100,200),false);
 });
 
-function file(name,{created='2026-10-01T00:00:00Z',failDelete=false}={}){return {name,deleted:false,getMetadata:async()=>[{timeCreated:created,contentType:'application/pdf'}],download:async()=>[Buffer.from('archive-me')],async delete(){if(failDelete)throw Error('delete failed');this.deleted=true;}};}
+function file(name,{created='2026-10-01T00:00:00Z',failDelete=false}={}){return {name,deleted:false,getMetadata:async()=>[{timeCreated:created,contentType:'application/pdf',generation:'1'}],download:async()=>[Buffer.from('archive-me')],async delete(){if(failDelete)throw Error('delete failed');this.deleted=true;}};}
 const quiet={info(){},warn(){}};
 
 test('scheduled cleanup touches only old event files and archives before deleting',async()=>{
  const old=file('events/id/materials/song.pdf'),recent=file('events/id/new.pdf',{created:'2026-10-28T00:00:00Z'}),profile=file('profile-photos/id/photo.jpg');let archived=false;
- const drive={files:{create:async req=>{assert.equal(old.deleted,false);const chunks=[];for await(const b of req.media.body)chunks.push(b);assert.equal(Buffer.concat(chunks).toString(),'archive-me');archived=true;return {data:{id:'archive-confirmed'}};}}};
+ const drive={files:{create:async req=>{assert.equal(old.deleted,false);const chunks=[];for await(const b of req.media.body)chunks.push(b);const bytes=Buffer.concat(chunks);assert.equal(bytes.toString(),'archive-me');archived=true;return {data:{id:'archive-confirmed',size:String(bytes.length),md5Checksum:createHash('md5').update(bytes).digest('hex')}};}}};
  const result=await archiveOldEventFiles({bucket:{getFiles:async()=>[[old,recent,profile]]},drive,folderId:'fixture-folder',now:new Date('2026-10-29T00:00:00Z'),logger:quiet});
  assert.equal(archived,true);assert.equal(old.deleted,true);assert.equal(recent.deleted,false);assert.equal(profile.deleted,false);
  assert.deepEqual(result,{archived:1,deleted:1,skipped:2,errors:0});

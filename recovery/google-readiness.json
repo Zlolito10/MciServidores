@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-29T19:29:04.142Z",
+  "productionSignInPerformed": true,
+  "productionUserCreated": false,
+  "authUri": {
+    "status": 200,
+    "provider": "google.com",
+    "host": "accounts.google.com",
+    "path": "/o/oauth2/auth",
+    "redirectUri": "https://mcimachala-servidor.firebaseapp.com/__/auth/handler",
+    "prompt": "select_account"
+  },
+  "probeDescription": "Initial authorization URI probe, followed by the isolated real Auth test below",
+  "realAuth": {
+    "providerEnabled": true,
+    "localhostAuthorized": true,
+    "loopbackIpAuthorizedForOAuth": false,
+    "existingGoogleLinkedAccountVerifiedBeforeSignIn": true,
+    "realSignInSucceeded": true,
+    "provider": "google.com",
+    "persistence": "memory",
+    "realSignOutSucceeded": true,
+    "applicationProvidersLoaded": false,
+    "firestoreOrBffCalls": false,
+    "normalAuthSignInMetadataUpdated": true,
+    "identityOrCredentialsInEvidence": false
+  },
+  "completedAt": "2026-10-29T19:55:20.051699+00:00"
+}

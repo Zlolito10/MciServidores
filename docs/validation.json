@@ -192,5 +192,20 @@
       "writesPerformed": false,
       "deploymentPerformed": false
     }
+  },
+  "externalValidation": {
+    "date": "2026-10-29",
+    "report": "recovery/real-integrations-validation.json",
+    "productionServicesUsed": true,
+    "productionApplicationDataWrites": 0,
+    "productionDeployments": 0,
+    "nodeTestsPassed": 101,
+    "pythonTestsPassed": 15,
+    "emulatorFlowsPassed": 41,
+    "googleAuthReal": "passed; signed out",
+    "physicalCamera": "passed; all tracks stopped",
+    "fcmForegroundAndNativeDisplay": "passed",
+    "fcmBackgroundDisplay": "unverified",
+    "driveRuntime": "blocked: IAM403 and compatible destination required"
   }
 }

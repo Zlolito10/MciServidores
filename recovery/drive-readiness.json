@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-10-29T19:24:11.612Z",
+  "project": "mcimachala-servidor",
+  "runtimeMetadata": {
+    "function": "cleanupOldFiles",
+    "httpStatus": 200,
+    "serviceAccountEmail": "mcimachala-servidor@appspot.gserviceaccount.com"
+  },
+  "serviceAccountTokenRequest": {
+    "callerAccount": "apolonetworsyt@gmail.com",
+    "scope": "https://www.googleapis.com/auth/drive.readonly",
+    "lifetimeSeconds": 600,
+    "httpStatus": 403,
+    "errorStatus": "PERMISSION_DENIED",
+    "errorReason": "IAM_PERMISSION_DENIED",
+    "missingPermission": "iam.serviceAccounts.getAccessToken",
+    "issued": false,
+    "persisted": false
+  },
+  "archiveFolder": {
+    "configuredInRecoveredCode": true,
+    "metadataReadPerformedAsRuntime": false,
+    "readAccessVerified": false,
+    "writeAccessVerified": false,
+    "sharedDriveStatus": "not_in_shared_drive_according_to_human_connector_metadata"
+  },
+  "humanConnectorObservation": {
+    "account": "lolitocrack10@gmail.com",
+    "matchesConfiguredFolder": true,
+    "folderName": "Respaldo MCI",
+    "shared": true,
+    "driveId": null,
+    "inference": "shared personal My Drive folder, not a Shared Drive",
+    "runtimeServiceAccountPermissionVerified": false
+  },
+  "credentialInspection": {
+    "gen2SourceArchivesChecked": 2,
+    "gen2EnvironmentKeys": ["MCI_FIREBASE_WEB_API_KEY"],
+    "serviceAccountPrivateKeyInGen2Env": false,
+    "googleApplicationCredentialsEnvironmentSet": false,
+    "standardGcloudLocalAdcPresent": false
+  },
+  "productionResourceWrites": 0,
+  "iamPolicyChanges": 0,
+  "driveFilesCreated": 0,
+  "driveFilesDeleted": 0,
+  "result": "BLOCKED_BEFORE_DRIVE_FOLDER_READ"
+}

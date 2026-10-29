@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-29T19:26:43.199Z",
+  "project": "mcimachala-servidor",
+  "validateOnly": true,
+  "deliveryAttempted": false,
+  "firestoreWrites": 0,
+  "productionDeployment": false,
+  "httpStatus": 200,
+  "validationAccepted": true,
+  "errorStatus": null,
+  "publicVapid": {
+    "pointBytes": 65,
+    "curve": "P-256",
+    "encodingValid": true,
+    "projectAssociationVerified": true,
+    "deviceEvidence": "recovery/fcm-device-validation.json"
+  }
+}

@@ -540,6 +540,17 @@ const AuthProvider = ({ children: t }) => {
       r && r.uid && (await k(r.uid));
     }, [r, E]),
     L = React.useCallback(async () => {
+      try {
+        const uid = firebaseAuth.currentUser?.uid || r?.uid || a?.uid;
+        if (uid) {
+          const notifications = await import("../services/notifications.js");
+          await notifications.revokeBrowserNotifications(uid);
+        }
+      } catch {
+        console.warn(
+          "No se completó la retirada local de notificaciones al cerrar sesión.",
+        );
+      }
       p.current = !0;
       try {
         const m = ((g) => {
@@ -570,7 +581,7 @@ const AuthProvider = ({ children: t }) => {
       } catch (i) {
         (console.error("Firebase signOut failed:", i), n(null), l(null));
       }
-    }, []),
+    }, [r, a]),
     T = React.useCallback(
       (i) => (!a || !a.permissions ? !1 : a.permissions.includes(i)),
       [a],

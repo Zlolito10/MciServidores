@@ -1,6 +1,8 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
+import { ensureMessagingWorker, createMessageSubscription, createTokenRequest, requestNotificationPermission, revokeBrowserRegistration } from "./notification-runtime.js";
 import { r as T, _ as k, C as I, b as D, a0 as ee, a1 as R, a2 as De, g as Re, c as F, a3 as Fe, a4 as Ke, a5 as Le, a6 as E, A as te, S as je, a7 as qe, B as $e, a8 as We } from "../vendor/vendor-firebase-BjYbfC3F.js";
-import { firebaseApp, isBffEnabled, bffFetch, firestoreDb } from "../app/App.jsx";
+import { firebaseApp, firestoreDb } from "../firebase/client.js";
+import { isBffEnabled, bffFetch } from "../app/runtime.jsx";
 const re = "@firebase/installations";
 const K = "0.6.19";
 const ae = 1e4;
@@ -977,57 +979,17 @@ const V = () => {
   return yn() && (!kn() || !In()) ? !1 : e && t && n;
 };
 const Cn = () => V() ? Notification.permission : "unsupported";
-const Sn = async () => {
-  if (!V()) throw new Error("Notificaciones no soportadas en este navegador");
-  return await Notification.requestPermission();
-};
-const vn = async () => {
-  if (!("serviceWorker" in navigator)) return null;
-  try {
-    let t = (await navigator.serviceWorker.getRegistrations()).find(n => n.active?.scriptURL?.includes("firebase-messaging-sw.js") || n.installing?.scriptURL?.includes("firebase-messaging-sw.js") || n.waiting?.scriptURL?.includes("firebase-messaging-sw.js"));
-    return t || (t = await navigator.serviceWorker.register("/firebase-messaging-sw.js", {
-      updateViaCache: "none"
-    })), t.waiting && t.waiting.postMessage({
-      type: "SKIP_WAITING"
-    }), t.addEventListener("updatefound", () => {
-      const n = t.installing;
-      n && n.addEventListener("statechange", () => {
-        n.state === "installed" && navigator.serviceWorker.controller && n.postMessage({
-          type: "SKIP_WAITING"
-        });
-      });
-    }), t.update().catch(() => {}), t.installing ? await new Promise(n => {
-      t.installing.addEventListener("statechange", function (i) {
-        i.target.state === "activated" && n();
-      });
-    }) : t.waiting && (t.waiting.postMessage({
-      type: "SKIP_WAITING"
-    }), await new Promise(n => {
-      t.waiting.addEventListener("statechange", function (i) {
-        i.target.state === "activated" && n();
-      });
-    })), await navigator.serviceWorker.ready, t;
-  } catch {
-    return null;
-  }
-};
-const An = async () => Date.now() < Q ? null : w || (w = (async () => {
-  try {
-    const t = await Oe();
-    if (!t) return null;
-    const n = await vn();
-    if (!n) return null;
-    const o = await wn(t, {
-      vapidKey: mn,
-      serviceWorkerRegistration: n
-    });
-    return o || null;
-  } catch (t) {
-    return t?.name === "AbortError" && (Q = Date.now() + 600 * 1e3), null;
-  } finally {
-    w = null;
-  }
-})(), w);
+const Sn = () => requestNotificationPermission(Notification);
+const vn = () => ensureMessagingWorker(navigator.serviceWorker);
+const An = createTokenRequest({
+  getPermission: () => Notification.permission,
+  getMessaging: Oe,
+  getRegistration: vn,
+  requestToken: (messaging, registration) => wn(messaging, {
+    vapidKey: mn,
+    serviceWorkerRegistration: registration
+  })
+});
 const En = async (e, t) => {
   if (isBffEnabled()) {
     await bffFetch("/api/notifications/register", {
@@ -1069,16 +1031,7 @@ const Pn = async (e, t) => {
     });
   } catch {}
 };
-const On = e => {
-  let t = null;
-  return Oe().then(n => {
-    n && (t = hn(n, o => {
-      e(o);
-    }));
-  }), () => {
-    t && t();
-  };
-};
+const On = createMessageSubscription(Oe, (messaging, callback) => hn(messaging, callback));
 const Mn = async e => {
   try {
     if (!V()) return {
@@ -1102,6 +1055,10 @@ const Mn = async e => {
       error: "No se pudo obtener el token de notificaciones. Verifica permisos, que la app esté instalada como PWA (iOS) y que el navegador soporte FCM."
     };
   } catch (t) {
+    if (t?.message === "NOTIFICATION_PERMISSION_PENDING") return {
+      success: false,
+      error: "El navegador no respondió al permiso. Revisa su indicador de notificaciones y vuelve a intentarlo."
+    };
     return {
       success: !1,
       error: String(t)
@@ -1128,3 +1085,47 @@ const Dn = (e, t) => {
   } catch {}
 };
 export { bn as a, Mn as b, An as c, Dn as d, Cn as g, V as i, On as o, Pn as r, En as s };
+async function revokeBrowserNotifications(uid) {
+  if (!uid || !("serviceWorker" in navigator)) return {
+    hadToken: false
+  };
+  const messaging = await Oe();
+  if (!messaging) return {
+    hadToken: false
+  };
+  const dependencies = messaging.firebaseDependencies;
+  return revokeBrowserRegistration({
+    getStoredToken: () => $t(dependencies),
+    unregisterToken: async token => {
+      if (isBffEnabled()) await bffFetch('/api/notifications/unregister', {
+        method: 'POST',
+        json: {
+          pushKey: token
+        }
+      });else {
+        try {
+          await je(te(firestoreDb, 'userTokens', uid), {
+            tokens: qe(token),
+            updatedAt: new Date().toISOString()
+          });
+        } catch (error) {
+          if (error?.code !== 'not-found') throw error;
+        }
+      }
+    },
+    deleteToken: token => Bt(dependencies, token),
+    clearStoredToken: async () => {
+      const tx = (await Ae()).transaction(b, 'readwrite');
+      await tx.objectStore(b).delete(Ee(dependencies));
+      await tx.done;
+    },
+    unsubscribePush: async scope => {
+      for (const registration of await navigator.serviceWorker.getRegistrations()) {
+        if (scope ? registration.scope !== scope : !registration.active?.scriptURL?.endsWith('/firebase-messaging-sw.js')) continue;
+        const subscription = await registration.pushManager.getSubscription();
+        if (subscription) await subscription.unsubscribe();
+      }
+    }
+  });
+}
+export { revokeBrowserNotifications };

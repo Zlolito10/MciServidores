@@ -73,7 +73,7 @@ La variante de sesión BFF se compila aparte con `npm run build:frontend -- --bf
 
 ## Validación y límites
 
-El 29 de octubre de 2026 pasaron **138 pruebas Node**, **15 pruebas Python** y **41 comprobaciones de integración** con Auth, Firestore, Storage y Functions locales. Las pruebas incluyen servidor, JSX, cámara, Google, ciclo de notificaciones, Drive, consentimiento OAuth local, cifrado y controles HTTP, alta demo y service worker. El snapshot conserva sus 47 archivos con tamaño y SHA-256 verificados. La cobertura y los resultados están en `docs/FLOW-COVERAGE.md`, `docs/validation.json` y `recovery/flow-validation.json`.
+El 29 de octubre de 2026 pasaron **221 pruebas Node**, **15 pruebas Python** y **63 comprobaciones de integración** con Auth, Firestore, Storage y Functions locales. Las pruebas incluyen servidor, JSX, cámara, Google, ciclo de notificaciones, Drive, consentimiento OAuth local, cifrado y controles HTTP, alta demo y service worker. El snapshot conserva sus 47 archivos con tamaño y SHA-256 verificados. La cobertura y los resultados están en `docs/FLOW-COVERAGE.md`, `docs/validation.json` y `recovery/flow-validation.json`.
 
 Se corrigieron la persistencia de preferencias anidadas y la descarga de archivos del bucket demo. Se restauraron seis GET administrativos referenciados por la interfaz, con controles de rol y límites. Los reportes no inventan métricas ausentes y la ingestión de telemetría permanece desactivada. Functions conserva las 30 exportaciones. Las auditorías npm de frontend y Functions dieron **cero vulnerabilidades** el 29 de octubre de 2026; los overrides y su comprobación se explican en `functions/RECOVERY-CHANGES.md`.
 
@@ -86,3 +86,11 @@ Se eligió **conservar Respaldo MCI con OAuth del propietario**. El flujo local 
 Las pruebas demo de FCM/Drive siguen usando adaptadores explícitos. GPS físico y entrega de Cloud Scheduler/PubSub permanecen pendientes. No se exportaron colecciones de producción, usuarios Auth ni objetos privados al repositorio. No se publicaron secretos ni se desplegó el código sobre la web publicada.
 
 ![Dashboard local con datos sintéticos](docs/images/dashboard-desktop.jpg)
+
+## Candidato de producción
+
+La preparación del candidato pasa 221 pruebas Node, 15 Python y 63 subflujos de emuladores (42 funcionales y 21 de seguridad). El build de producción es independiente del demo: `npm run release:prepare`. `npm run release:verify` recompila ambas partes y vincula las pruebas a las fuentes y los bytes del artefacto; `npm run release:check` conserva el estado bloqueado mientras falten configuración o comprobaciones externas. Guía: [`docs/PRODUCTION-RELEASE.md`](docs/PRODUCTION-RELEASE.md).
+
+Se corrigieron controles de rol/autor, colas de comandos, notificaciones autenticadas y privacidad de asistencia. El roster visible del equipo está separado de las asignaciones privadas; las fotos se transmiten con autenticación y no se convierten en URLs compartibles. Las lecturas PITR rechazan snapshots no históricos. Estas correcciones están en el candidato local y no se han desplegado sobre la web original.
+
+**Aún no está autorizado ni validado el despliegue completo.** Faltan OAuth y respaldo real de Drive, el plan seguro del runtime, acceso cruzado de reglas Storage a Firestore, revisión de la migración del roster/tokens históricos y las observaciones externas pendientes. Los detalles concretos están en `recovery/production-readiness.json`. El código/configuración disponibles están recuperados o reconstruidos; los JSX originales no están disponibles y los datos/usuarios reales siguen en Firebase. `recovery/completeness.json` documenta esa distinción.

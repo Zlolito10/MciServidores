@@ -1,0 +1,79 @@
+{
+  "checkedAt": "2026-10-30T01:26:05.728Z",
+  "project": "mcimachala-servidor",
+  "allOriginalSourcesRecovered": false,
+  "hosting": {
+    "recoveredFiles": 47,
+    "sha256AndSizeVerified": true
+  },
+  "backend": {
+    "deployedSourcesRecovered": true,
+    "deployedExportsCovered": 30,
+    "originalSnapshotsVerified": 4,
+    "unavailableIndividualGen1SourceZips": 28
+  },
+  "frontend": {
+    "originalJsxTsxRecovered": false,
+    "reconstructedEditableFrontend": true,
+    "reconstructedPublishedJsxExpressions": 3632,
+    "originalReadableModules": 28,
+    "missingOriginalMessagingLogicReimplemented": true
+  },
+  "configuration": {
+    "hostingConfigRecovered": true,
+    "firestoreAndStorageRulesRecovered": true,
+    "compositeIndexesRecovered": 5,
+    "fieldIndexOverridesRecovered": 1,
+    "localSecurityCorrectionsApplied": true
+  },
+  "productionDatabaseExportIncluded": false,
+  "authUserExportIncluded": false,
+  "privateStorageObjectsIncluded": false,
+  "localValidation": [
+    {
+      "label": "frontend-build",
+      "exitCode": 0
+    },
+    {
+      "label": "backend-build",
+      "exitCode": 0
+    },
+    {
+      "label": "node",
+      "exitCode": 0,
+      "tests": 221,
+      "passed": 221,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "python",
+      "exitCode": 0,
+      "tests": 15,
+      "skipped": 0
+    },
+    {
+      "label": "emulator",
+      "exitCode": 0,
+      "tests": 65,
+      "passed": 65,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "productionCandidate": {
+    "artifactStatus": "passed",
+    "candidateStatus": "validated-locally",
+    "readyToDeploy": false,
+    "blockers": [
+      "real-owner-drive-archive",
+      "production-runtime-configuration",
+      "storage-rules-firestore-access",
+      "background-notification-and-click",
+      "attendance-privacy-migration",
+      "physical-geolocation",
+      "scheduler-delivery"
+    ]
+  },
+  "productionDeploymentPerformed": false
+}

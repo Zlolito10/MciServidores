@@ -23,7 +23,11 @@
     "test:integration": "node --test tests/emulator.integration.mjs",
     "seed:emulators": "node scripts/seed-emulators.mjs",
     "drive:authorize": "node scripts/drive-oauth-bootstrap.mjs",
-    "drive:test-owner": "node scripts/test-drive-owner-archive.mjs"
+    "drive:test-owner": "node scripts/test-drive-owner-archive.mjs",
+    "build:production": "node scripts/build-frontend.mjs --production-services --out-dir dist-production && npm run build:backend",
+    "release:prepare": "npm run build:production && node scripts/check-production-release.mjs --artifact-only",
+    "release:verify": "node scripts/verify-production.mjs",
+    "release:check": "node scripts/check-production-release.mjs --report"
   },
   "devDependencies": {
     "acorn": "8.15.0",

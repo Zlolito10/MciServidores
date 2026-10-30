@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-30T01:29:45.820Z",
+  "project": "mcimachala-servidor",
+  "status": "blocked",
+  "candidateStatus": "validated-locally",
+  "readyToDeploy": false,
+  "productionDeploymentPerformed": false,
+  "sourceDigest": "617aeab7f31823bb7cc2f754bab3222a760fcee447208d0bab4691f1f5ff2d55",
+  "artifact": {
+    "status": "passed",
+    "project": "mcimachala-servidor",
+    "configFile": "firebase.production.json",
+    "publicPath": "dist-production",
+    "manifestSha256": "efa72d96a60f72026e2e6a9a8ce16337e2ea6f6f0c5b501c9c4e2e2877eed9e6",
+    "publicFiles": 96,
+    "checks": [
+      {
+        "id": "expected-project",
+        "passed": true
+      },
+      {
+        "id": "actual-deployment-project",
+        "passed": true
+      },
+      {
+        "id": "production-target",
+        "passed": true
+      },
+      {
+        "id": "production-worker",
+        "passed": true
+      },
+      {
+        "id": "no-public-source-maps",
+        "passed": true
+      },
+      {
+        "id": "frontend-provenance",
+        "passed": true
+      },
+      {
+        "id": "worker-files-present",
+        "passed": true
+      },
+      {
+        "id": "complete-public-file-list",
+        "passed": true
+      },
+      {
+        "id": "public-file-integrity",
+        "passed": true
+      },
+      {
+        "id": "entry-is-built",
+        "passed": true
+      },
+      {
+        "id": "html-loads-current-entry",
+        "passed": true
+      },
+      {
+        "id": "api-and-spa-rewrites",
+        "passed": true
+      },
+      {
+        "id": "node22-functions",
+        "passed": true
+      }
+    ]
+  },
+  "blockers": [
+    {
+      "id": "real-owner-drive-archive",
+      "action": "Complete owner OAuth, select Respaldo MCI, save the protected credential and run the synthetic archive probe."
+    },
+    {
+      "id": "production-runtime-configuration",
+      "action": "Validate the proposed OAuth runtime settings and bindings, existing Secret Manager references and runtime identity access before deployment; local DPAPI storage alone does not configure Cloud Functions."
+    },
+    {
+      "id": "storage-rules-firestore-access",
+      "action": "Verify or authorize the Firebase Rules service agent role for the new Storage rules that consult Firestore."
+    },
+    {
+      "id": "background-notification-and-click",
+      "action": "Observe a real background notification and verify its click opens the intended same-origin page."
+    },
+    {
+      "id": "attendance-privacy-migration",
+      "action": "Validate the bounded roster backfill and historical-token rotation plan, its rollback and rollout order; execute production mutations only in an authorized deployment."
+    },
+    {
+      "id": "physical-geolocation",
+      "action": "Verify location permission and the attendance flow on a real device."
+    },
+    {
+      "id": "scheduler-delivery",
+      "action": "Verify the scheduled job delivery in an authorized isolated Cloud environment."
+    }
+  ]
+}

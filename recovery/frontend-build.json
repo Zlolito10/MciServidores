@@ -1,14 +1,16 @@
 {
   "environment": "local-emulators",
   "bff": false,
-  "entry": "dist/app/entry-O7OO5BW7.js",
-  "moduleInputs": 58,
+  "entry": "dist/app/entry-VZSC336D.js",
+  "moduleInputs": 65,
   "originalJsxRecovered": false,
   "reconstructedJsx": true,
   "rebuiltFromEditableRecoveredJavaScript": true,
+  "sourceMaps": true,
+  "releaseManifest": "mci-release.json",
   "serviceWorker": {
-    "version": "5.1.18-reconstructed-8e8a0f9288f8",
-    "assets": 84,
+    "version": "5.1.18-reconstructed-45ac35585a49",
+    "assets": 89,
     "automaticRegistration": false
   }
 }

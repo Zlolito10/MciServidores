@@ -204,19 +204,19 @@
     },
     {
       "path": "frontend/src/pages/Attendance.jsx",
-      "sha256": "c1667dde2e1aa0b3f540efc4292da4b3b02d87bb5d88775ba50cd70f08031e1c"
+      "sha256": "51ec8edef3dde662e7a1c4f4782dde2cc052afdfa17fe973b5bfaaca79315a63"
     },
     {
       "path": "frontend/src/pages/Dashboard.jsx",
-      "sha256": "66ddd0c20e64cf25988de4db39996e2dac99a4c6acd6dd28c556b2c4ddec30f1"
+      "sha256": "d6d74dc4b2cb7bb4eae6c02aa24309861baeaae8f614c11b50d5c73e74f75fc9"
     },
     {
       "path": "frontend/src/pages/EventDetails.jsx",
-      "sha256": "25c0ef8c71d0688ec23e85e78104b6cdb6fd8b27ff5ece8bfab4cc1460dedcb4"
+      "sha256": "a8386b372115d18fb89f4fc6f4ab9fd3829e4ca3903a0b3ef1f1b6f5b451069f"
     },
     {
       "path": "frontend/src/pages/Events.jsx",
-      "sha256": "308875b6c95e16d216a9f50477bba5fd26bd1c7bb112eb3ca2e34643ae2a32b8"
+      "sha256": "10c0c59a4a3c70945e993f6d9993962a70ee7327b1e7a3538449dae5bac305be"
     },
     {
       "path": "frontend/src/vendor/html2canvas.esm-Ge7aVWlp.js",
@@ -252,7 +252,7 @@
     },
     {
       "path": "frontend/src/pages/Settings.jsx",
-      "sha256": "095667bdb6b48d96bb98e216cfbc01bad88bd266ce631aa09e651971a2e3cec7"
+      "sha256": "c2f4433f4ca0927e6100fe1e726bebadf1c422b6da0a62988061c38bf73ac299"
     },
     {
       "path": "frontend/src/pages/TuesdayTeaching.jsx",
@@ -316,7 +316,7 @@
     },
     {
       "path": "frontend/src/utils/images.js",
-      "sha256": "da52b51b716d26da3872d0cc24ff1fc42573e8062d5226516e65bfa0f706b820"
+      "sha256": "a565581b9e4caed966bac62ac1b9e31e33d487347f44b0e05357bf37b21b1e42"
     },
     {
       "path": "frontend/src/data/GlobalDataProvider.jsx",
@@ -328,7 +328,7 @@
     },
     {
       "path": "frontend/src/components/OptimizedImage.jsx",
-      "sha256": "4b674fe6976941b8f8545b6b6aabcc0f599cf8bec9f45cdb9d0702c647a4779c"
+      "sha256": "d7e0337aa92b6819fafdd6520635b181db4126d3e368b12c64a16402a2128b40"
     },
     {
       "path": "frontend/src/app/DashboardLayout.jsx",

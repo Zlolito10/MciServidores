@@ -1,0 +1,25 @@
+{
+  "checkedAt": "2026-10-30T01:29:45.689037+00:00",
+  "project": "demo-mci-servidores",
+  "build": "latest local-emulator build",
+  "productionServicesUsed": false,
+  "productionApplicationDataWrites": 0,
+  "pagesObserved": [
+    "dashboard",
+    "attendance",
+    "events"
+  ],
+  "dashboardLoaded": true,
+  "attendanceStatisticsLoaded": true,
+  "eventsListLoaded": true,
+  "authenticatedProfileImage": {
+    "source": "synthetic 5x5 local fixture",
+    "transport": "same-origin authenticated request to blob URL",
+    "decodedWidth": 5,
+    "decodedHeight": 5
+  },
+  "warningsOrErrorsObservedAtAttendance": 0,
+  "eventDetailVisualCheckCompleted": false,
+  "browserControlInterruptedBeforeEventDetail": true,
+  "observationLimit": "This is a limited visual regression. The 42 functional and 21 security flows are checked separately by emulator integration, not all visually observed here."
+}

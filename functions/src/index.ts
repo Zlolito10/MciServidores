@@ -46,6 +46,10 @@ const { normalizeFcmData, getEcuadorDateString, parseLocalEcuadorDateTimeToUtcMs
 const { archiveOldEventFiles } = require("./cleanup");
 const { archiveFolderId } = require("./drive-archive");
 const { syncUserTokenTopics } = require("./notification-topics");
+const { releaseRequestGuard, releaseReadRequestGuard, requireMasterProfile, canWriteAssignmentScope, normalizeCommandPayload, authorizeQueuedCommand, claimQueuedCommand, completeEmptyCommand } = require("./release-security");
+const { assignmentActorContext, assignmentForActor, syncAssignmentRoster, servePrivateAttendance } = require("./assignment-roster");
+const { readHistoricalAssignments } = require("./historical-assignments");
+const { archiveFunctionRuntimeOptions } = require("./backend-release");
 const runtimeMessaging = () => createRuntimeMessaging(admin);
 const stream = require("stream");
 
@@ -787,7 +791,8 @@ const sessionLogoutHandler = async (req, res) => {
 
 // Refresh Custom Token (Hybrid Session Restore)
 // Validates the HttpOnly cookie and returns a fresh Custom Token for the SDK.
-app.post("/api/session/refresh", requireSession, async (req, res) => {
+app.post("/api/session/refresh", requireSession, requireCsrf, async (req, res) => {
+  res.setHeader("Cache-Control", "private, no-store");
   const uid = String(res.locals.uid || "");
   if (!uid) return res.status(401).json({ error: "UNAUTHENTICATED" });
 
@@ -969,42 +974,10 @@ const requireAdmin = async (_req, res, next) => {
     return res.status(403).json({ error: "FORBIDDEN" });
   }
 };
-const computeAssignedMinistriesFromRole = (role) => {
-  const r = String(role || "").trim();
-  if (r.startsWith("ministry_admin_") || r.startsWith("ministry_subadmin_")) {
-    const ministryId = r
-      .replace("ministry_admin_", "")
-      .replace("ministry_subadmin_", "")
-      .trim();
-    return ministryId ? [ministryId] : [];
-  }
-  return [];
-};
 const getUserCtx = async (uid) => {
   const snap = await db.collection("users").doc(uid).get();
   const data = snap.exists ? snap.data() : {};
-  const role =
-    typeof (data === null || data === void 0 ? void 0 : data.role) === "string"
-      ? data.role
-      : "";
-  const isAdmin = role === "master_admin" || role === "admin";
-  const isMinistryRestricted =
-    role === "ministry_admin" ||
-    role === "ministry_subadmin" ||
-    role.startsWith("ministry_admin_") ||
-    role.startsWith("ministry_subadmin_");
-  const assignedMinistries = Array.isArray(
-    data === null || data === void 0 ? void 0 : data.assignedMinistries,
-  )
-    ? data.assignedMinistries.map((x) => String(x)).filter(Boolean)
-    : computeAssignedMinistriesFromRole(role);
-  return {
-    uid,
-    role,
-    assignedMinistries,
-    isAdmin,
-    isMinistryRestricted,
-  };
+  return assignmentActorContext(data, uid);
 };
 const canEditAssignmentsForArea = (ctx, areaId) => {
   if (ctx.isAdmin) return true;
@@ -1288,9 +1261,9 @@ app.get("/api/events/:id/details", requireSession, async (req, res) => {
     ]);
   if (!eventSnap.exists) return res.status(404).json({ error: "NOT_FOUND" });
   const event = Object.assign({ id: eventSnap.id }, eventSnap.data());
-  const assignments = assignmentsSnap.docs.map((d) =>
-    Object.assign({ id: d.id }, d.data()),
-  );
+  const actor = await getUserCtx(String(res.locals.uid || ""));
+  const assignments = assignmentsSnap.docs.map((d) => assignmentForActor(d.data(), d.id, id, actor));
+  res.setHeader("Cache-Control", "private, no-store");
   const repertoire = repertoireSnap.docs.map((d) =>
     Object.assign({ id: d.id }, d.data()),
   );
@@ -1393,13 +1366,19 @@ app.put(
       .doc(eventId)
       .collection("assignments")
       .doc(assignmentId);
-    await ref.set(
-      Object.assign(Object.assign({}, body), {
-        id: assignmentId,
-        updatedAt: FieldValue.serverTimestamp(),
-      }),
-      { merge: true },
-    );
+    try {
+      await db.runTransaction(async (transaction) => {
+        const previous = await transaction.get(ref);
+        const previousArea = previous.exists ? previous.data()?.areaId || "" : undefined;
+        if (!canWriteAssignmentScope(ctx, previousArea, areaId)) throw Object.assign(new Error("FORBIDDEN"), { code: "FORBIDDEN" });
+        transaction.set(ref, Object.assign(Object.assign({}, body), {
+          id: assignmentId, updatedAt: FieldValue.serverTimestamp(),
+        }), { merge: true });
+      });
+    } catch (error) {
+      if (error.code === "FORBIDDEN") return res.status(403).json({ error: "FORBIDDEN" });
+      throw error;
+    }
     const snap = await ref.get();
     return res.json({
       ok: true,
@@ -2317,35 +2296,8 @@ app.get(
     }
 
     try {
-      // Usamos readTime para leer datos de un punto en el tiempo específico
-      const readTime = new Date(snapshotTime);
-      if (isNaN(readTime.getTime())) {
-        return res.status(400).json({
-          error: "INVALID_TIMESTAMP",
-          hint: "Usa formato ISO: 2026-01-13T23:00:00Z",
-        });
-      }
-
-      // Verificar que el evento existía en ese momento
-      const eventRef = db.collection("events").doc(eventId);
-      const eventSnap = await eventRef.get();
-
-      // Leer asignaciones con readTime (PITR)
-      // Nota: Firestore Admin SDK soporta readTime en queries
-      const assignmentsRef = db
-        .collection("events")
-        .doc(eventId)
-        .collection("assignments");
-
-      // Para usar PITR, necesitamos usar el método con readTime
-      const firestoreClient = db as any;
-
-      // Obtener asignaciones del pasado usando la API nativa
-      const assignmentsQuery = assignmentsRef;
-      const assignmentsSnap = await (assignmentsQuery as any).get({
-        fieldMask: undefined,
-        readTime: Timestamp.fromDate(readTime),
-      });
+      const historical = await readHistoricalAssignments(db, eventId, snapshotTime);
+      const assignmentsSnap = historical.assignments;
 
       const assignments: any[] = [];
       assignmentsSnap.docs.forEach((doc: any) => {
@@ -2355,11 +2307,7 @@ app.get(
         });
       });
 
-      // Obtener evento del pasado también
-      const eventPastSnap = await (eventRef as any).get({
-        fieldMask: undefined,
-        readTime: Timestamp.fromDate(readTime),
-      });
+      const eventPastSnap = historical.event;
 
       const eventData = eventPastSnap.exists
         ? { id: eventPastSnap.id, ...eventPastSnap.data() }
@@ -2367,7 +2315,8 @@ app.get(
 
       return res.json({
         ok: true,
-        snapshotTime: snapshotTime,
+        snapshotTime: historical.snapshotTime,
+        historicalReadTimeVerified: true,
         event: eventData
           ? {
               id: eventData.id,
@@ -2383,12 +2332,7 @@ app.get(
             : "No se encontraron asignaciones en ese momento",
       });
     } catch (err: any) {
-      console.error("[debug/pitr-assignments] error:", err);
-      return res.status(500).json({
-        error: "SERVER_ERROR",
-        message: err?.message,
-        hint: "Asegúrate de que PITR esté habilitado y el timestamp esté dentro del período de retención (7 días)",
-      });
+      return res.status(err?.status || 501).json({ error: err?.status ? err.code : "PITR_UNAVAILABLE" });
     }
   },
 );
@@ -2412,20 +2356,8 @@ app.post(
     }
 
     try {
-      const readTime = new Date(snapshotTime);
-      if (isNaN(readTime.getTime())) {
-        return res.status(400).json({ error: "INVALID_TIMESTAMP" });
-      }
-
-      // Leer asignaciones del pasado
-      const assignmentsRef = db
-        .collection("events")
-        .doc(eventId)
-        .collection("assignments");
-      const assignmentsSnap = await (assignmentsRef as any).get({
-        fieldMask: undefined,
-        readTime: Timestamp.fromDate(readTime),
-      });
+      const historical = await readHistoricalAssignments(db, eventId, snapshotTime);
+      const assignmentsSnap = historical.assignments;
 
       if (assignmentsSnap.empty) {
         return res.json({
@@ -2464,16 +2396,13 @@ app.post(
       return res.json({
         ok: true,
         restoredCount: restored.length,
-        snapshotTime,
+        snapshotTime: historical.snapshotTime,
+        historicalReadTimeVerified: true,
         restored,
         message: `Se restauraron ${restored.length} asignaciones del ${snapshotTime}`,
       });
     } catch (err: any) {
-      console.error("[debug/pitr-restore] error:", err);
-      return res.status(500).json({
-        error: "SERVER_ERROR",
-        message: err?.message,
-      });
+      return res.status(err?.status || 501).json({ error: err?.status ? err.code : "PITR_UNAVAILABLE" });
     }
   },
 );
@@ -2517,6 +2446,9 @@ app.get("/api/dashboard", requireSession, async (_req, res) => {
   const uid = String(res.locals.uid || "");
   if (!uid) return res.status(401).json({ error: "UNAUTHENTICATED" });
   // Leer ChangeMeta para generar ETag dinámico (invalida cache cuando hay cambios)
+  const actor = await getUserCtx(uid);
+  res.setHeader("Cache-Control", "private, no-store");
+  res.setHeader("Vary", "Cookie, Cache-Control");
   let changeRev = 0;
   try {
     const metaSnap = await db.doc(CHANGE_META_DOC_PATH).get();
@@ -2543,7 +2475,8 @@ app.get("/api/dashboard", requireSession, async (_req, res) => {
     changeRev = Math.floor(Date.now() / 1000);
   }
   // ETag dinámico basado en uid + changeRev
-  const etag = `"dash-${uid.slice(0, 8)}-${changeRev}"`;
+  const actorRevision = (0, crypto_1.createHash)("sha256").update(JSON.stringify([uid, actor.role, actor.assignedMinistries])).digest("hex").slice(0, 20);
+  const etag = `"dash-private-v1-${actorRevision}-${changeRev}"`;
   res.setHeader("ETag", etag);
   // Verificar If-None-Match para 304 Not Modified
   const ifNoneMatch = _req.header("if-none-match");
@@ -2552,19 +2485,8 @@ app.get("/api/dashboard", requireSession, async (_req, res) => {
   if (ifNoneMatch === etag) {
     return res.status(304).end();
   }
-  if (clientWantsFresh) {
-    // Force fresh response — no browser caching for this request.
-    res.setHeader(
-      "Cache-Control",
-      "private, no-store, no-cache, must-revalidate",
-    );
-  } else {
-    // Cache agresivo de 10 minutos para reducir lecturas
-    res.setHeader(
-      "Cache-Control",
-      "private, max-age=600, stale-while-revalidate=1800",
-    );
-  }
+  // The bundle can contain the caller's private attendance data.
+  res.setHeader("Cache-Control", "private, no-store");
   res.setHeader("Vary", "Cookie, Cache-Control");
   // Use UTC-based calculation but include yesterday to handle timezone differences
   // (server is in UTC, users may be in UTC-5 or other timezones)
@@ -2626,7 +2548,7 @@ app.get("/api/dashboard", requireSession, async (_req, res) => {
         results.forEach(({ eventId, snap }) => {
           snap.docs.forEach((doc) => {
             allAssignments.push(
-              Object.assign({ id: doc.id, eventId }, doc.data()),
+              assignmentForActor(doc.data(), doc.id, eventId, actor),
             );
           });
         });
@@ -2855,30 +2777,15 @@ app.post("/api/commands", requireSession, requireCsrf, async (req, res) => {
   const uid = String(res.locals.uid || "");
   if (!uid) return res.status(401).json({ error: "UNAUTHENTICATED" });
 
-  const payload = req.body || {};
-
-  // Whitelist command types to avoid arbitrary writes.
-  const allowedTypes = new Set([
-    "REPLICATE_REPERTOIRE",
-    "REPLICATE_MATERIALS",
-    "RESTORE_REPERTOIRE",
-  ]);
-
-  const type = String(payload.type || "");
-  if (!allowedTypes.has(type)) {
-    return res.status(400).json({ error: "INVALID_TYPE" });
+  let command;
+  try {
+    command = normalizeCommandPayload(req.body || {}, uid);
+    await authorizeQueuedCommand(command, db);
+  } catch (error) {
+    const invalid = String(error.code || "").startsWith("INVALID_");
+    return res.status(invalid ? 400 : 403).json({ error: invalid ? error.code : "FORBIDDEN" });
   }
-
-  const command = {
-    type,
-    sourceEventId: payload.sourceEventId || null,
-    targetEventId: payload.targetEventId || null,
-    backupId: payload.backupId || null,
-    collection: payload.collection || null,
-    createdBy: uid,
-    createdAt: FieldValue.serverTimestamp(),
-    status: payload.status || "pending",
-  };
+  command.createdAt = FieldValue.serverTimestamp();
 
   const docRef = await db.collection("commands").add(command);
   const snap = await docRef.get();
@@ -2974,10 +2881,10 @@ app.get("/api/events/:id/details", requireSession, async (req, res) => {
 
     const event = { id: eventSnap.id, ...eventSnap.data() };
 
-    const assignments = assignmentsSnap.docs.map((d) => ({
-      id: d.id,
-      ...d.data(),
-    }));
+    const actor = await getUserCtx(String(res.locals.uid || ""));
+    const assignments = assignmentsSnap.docs.map((d) => assignmentForActor(d.data(), d.id, id, actor));
+    res.setHeader("Cache-Control", "private, no-store");
+    res.setHeader("Vary", "Cookie");
 
     const repertoire = repertoireSnap.docs.map((d) => ({
       id: d.id,
@@ -3094,7 +3001,7 @@ app.put(
   "/api/roles/:id",
   requireSession,
   requireCsrf,
-  requireAdmin,
+  requireMasterProfile,
   async (req, res) => {
     const id = String(req.params.id || "");
     if (!id) return res.status(400).json({ error: "MISSING_ID" });
@@ -3121,7 +3028,7 @@ app.post(
   "/api/roles",
   requireSession,
   requireCsrf,
-  requireAdmin,
+  requireMasterProfile,
   async (req, res) => {
     const body = req.body || {};
     const docRef = await db.collection("roles").add(
@@ -3141,7 +3048,7 @@ app.delete(
   "/api/roles/:id",
   requireSession,
   requireCsrf,
-  requireAdmin,
+  requireMasterProfile,
   async (req, res) => {
     const id = String(req.params.id || "");
     if (!id) return res.status(400).json({ error: "MISSING_ID" });
@@ -3251,18 +3158,9 @@ app.delete(
   },
 );
 // Users (read for any authed; write for admin)
-app.get("/api/users", optionalSession, async (_req, res) => {
-  // Cache agresivo de 10 minutos
-  res.setHeader(
-    "Cache-Control",
-    "private, max-age=600, stale-while-revalidate=1800",
-  );
-  res.setHeader("Vary", "Cookie");
-  // If no session, return empty list to satisfy global data fetchers without leaking data
-  const uid = String(res.locals.uid || "");
-  if (!uid) {
-    return res.json({ ok: true, items: [] });
-  }
+app.get("/api/users", requireSession, async (_req, res) => {
+  res.setHeader("Cache-Control", "private, no-store");
+  res.setHeader("Vary", "Cookie, Authorization");
   const items = await getCachedOrFresh("users");
   return res.json({ ok: true, items });
 });
@@ -3633,7 +3531,7 @@ app.patch(
   "/api/users/:id",
   requireSession,
   requireCsrf,
-  requireAdmin,
+  requireMasterProfile,
   async (req, res) => {
     const id = String(req.params.id || "");
     if (!id) return res.status(400).json({ error: "MISSING_ID" });
@@ -3671,7 +3569,7 @@ app.delete(
   "/api/users/:id",
   requireSession,
   requireCsrf,
-  requireAdmin,
+  requireMasterProfile,
   async (req, res) => {
     const id = String(req.params.id || "");
     if (!id) return res.status(400).json({ error: "MISSING_ID" });
@@ -3921,7 +3819,7 @@ app.delete(
   "/api/users/:id",
   requireSession,
   requireCsrf,
-  requireAdmin,
+  requireMasterProfile,
   async (req, res) => {
     const id = String(req.params.id || "");
     if (!id) return res.status(400).json({ error: "MISSING_ID" });
@@ -3930,6 +3828,9 @@ app.delete(
   },
 );
 const db = admin.firestore();
+const requireNotificationActor = releaseRequestGuard({ auth: admin.auth(), db }, "notification");
+const requireMaintenanceActor = releaseRequestGuard({ auth: admin.auth(), db }, "maintenance");
+const requirePrivateReadActor = releaseReadRequestGuard({ auth: admin.auth(), db });
 const messaging = runtimeMessaging();
 const storage = admin.storage();
 // --- Attendance sync ---
@@ -4972,6 +4873,8 @@ const downloadFileHandler = async (req, res) => {
     const inlineRaw = String(req.query.inline || "").toLowerCase();
     const isInline = inlineRaw === "1" || inlineRaw === "true";
 
+    if (servePrivateAttendance({ objectPath: path, file, metadata, filename: downloadFilename, inline: isInline, res })) return;
+
     // --- INTENTO DE SIGNED URL (Igual que en downloadMaterialHandler) ---
     // Ahorro masivo de bandwidth para imágenes y otros recursos frecuentes.
     try {
@@ -5153,6 +5056,8 @@ const downloadMaterialHandler = async (req, res) => {
     const inlineRaw = String(req.query.inline || "").toLowerCase();
     const isInline = inlineRaw === "1" || inlineRaw === "true";
 
+    if (servePrivateAttendance({ objectPath: path, file, metadata, filename: downloadFilename, inline: isInline, res })) return;
+
     // --- INTENTO DE SIGNED URL ---
     try {
       const expires = Date.now() + 1000 * 60 * 60; // 1 hora
@@ -5246,9 +5151,9 @@ const downloadMaterialHandler = async (req, res) => {
 
 // Register download routes with the comprehensive, secure handler
 // This handler includes path validation, security checks, and proper cache headers
-app.get("/download", requireSession, downloadFileHandler);
-app.get("/api/download", requireSession, downloadFileHandler);
-app.get("/api/download-material", requireSession, downloadMaterialHandler);
+app.get("/download", requirePrivateReadActor, downloadFileHandler);
+app.get("/api/download", requirePrivateReadActor, downloadFileHandler);
+app.get("/api/download-material", requirePrivateReadActor, downloadMaterialHandler);
 // Hello endpoint (ambas rutas: /hello y /api/hello)
 const helloHandler = (_req, res) => {
   res.json({ message: "Hello from API via Firebase Hosting!" });
@@ -5339,8 +5244,8 @@ const notifyUserHandler = async (req, res) => {
   }
 };
 // Registrar ambas rutas: /notify/user (hosting rewrite) y /api/notify/user (función directa)
-app.post("/notify/user", notifyUserHandler);
-app.post("/api/notify/user", notifyUserHandler);
+app.post("/notify/user", requireNotificationActor, notifyUserHandler);
+app.post("/api/notify/user", requireNotificationActor, notifyUserHandler);
 // --- Comentarios: reacciones (WhatsApp-style) ---
 const ALLOWED_REACTIONS = new Set([
   "like",
@@ -5356,18 +5261,6 @@ const getBearerToken = (req) => {
   const m = /^Bearer\s+(.+)$/i.exec(h);
   return m ? m[1] : null;
 };
-const decodeJwtPayloadUnsafe = (jwt) => {
-  try {
-    const parts = String(jwt || "").split(".");
-    if (parts.length < 2) return null;
-    const b64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
-    const padded = b64 + "=".repeat((4 - (b64.length % 4)) % 4);
-    const json = Buffer.from(padded, "base64").toString("utf8");
-    return JSON.parse(json);
-  } catch (_a) {
-    return null;
-  }
-};
 const reactToCommentHandler = async (req, res) => {
   var _a;
   try {
@@ -5378,25 +5271,9 @@ const reactToCommentHandler = async (req, res) => {
     }
     let uid = null;
     try {
-      const decoded = await admin.auth().verifyIdToken(token);
+      const decoded = await admin.auth().verifyIdToken(token, true);
       uid = decoded.uid;
     } catch (error) {
-      // En emulador/local dev, a veces se usan tokens del proyecto real.
-      // Si Auth Emulator está activo, verifyIdToken puede fallar.
-      // Permitimos fallback SOLO en emulador para desbloquear desarrollo.
-      const isEmulator =
-        process.env.FUNCTIONS_EMULATOR === "true" ||
-        !!process.env.FIREBASE_AUTH_EMULATOR_HOST;
-      if (isEmulator) {
-        const payload = decodeJwtPayloadUnsafe(token);
-        const sub =
-          typeof (payload === null || payload === void 0
-            ? void 0
-            : payload.sub) === "string"
-            ? payload.sub
-            : "";
-        if (sub) uid = sub;
-      }
       if (!uid) {
         const code = String(
           (error === null || error === void 0 ? void 0 : error.code) || "",
@@ -5659,8 +5536,8 @@ const notifyUsersHandler = async (req, res) => {
   }
 };
 // Registrar ambas rutas para notify/users
-app.post("/notify/users", notifyUsersHandler);
-app.post("/api/notify/users", notifyUsersHandler);
+app.post("/notify/users", requireNotificationActor, notifyUsersHandler);
+app.post("/api/notify/users", requireNotificationActor, notifyUsersHandler);
 // Handler para notificar a todos los servidores asignados a un evento sobre su repertorio
 const notifyRepertoireHandler = async (req, res) => {
   try {
@@ -5823,8 +5700,8 @@ const notifyRepertoireHandler = async (req, res) => {
   }
 };
 // Registrar ambas rutas para notify/repertoire
-app.post("/notify/repertoire", notifyRepertoireHandler);
-app.post("/api/notify/repertoire", notifyRepertoireHandler);
+app.post("/notify/repertoire", requireNotificationActor, notifyRepertoireHandler);
+app.post("/api/notify/repertoire", requireNotificationActor, notifyRepertoireHandler);
 // Handler para notificar a todos los servidores asignados a un evento sobre sus materiales
 const notifyMaterialsHandler = async (req, res) => {
   try {
@@ -5989,8 +5866,8 @@ const notifyMaterialsHandler = async (req, res) => {
   }
 };
 // Registrar ambas rutas para notify/materials
-app.post("/notify/materials", notifyMaterialsHandler);
-app.post("/api/notify/materials", notifyMaterialsHandler);
+app.post("/notify/materials", requireNotificationActor, notifyMaterialsHandler);
+app.post("/api/notify/materials", requireNotificationActor, notifyMaterialsHandler);
 // Handler para enviar notificación a TODOS los usuarios con tokens
 const notifyAllHandler = async (req, res) => {
   try {
@@ -6061,8 +5938,8 @@ const notifyAllHandler = async (req, res) => {
   }
 };
 // Registrar ambas rutas para notify/all
-app.post("/notify/all", notifyAllHandler);
-app.post("/api/notify/all", notifyAllHandler);
+app.post("/notify/all", requireNotificationActor, notifyAllHandler);
+app.post("/api/notify/all", requireNotificationActor, notifyAllHandler);
 // Handler para notificar a servidores de eventos de una semana específica
 const notifyWeekHandler = async (req, res) => {
   var _a;
@@ -6196,8 +6073,8 @@ const notifyWeekHandler = async (req, res) => {
   }
 };
 // Registrar ambas rutas para notify/week
-app.post("/notify/week", notifyWeekHandler);
-app.post("/api/notify/week", notifyWeekHandler);
+app.post("/notify/week", requireNotificationActor, notifyWeekHandler);
+app.post("/api/notify/week", requireNotificationActor, notifyWeekHandler);
 exports.api = functions.https.onRequest(app);
 // ELIMINADO: onVolunteerAssigned (legacy) - reemplazado por onAssignmentWritten moderno
 // ELIMINADO: onSongAdded (legacy) - reemplazado por onRepertoireWritten moderno
@@ -6440,6 +6317,7 @@ exports.onEventTemplateWritten = functions.firestore
 exports.onAssignmentWritten = functions.firestore
   .document("events/{eventId}/assignments/{assignmentId}")
   .onWrite(async (change, context) => {
+    await syncAssignmentRoster({ db, eventId: context.params.eventId, assignmentId: context.params.assignmentId });
     // 1. Silent/Meta Check - Do not touch meta if it's a silent op?
     // Actually we usually want to touch meta to update the UI list, but maybe not for purely internal flags.
     // For now we keep touching meta to be safe for UI consistency.
@@ -6716,10 +6594,7 @@ const updatePendingUsersDoc = async (userId, userData) => {
 };
 
 exports.backfillPendingUsers = functions.https.onRequest(async (req, res) => {
-  // Quick security check (basic)
-  // In production, you might want to Verify ID Token, but for this maintenance script:
-  // if (!req.query.secret || req.query.secret !== "MY_SECRET") return res.status(403).send("Forbidden");
-
+  return requireMaintenanceActor(req, res, async () => {
   try {
     const snapshot = await db.collection("users").get();
     const pendingUsers = [];
@@ -6757,8 +6632,9 @@ exports.backfillPendingUsers = functions.https.onRequest(async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "MAINTENANCE_FAILED" });
   }
+  });
 });
 exports.onUserTokenWritten = functions.firestore
   .document("userTokens/{userId}")
@@ -7121,17 +6997,10 @@ exports.onNotificationWritten = functions.firestore
 exports.onCommandWritten = functions.firestore
   .document("commands/{commandId}")
   .onCreate(async (snap, context) => {
-    const command = snap.data();
     const commandId = context.params.commandId;
     try {
-      // Mark as processing for easier debugging / visibility
-      await snap.ref.set(
-        {
-          status: "processing",
-          startedAt: FieldValue.serverTimestamp(),
-        },
-        { merge: true },
-      );
+      const command = await authorizeQueuedCommand(snap.data(), db);
+      if (!(await claimQueuedCommand(db, snap.ref, FieldValue.serverTimestamp()))) return;
 
       // Helper to execute operations in chunks
       const executeChunked = async (ops) => {
@@ -7149,7 +7018,7 @@ exports.onCommandWritten = functions.firestore
         const sourceRef = db.collection(`events/${sourceEventId}/repertoire`);
         const targetRef = db.collection(`events/${targetEventId}/repertoire`);
         const sourceSnap = await sourceRef.get();
-        if (sourceSnap.empty) return;
+        if (await completeEmptyCommand(sourceSnap, snap.ref, FieldValue.serverTimestamp())) return;
         const operations = [];
         // 1. Delete existing
         const targetSnap = await targetRef.get();
@@ -7187,7 +7056,7 @@ exports.onCommandWritten = functions.firestore
         const sourceRef = db.collection(`events/${sourceEventId}/materials`);
         const targetRef = db.collection(`events/${targetEventId}/materials`);
         const sourceSnap = await sourceRef.get();
-        if (sourceSnap.empty) return;
+        if (await completeEmptyCommand(sourceSnap, snap.ref, FieldValue.serverTimestamp())) return;
         const operations = [];
         const targetSnap = await targetRef.get();
         targetSnap.forEach((doc) => {
@@ -7221,7 +7090,7 @@ exports.onCommandWritten = functions.firestore
         const sourceRef = db.collection(`events/${sourceEventId}/assignments`);
         const targetRef = db.collection(`events/${targetEventId}/assignments`);
         const sourceSnap = await sourceRef.get();
-        if (sourceSnap.empty) return;
+        if (await completeEmptyCommand(sourceSnap, snap.ref, FieldValue.serverTimestamp())) return;
         const operations = [];
         const targetSnap = await targetRef.get();
         targetSnap.forEach((doc) => {
@@ -7270,7 +7139,7 @@ exports.onCommandWritten = functions.firestore
           backupItemsRef.get(),
           currentRef.get(),
         ]);
-        if (backupSnap.empty) return;
+        if (await completeEmptyCommand(backupSnap, snap.ref, FieldValue.serverTimestamp())) return;
         const operations = [];
         const currentIds = new Set(currentSnap.docs.map((d) => d.id));
         backupSnap.docs.forEach((doc) => {
@@ -7302,7 +7171,7 @@ exports.onCommandWritten = functions.firestore
       await snap.ref.set(
         {
           status: "error",
-          error: String(error?.message || error),
+          error: /^[A-Z_]{1,80}$/.test(error?.code || "") ? error.code : "COMMAND_FAILED",
           processedAt: FieldValue.serverTimestamp(),
         },
         { merge: true },
@@ -7319,6 +7188,7 @@ exports.onEventDeleted = functions.firestore
       "repertoire",
       "materials",
       "assignments",
+      "assignment_roster",
       "comments",
       "autoBackups",
       "replicateBackups",
@@ -7393,6 +7263,7 @@ exports.onUserDeleted = functions.firestore
   });
 
 exports.fixStorageCors = functions.https.onRequest(async (req, res) => {
+  return requireMaintenanceActor(req, res, async () => {
   try {
     const bucket = admin
       .storage()
@@ -7422,8 +7293,9 @@ exports.fixStorageCors = functions.https.onRequest(async (req, res) => {
     });
   } catch (error) {
     console.error("CORS Fix Failed:", error);
-    res.status(500).json({ error: String(error) });
+    res.status(500).json({ error: "MAINTENANCE_FAILED" });
   }
+  });
 });
 
 // Main API function
@@ -7573,7 +7445,7 @@ exports.onChatMessageWritten = functions.firestore
   });
 
 // Scheduled archive/cleanup keeps the deployed schedule; local demo uses a retained archive in Storage Emulator.
-exports.cleanupOldFiles = functions.pubsub
+exports.cleanupOldFiles = functions.runWith(archiveFunctionRuntimeOptions()).pubsub
   .schedule("every sunday 03:00")
   .timeZone("America/Mexico_City")
   .onRun(async () => {

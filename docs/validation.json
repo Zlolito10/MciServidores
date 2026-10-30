@@ -71,7 +71,7 @@
   ],
   "previousCloudCommit": "b84d5a7c990ab7963161e2c1c3c200c031233f44",
   "previousBundleImported": false,
-  "snapshotDescription": "Los campos de primer nivel conservan la validaciÃ³n inicial del 2026-10-19. La evidencia posterior se registra en latestValidation.",
+  "snapshotDescription": "Los campos de primer nivel conservan la validaciÃƒÂ³n inicial del 2026-10-19. La evidencia posterior se registra en latestValidation.",
   "latestValidation": {
     "date": "2026-10-29",
     "generatedAt": "2026-10-29T18:43:49.152Z",
@@ -220,5 +220,20 @@
     "cloudChangesReport": "recovery/drive-oauth-cloud-validation.json",
     "productionHostingRecheck": "recovery/hosting-final-recheck.json",
     "fullValidationReport": "recovery/full-validation-current.json"
+  },
+  "productionCandidateValidation": {
+    "date": "2026-10-29",
+    "report": "recovery/production-validation.json",
+    "nodeTestsPassed": 221,
+    "pythonTestsPassed": 15,
+    "functionalEmulatorFlowsPassed": 42,
+    "securityEmulatorFlowsPassed": 21,
+    "nodeIntegrationResultsIncludingContainers": 65,
+    "frontendAndBackendBuilds": "passed",
+    "readinessReport": "recovery/production-readiness.json",
+    "readyToDeploy": false,
+    "browserReport": "recovery/production-browser-review.json",
+    "dependencyAuditReport": "recovery/release-dependency-audit.json",
+    "productionDeployments": 0
   }
 }

@@ -6,7 +6,7 @@
       "bytes": 262287,
       "origin": "Gen2 deployed source ZIP",
       "snapshotPath": "recovered/backend-snapshots/src/index.ts",
-      "workingSha256": "21f0a1452d3217483a7e47836e69e39b9a05972ebdf8205a0bbe935935d1c29d",
+      "workingSha256": "7c0187453531b70f484d7a60db35cb5f9891a9edc1c69c65262ef2ef161f978e",
       "workingFileModified": true
     },
     {
@@ -15,7 +15,7 @@
       "bytes": 808,
       "origin": "Gen2 deployed source ZIP",
       "snapshotPath": "recovered/backend-snapshots/package.json",
-      "workingSha256": "cb2348dec51eb3ed83e2ae2d7693874b117136406780aa3ac7b79ebc8153ea43",
+      "workingSha256": "129f006f6dd30c19aa81201e45d366b32d0523cb917a379ee0fe2dd9bb7da305",
       "workingFileModified": true
     },
     {
@@ -24,7 +24,7 @@
       "bytes": 159646,
       "origin": "Gen2 deployed source ZIP",
       "snapshotPath": "recovered/backend-snapshots/package-lock.json",
-      "workingSha256": "6235e414edd4767b3bb798e76bc39e0b6ae1af5aa8604c9d103b3518eb16328d",
+      "workingSha256": "379f18136c70d837b71ea6e42de3cddfe42056f4063f51992721023e35753e0b",
       "workingFileModified": true
     },
     {

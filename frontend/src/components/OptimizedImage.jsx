@@ -1,4 +1,8 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
+import {
+  releaseProtectedImage,
+  protectedImageProxy,
+} from "../services/private-image-client.js";
 import { jsxRuntime } from "../vendor/jsx-runtime.js";
 import { r as React } from "../vendor/vendor-react-BwINE3B3.js";
 import { resolveCachedImageUrl } from "../utils/images.js";
@@ -15,8 +19,8 @@ const OptimizedImage = ({
   imgClassName: b = "object-cover",
   onImageLoad: p,
 }) => {
-  const [u, E] = React.useState(t),
-    [v, _] = React.useState(s),
+  const [u, E] = React.useState(protectedImageProxy(t) ? "" : t),
+    [v, _] = React.useState(protectedImageProxy(s) ? "" : s),
     [k, y] = React.useState(!1),
     [L, T] = React.useState(!1),
     [A, N] = React.useState(!1),
@@ -31,25 +35,53 @@ const OptimizedImage = ({
         window.matchMedia("(display-mode: standalone)").matches) ||
         (typeof navigator < "u" && navigator.standalone === !0));
   (React.useEffect(() => {
-    let x = !1;
-    return (
-      y(!1),
-      T(!1),
-      N(!1),
-      i(!1),
-      (async () => {
+    const controller = new AbortController();
+    let thumbnail, full;
+    y(false);
+    T(false);
+    N(false);
+    i(false);
+    E(protectedImageProxy(t) ? "" : t);
+    _(protectedImageProxy(s) ? "" : s);
+    (async () => {
+      try {
         if (!t) {
-          x || (E(""), N(!0), y(!0));
+          E("");
+          N(true);
+          y(true);
           return;
         }
-        const z = await resolveCachedImageUrl(t),
-          $ = s ? await resolveCachedImageUrl(s) : void 0;
-        x || (E(z), _($));
-      })(),
-      () => {
-        x = !0;
+        thumbnail = await resolveCachedImageUrl(t, {
+          signal: controller.signal,
+        });
+        full = s
+          ? await resolveCachedImageUrl(s, {
+              signal: controller.signal,
+            })
+          : undefined;
+        if (controller.signal.aborted) {
+          releaseProtectedImage(thumbnail);
+          releaseProtectedImage(full);
+          return;
+        }
+        E(thumbnail);
+        _(full);
+      } catch {
+        releaseProtectedImage(thumbnail);
+        releaseProtectedImage(full);
+        if (!controller.signal.aborted) {
+          E("");
+          _(undefined);
+          N(true);
+          y(true);
+        }
       }
-    );
+    })();
+    return () => {
+      controller.abort();
+      releaseProtectedImage(thumbnail);
+      releaseProtectedImage(full);
+    };
   }, [t, s]),
     React.useEffect(() => {
       if (f || R || typeof IntersectionObserver > "u") {

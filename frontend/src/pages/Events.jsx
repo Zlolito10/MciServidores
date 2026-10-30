@@ -1,4 +1,11 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
+import {
+  assignmentPrivacyKey,
+  assignmentManagedAreas,
+  watchAssignmentView,
+  prepareAssignmentView,
+} from "../services/assignment-client.js";
+import { sendNotification } from "../services/notification-client.js";
 import { jsxRuntime } from "../vendor/jsx-runtime.js";
 import {
   r as React,
@@ -2014,7 +2021,7 @@ const Events = () => {
       (d?.role || "").startsWith("ministry_admin_"),
     be = d?.role === "master_admin" || d?.role === "admin",
     ee = React.useMemo(() => {
-      if (D()) return c();
+      if (D()) return assignmentManagedAreas(d);
       const a = Array.isArray(d?.areas) ? d?.areas : [];
       if (a.length === 0) return [];
       const g = new Map(p.map((y) => [normalizeMinistryName(y.name), y.id]));
@@ -2034,59 +2041,38 @@ const Events = () => {
               : y.some((B) => ee.includes(B));
       });
     }, [k, be, p, ee, d]),
-    Be = async (a) => {
+    Be = async (notification) => {
       try {
-        if (isBffEnabled()) {
-          const g = await bffFetch("/api/notify/users", {
-            method: "POST",
-            body: JSON.stringify({
-              userIds: a.selectedUserIds,
-              title: a.title,
-              body: a.message,
-              data: {
-                url: "/dashboard",
-              },
-            }),
-          });
-          g && g.success
-            ? f.showSuccess(`Notificación enviada a ${g.sent} usuarios`)
-            : f.showError("Hubo un error al enviar las notificaciones.");
-        } else
-          (console.log("Simulating notification in dev mode"),
-            await new Promise((g) => setTimeout(g, 1e3)),
-            f.showSuccess(
-              `Notificación simulada a ${a.selectedUserIds.length} usuarios (BFF disabled)`,
-            ));
-      } catch (g) {
-        (console.error("Error sending user notifications:", g),
-          f.showError("Error al enviar notificaciones."));
+        const result = await sendNotification("/api/notify/users", {
+          userIds: notification.selectedUserIds,
+          title: notification.title,
+          body: notification.message,
+          data: {
+            url: "/dashboard",
+          },
+        });
+        f.showSuccess("Notificación enviada a " + result.sent + " usuarios");
+      } catch (error) {
+        f.showError("Error al enviar notificaciones.");
       }
     },
-    Ge = async (a) => {
+    Ge = async (notification) => {
       try {
-        if (isBffEnabled()) {
-          const g = await bffFetch("/api/notify/all", {
-            method: "POST",
-            body: JSON.stringify({
-              title: a.title,
-              body: a.message,
-              data: {
-                url: "/dashboard",
-              },
-            }),
-          });
-          g && g.success
-            ? f.showSuccess("Notificación masiva enviada correctamente.")
-            : f.showError("Hubo un error al enviar la notificación masiva.");
-        } else
-          (console.log("Simulating broadcast in dev mode"),
-            await new Promise((g) => setTimeout(g, 1e3)),
-            f.showSuccess("Notificación masiva simulada (BFF disabled)"));
-      } catch (g) {
-        (console.error("Error sending notify all:", g),
-          f.showError("Error al enviar notificación masiva."));
+        await sendNotification("/api/notify/all", {
+          title: notification.title,
+          body: notification.message,
+          data: {
+            url: "/dashboard",
+          },
+        });
+        f.showSuccess("Notificación masiva enviada correctamente.");
+      } catch (error) {
+        f.showError("Error al enviar notificación masiva.");
       }
     };
+  React.useEffect(() => {
+    x([]);
+  }, [assignmentPrivacyKey(d)]);
   (React.useEffect(() => {
     o(!0);
     const a = me(Q(firestoreDb, "events"), ue("date", "desc"), Ze(25)),
@@ -2116,19 +2102,26 @@ const Events = () => {
           .slice(0, 10)
           .forEach((y) => {
             const B = Q(firestoreDb, "events", y, "assignments"),
-              q = we(
+              q = watchAssignmentView(
                 B,
-                (K) => {
-                  const Ne = K.docs.map((te) => ({
-                    id: te.id,
-                    eventId: y,
-                    ...te.data(),
-                  }));
-                  x((te) => [...te.filter((Ve) => Ve.eventId !== y), ...Ne]);
+                d,
+                (rows) => {
+                  const assignments = prepareAssignmentView(rows, d, P, p).map(
+                    (row) => ({
+                      ...row,
+                      eventId: y,
+                    }),
+                  );
+                  x((previous) => [
+                    ...previous.filter((row) => row.eventId !== y),
+                    ...assignments,
+                  ]);
                 },
-                (K) => {
-                  console.warn(`Error listening assignments for ${y}`, K);
-                },
+                (error) =>
+                  console.warn(
+                    "Error listening to authorized assignment view",
+                    error,
+                  ),
               );
             a.push(q);
           }),
@@ -2136,7 +2129,7 @@ const Events = () => {
           a.forEach((y) => y());
         }
       );
-    }, [H]));
+    }, [H, assignmentPrivacyKey(d), P, p]));
   const [ve, qe] = React.useState(!1);
   React.useEffect(() => {
     if (H.length > 0 && !ve) {
@@ -2149,7 +2142,7 @@ const Events = () => {
       }
       qe(!0);
     }
-  }, [H, ve]);
+  }, [H, ve, assignmentPrivacyKey(d), P, p]);
   const ye = () => {},
     je = H.filter((a) => {
       const g = (a.title || "").toLowerCase().includes(h.toLowerCase()),

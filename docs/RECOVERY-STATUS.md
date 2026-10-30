@@ -75,3 +75,9 @@ FCM confirmó entrega real al navegador. Al repetir el envío con la misma funci
 Se corrigieron fugas de cámara, esperas de permiso, listeners compartidos, estado de registro y retirada de tokens al cerrar sesión. El backend desuscribe tokens retirados y comprueba el destino Drive, tamaño, checksum y generación antes de borrar originales.
 
 Drive continúa pendiente de configuración: la carpeta observada por el conector humano pertenece a Mi unidad, mientras Functions usa una cuenta de servicio. Se necesita OAuth de usuario explícito o una unidad compartida con acceso del runtime. La sesión de recuperación recibió IAM 403 al solicitar un token de lectura de esa identidad. No se cambiaron permisos IAM, secretos ni carpetas. Los pasos precisos están en `docs/DRIVE-READINESS.md`.
+
+## Candidato posterior para producción
+
+Se corrigieron escaladas de privilegio en reglas y BFF, comandos sin autor validado, rutas de notificación/mantenimiento sin controles suficientes y acceso a recursos Storage ajenos. El registro completo de asistencia quedó privado por actor/área y el roster conserva solo campos de programación; las fotografías usan streaming autenticado sin URLs firmadas. El código PITR transmite `readTime` con el SDK y rechaza respuestas actuales antes de restaurar. Los snapshots originales permanecen intactos.
+
+La validación agregada pasa **221 Node, 15 Python y 63 subflujos emulados**; las auditorías npm de ambos paquetes no encontraron vulnerabilidades. El frontend de producción contiene 96 archivos públicos verificados, sin mapas de fuente ni credenciales. `firebase.production.json` y los hooks bloquean builds demo, proyectos incorrectos, artefactos alterados y evidencia obsoleta. La guía y los límites están en `docs/PRODUCTION-RELEASE.md` y `recovery/production-readiness.json`. La web publicada sigue sin modificaciones; no se ejecutó ninguna migración, rotación de tokens, cambio IAM ni despliegue durante esta fase.

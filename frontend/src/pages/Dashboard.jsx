@@ -2088,7 +2088,7 @@ const RenderComponent3 = ({
         } else {
           const w = Date.now(),
             Z = ss(firebaseStorage, `attendance/${S}/${p}/${v}_${w}.jpg`);
-          (await as(Z, J), (Q = await rs(Z)));
+          (await as(Z, J), (Q = Z.fullPath));
         }
         if (!isBffEnabled()) {
           const w = Ge(firestoreDb, "events", S, "assignments", p),

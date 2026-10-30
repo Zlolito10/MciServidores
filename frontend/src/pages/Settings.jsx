@@ -1,4 +1,5 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
+import { sendNotification } from "../services/notification-client.js";
 import { jsxRuntime } from "../vendor/jsx-runtime.js";
 import {
   u as useNavigate,
@@ -228,77 +229,41 @@ const Settings = () => {
       }
     },
     Fe = async () => {
-      (O(!0), T(null));
-      const a = () => (isBffEnabled() ? l?.uid : d?.uid) || d?.uid;
-      let t = a();
-      if (!t && isBffEnabled()) {
+      O(true);
+      T(null);
+      const resolveUserId = () => (isBffEnabled() ? l?.uid : d?.uid) || d?.uid;
+      let userId = resolveUserId();
+      if (!userId && isBffEnabled()) {
         try {
           await ee();
         } catch {}
-        t = a();
+        userId = resolveUserId();
       }
-      if (!t) {
-        (T({
+      if (!userId) {
+        T({
           type: "error",
           text: "Debes iniciar sesión para enviar una prueba.",
-        }),
-          O(!1));
+        });
+        O(false);
         return;
       }
-      const r =
-        window.location.hostname === "localhost" ||
-        window.location.hostname === "127.0.0.1";
       try {
-        const n = {
-          userId: t,
+        await sendNotification("/api/notify/user", {
+          userId,
           title: "Notificación de prueba",
           body: "¡Las notificaciones funcionan correctamente!",
-        };
-        if (!r || isBffEnabled()) {
-          const i = await bffFetch("/api/notify/user", {
-            method: "POST",
-            json: n,
-          });
-          if (i && i.success === !1)
-            throw new Error(i.error || "No se pudo enviar la notificación.");
-        } else {
-          const x = await fetch(
-            "https://us-central1-mcimachala-servidor.cloudfunctions.net/api/notify/user",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-              body: JSON.stringify(n),
-            },
-          );
-          let g = null;
-          try {
-            g = await x.json();
-          } catch {}
-          if (!x.ok || (g && !g.success)) {
-            const _e =
-              g?.error || `Error enviando notificación (status ${x.status})`;
-            throw new Error(_e);
-          }
-        }
+        });
         T({
           type: "success",
           text: "Enviada. Revisa tu dispositivo.",
         });
-      } catch (n) {
-        const i =
-          n instanceof BffError
-            ? n?.data?.error ||
-              `Error enviando notificación (status ${n.status})`
-            : n?.message;
+      } catch (error) {
         T({
           type: "error",
-          text: i || "Error de red",
+          text: error?.data?.error || error?.message || "Error de red",
         });
       } finally {
-        O(!1);
+        O(false);
       }
     },
     [G, he] = React.useState(!1),

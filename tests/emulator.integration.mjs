@@ -78,6 +78,23 @@ test('Recovered backend, Auth, Firestore and Storage integration on local demo p
  await check('event details include assignments and repertoire',async()=>{
   const r=await api('/api/events/recovery-event/details',{session:admin});assert.equal(r.status,200);assert.equal(r.data.event.title,'Servicio de prueba local');assert.ok(r.data.assignments.length);assert.ok(r.data.repertoire.length);
  });
+ await check('event details redact other-user attendance while preserving owner and ministry access',async()=>{
+  const ref=db.doc('events/recovery-event/assignments/recovery-assignment'),previous=(await ref.get()).data();
+  const require=createRequire(new URL('../functions/package.json',import.meta.url));const {syncAssignmentRoster}=require('../functions/lib/assignment-roster.js');
+  try{
+   await ref.update({checkInPhoto:'attendance/recovery-event/recovery-assignment/synthetic-private.jpg',checkInLocation:{lat:0,lng:0},checkInTime:recoveryEventDate+'T15:00:00Z',attendanceStatus:'present'});
+   await syncAssignmentRoster({db,eventId:'recovery-event',assignmentId:'recovery-assignment'});
+   const allowed=new Set(['id','eventId','userId','areaId','roleId','roleName','status','createdAt','updatedAt']);
+   const publicDetails=await api('/api/events/recovery-event/details',{session:other});assert.equal(publicDetails.status,200);assert.match(publicDetails.response.headers.get('cache-control'),/no-store/);
+   const publicAssignment=publicDetails.data.assignments.find(item=>item.id==='recovery-assignment');assert.ok(publicAssignment);
+   for(const key of Object.keys(publicAssignment))assert.ok(allowed.has(key),'Unexpected public assignment key: '+key);
+   assert.equal(publicAssignment.checkInPhoto,undefined);assert.equal(publicAssignment.checkInLocation,undefined);assert.equal(publicAssignment.attendanceStatus,undefined);
+   for(const actor of [user,ministry,admin]){const result=await api('/api/events/recovery-event/details',{session:actor});assert.equal(result.data.assignments.find(item=>item.id==='recovery-assignment').checkInLocation.lat,0);}
+   assert.equal((await clientDocument(ref.path,{session:other})).status,403);
+   assert.equal((await clientDocument('events/recovery-event/assignment_roster/recovery-assignment',{session:other})).status,200);
+   assert.equal((await clientDocument('events/recovery-event/assignment_roster/recovery-assignment',{session:admin,method:'PATCH',data:{checkInPhoto:'forbidden'}})).status,403);
+  }finally{await ref.set(previous);await syncAssignmentRoster({db,eventId:'recovery-event',assignmentId:'recovery-assignment'});}
+ });
  await check('repertoire edits persist through the recovered API',async()=>{
   const r=await api('/api/events/recovery-event/repertoire',{session:admin,method:'POST',body:{title:'Nueva canción',key:'D',link:'',notes:'Fixture',order:2}});
   assert.equal(r.status,200);assert.equal((await db.doc('events/recovery-event/repertoire/'+r.data.id).get()).data().key,'D');
@@ -316,8 +333,16 @@ test('Recovered backend, Auth, Firestore and Storage integration on local demo p
   const form=new FormData();for(const [k,v]of Object.entries({type:'check-in',attendanceTimeIso:recoveryEventDate+'T15:00:00Z',lat:'0',lng:'0',accuracyMeters:'3',capturedAtMs:String(Date.now())}))form.set(k,v);form.set('file',new Blob([image],{type:'image/png'}),'attendance.png');
   const r=await api('/api/events/recovery-event/assignments/recovery-assignment/attendance/photo',{session:user,method:'POST',body:form});assert.equal(r.status,200);assert.ok(r.data.updated>=2);assert.match(r.data.photoPath,/^attendance\/recovery-event\/recovery-assignment\//);
   for(const id of ['recovery-assignment','recovery-second-role']){const saved=(await db.doc('events/recovery-event/assignments/'+id).get()).data();assert.equal(saved.checkInPhoto,r.data.photoPath);assert.equal(saved.checkInLocation.lat,0);assert.equal(saved.checkInLocation.lng,0);assert.equal(saved.checkInLocation.accuracyMeters,3);}
-  const download=base+'/api/download?path='+encodeURIComponent(r.data.photoPath);assert.equal((await fetch(download,{headers:{cookie:other.cookie},redirect:'manual'})).status,403);
-  const own=await fetch(download,{headers:{cookie:user.cookie},redirect:'manual'});assert.equal(own.status,200);assert.match(own.headers.get('cache-control'),/no-store/);assert.deepEqual(Buffer.from(await own.arrayBuffer()),image);await extra.delete();
+  for(const route of ['/api/download','/api/download-material']){
+   const download=base+route+'?path='+encodeURIComponent(r.data.photoPath)+'&mode=link';
+   assert.equal((await fetch(download,{headers:{cookie:other.cookie},redirect:'manual'})).status,403);
+   assert.equal((await fetch(download,{headers:{Authorization:'Bearer '+other.idToken},redirect:'manual'})).status,403);
+   assert.equal((await fetch(download,{headers:{cookie:user.cookie,Authorization:'Bearer invalid-explicit-token'},redirect:'manual'})).status,401);
+   for(const headers of [{cookie:user.cookie},{Authorization:'Bearer '+user.idToken},{cookie:ministry.cookie},{cookie:admin.cookie}]){
+    const own=await fetch(download,{headers,redirect:'manual'});assert.equal(own.status,200);assert.match(own.headers.get('cache-control'),/no-store/);assert.equal(own.headers.get('location'),null);assert.match(own.headers.get('vary'),/Authorization/);assert.deepEqual(Buffer.from(await own.arrayBuffer()),image);
+   }
+  }
+  await extra.delete();
  });
  await check('logout clears session cookies',async()=>{
   const r=await api('/api/sessionLogout',{session:user,method:'POST',body:{}});assert.equal(r.status,200);assert.ok(r.response.headers.getSetCookie().some(x=>x.includes('Max-Age=0')));

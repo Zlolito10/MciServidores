@@ -31,6 +31,10 @@ export async function seedEmulators(){
  await db.collection('service_areas').doc('recovery-welcome').set({name:'Bienvenida',description:'Otro ministerio de prueba',active:true});
  await db.collection('events').doc('recovery-event').set({title:'Servicio de prueba local',date:recoveryEventDate,time:'10:00',endTime:'12:00',serviceTime:'10:00',location:'Entorno local',type:'service',description:'Datos sintéticos de validación',activeMinistries:['recovery-music'],imageUrl:'',imageThumbUrl:'',status:'scheduled',createdBy:'recovery-admin',createdAt:Timestamp.now()});
  await db.doc('events/recovery-event/assignments/recovery-assignment').set({areaId:'recovery-music',areaName:'Alabanza',roleName:'Servidor',userId:'recovery-user',userName:'Servidor local',eventDate:recoveryEventDate});
+ // Deterministic demo projection through the actual backend transaction. This
+ // does not claim that an asynchronous trigger has already been delivered.
+ const {syncAssignmentRoster}=require('./lib/assignment-roster.js');
+ await syncAssignmentRoster({db,eventId:'recovery-event',assignmentId:'recovery-assignment'});
  await db.doc('events/recovery-event/repertoire/recovery-song').set({title:'Canción local',key:'C',link:'',notes:'',order:1});
  return {app,db};
 }

@@ -1,4 +1,5 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
+import { resolveProtectedImage, protectedImageProxy } from "../services/private-image-client.js";
 const lr = t => {
   if (!t || t.startsWith("/api/download") || t.startsWith("data:") || t.startsWith("/") || t.startsWith("./") || t.startsWith("../")) return null;
   if (t.startsWith("gs://")) {
@@ -184,19 +185,8 @@ const wr = t => {
   return !t.startsWith("http://") && !t.startsWith("https://") && t.includes("/") ? t : null;
 };
 const dt = t => `/api/download?path=${encodeURIComponent(t)}&inline=1`;
-const resolveCachedImageUrl = async t => {
-  if (typeof t != "string" || !t) return t;
-  const s = Me.get(t);
-  if (s) return s;
-  {
-    const r = wr(t);
-    if (r) {
-      const n = await vr(r, async () => dt(r), !0);
-      if (n) return Me.set(t, n), n;
-      const a = dt(r);
-      return Me.set(t, a), a;
-    }
-    return t;
-  }
+const resolveCachedImageUrl = async (source, options) => {
+  if (typeof source !== 'string' || !source) return source;
+  return protectedImageProxy(source) ? resolveProtectedImage(source, options) : source;
 };
 export { lr, cr, dr, getAvatarUrl, compressImage, dataUrlToBlob, Me, br, yr, vr, wr, dt, resolveCachedImageUrl };

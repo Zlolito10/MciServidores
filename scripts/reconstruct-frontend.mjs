@@ -8,6 +8,7 @@ import generate from '@babel/generator';
 import * as t from '@babel/types';
 import prettier from 'prettier';
 import {createHash} from 'node:crypto';
+import {adaptAssignmentPrivacy} from './lib/reconstruct-assignment-privacy.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const src=path.join(root,'frontend/src');
 const check=process.argv.includes('--check');
@@ -277,6 +278,34 @@ for(const [file,ast]of asts){
   ast.program.body=ast.program.body.filter(node=>!(t.isImportDeclaration(node)&&node.source.value==='../vendor/face-api.js'));
   ast.program.body.unshift(t.importDeclaration([t.importSpecifier(t.identifier('useCamera'),t.identifier('useCamera'))],t.stringLiteral('../hooks/useCamera.js')));
  }
+ // Recovered notification buttons must authenticate against the hardened backend,
+ // including the original non-BFF production profile. Never route localhost to production.
+ const notificationAdapters={
+  'pages/EventDetails.jsx':{
+   ds:`async () => { if (!l || !x) return; ur(true); try { await sendNotification('/api/notify/repertoire',{eventId:l}); w('success','Notificación enviada','Se notificó a los servidores asignados sobre el repertorio.'); } catch(error) { w('error','Error enviando notificación',error?.message || 'Error de red'); } finally { ur(false); } }`,
+   us:`async () => { if (!l || !x) return; wr(true); try { await sendNotification('/api/notify/materials',{eventId:l}); w('success','Notificación enviada','Se notificó a los servidores asignados sobre los materiales.'); } catch(error) { w('error','Error enviando notificación',error?.message || 'Error de red'); } finally { wr(false); } }`,
+  },
+  'pages/Settings.jsx':{
+   Fe:`async () => { O(true); T(null); const resolveUserId=()=>(isBffEnabled()?l?.uid:d?.uid)||d?.uid; let userId=resolveUserId(); if(!userId&&isBffEnabled()){try{await ee();}catch{} userId=resolveUserId();} if(!userId){T({type:'error',text:'Debes iniciar sesión para enviar una prueba.'});O(false);return;} try { await sendNotification('/api/notify/user',{userId,title:'Notificación de prueba',body:'¡Las notificaciones funcionan correctamente!'}); T({type:'success',text:'Enviada. Revisa tu dispositivo.'}); } catch(error) { T({type:'error',text:error?.data?.error||error?.message||'Error de red'}); } finally {O(false);} }`,
+  },
+  'pages/Events.jsx':{
+   Be:`async (notification) => { try { const result=await sendNotification('/api/notify/users',{userIds:notification.selectedUserIds,title:notification.title,body:notification.message,data:{url:'/dashboard'}}); f.showSuccess('Notificación enviada a '+result.sent+' usuarios'); } catch(error) { f.showError('Error al enviar notificaciones.'); } }`,
+   Ge:`async (notification) => { try { await sendNotification('/api/notify/all',{title:notification.title,body:notification.message,data:{url:'/dashboard'}}); f.showSuccess('Notificación masiva enviada correctamente.'); } catch(error) { f.showError('Error al enviar notificación masiva.'); } }`,
+  },
+ };
+ if(notificationAdapters[from]){
+  const replacements=notificationAdapters[from];
+  const imports=['sendNotification',...(from==='pages/EventDetails.jsx'?['getCommandAuthor']:[])];
+  ast.program.body.unshift(t.importDeclaration(imports.map(name=>t.importSpecifier(t.identifier(name),t.identifier(name))),t.stringLiteral('../services/notification-client.js')));
+  traverse(ast,{VariableDeclarator(p){const replacement=replacements[p.node.id.name];if(replacement)p.node.init=parseJs('const handler='+replacement).program.body[0].declarations[0].init;},ObjectExpression(p){
+   if(from!=='pages/EventDetails.jsx')return;
+   const type=p.node.properties.find(property=>t.isObjectProperty(property)&&property.key.name==='type')?.value;
+   if(!t.isStringLiteral(type)||!['REPLICATE_ASSIGNMENTS','REPLICATE_REPERTOIRE','RESTORE_REPERTOIRE','REPLICATE_MATERIALS'].includes(type.value)||!p.node.properties.some(property=>property.key?.name==='createdAt'))return;
+   const author=p.node.properties.find(property=>property.key?.name==='createdBy');
+   if(author)author.value=t.callExpression(t.identifier('getCommandAuthor'),[]);else p.node.properties.push(t.objectProperty(t.identifier('createdBy'),t.callExpression(t.identifier('getCommandAuthor'),[])));
+  }});
+ }
+ adaptAssignmentPrivacy(ast,from);
  let code=generate(ast,{comments:true,jsescOption:{minimal:true}}).code;
  if(from.endsWith('.jsx'))code=await prettier.format(code,{parser:'babel',filepath:from});
  await emit(path.join('frontend/src',from),'// '+header+code.trimEnd()+'\n');

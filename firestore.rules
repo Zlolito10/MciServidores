@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// Rules updated 2026-01-14
+// Recovered baseline with local release authorization fixes, 2026-10-29.
 service cloud.firestore {
   match /databases/{database}/documents {
     
@@ -74,9 +74,47 @@ service cloud.firestore {
         || getUserAreaNames().hasAny(['U de la Vida']);
     }
 
-    function canManageUdlv(ministryId) {
-      return isAdmin()
-        || (ministryId is string && getAssignedMinistryIds().hasAny([ministryId]));
+    function canRecordUdlv(classId) {
+      let classroom = get(/databases/$(database)/documents/udlv_classes/$(classId)).data;
+      return isAdmin() || (classId is string
+        && classroom.get('teacherId', '') == request.auth.uid);
+    }
+
+    function simpleDocumentId(value) {
+      return value is string && value.size() > 0 && value.size() <= 128
+        && !value.matches('.*[/\\\\].*') && value != '.' && value != '..';
+    }
+
+    function validQueuedCommand(data) {
+      return data.createdBy == request.auth.uid
+        && data.createdAt is timestamp
+        && (!('status' in data) || data.status == 'pending')
+        && (
+          (data.type in ['REPLICATE_REPERTOIRE', 'REPLICATE_MATERIALS', 'REPLICATE_ASSIGNMENTS']
+            && data.keys().hasOnly(['type', 'sourceEventId', 'targetEventId', 'createdBy', 'createdAt', 'status'])
+            && simpleDocumentId(data.sourceEventId) && simpleDocumentId(data.targetEventId)
+            && data.sourceEventId != data.targetEventId)
+          || (data.type == 'RESTORE_REPERTOIRE'
+            && data.keys().hasOnly(['type', 'eventId', 'backupId', 'collection', 'createdBy', 'createdAt', 'status'])
+            && simpleDocumentId(data.eventId) && simpleDocumentId(data.backupId)
+            && data.collection in ['replicateBackups', 'autoBackups'])
+        );
+    }
+
+    function safeOwnAttendance() {
+      return resource.data.userId == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'checkInTime', 'checkOutTime', 'checkInPhoto', 'checkOutPhoto',
+          'checkInLocation', 'checkOutLocation', 'attendanceStatus', 'wasLate', 'wasCheckOutLate'
+        ])
+        && (!('attendanceStatus' in request.resource.data)
+          || request.resource.data.attendanceStatus in ['pending', 'present', 'late', 'completed', 'absent']);
+    }
+
+    function canReadAssignment(data) {
+      return isAuthenticated() && (isAdmin()
+        || data.get('userId', '') == request.auth.uid
+        || canManageAssignmentArea(data.get('areaId', '')));
     }
 
     // Users Collection
@@ -103,7 +141,7 @@ service cloud.firestore {
       allow update: if isAuthenticated() && (
         (
           request.auth.uid == userId
-          && request.resource.data.diff(resource.data).changedKeys().hasOnly([
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
             'name', 'photoURL', 'photoThumbURL', 'preferences', 'updatedAt'
           ])
         )
@@ -120,30 +158,29 @@ service cloud.firestore {
 
     // U de la Vida - Cursos
     match /udlv_courses/{courseId} {
-      allow read: if isAuthenticated() && canReadUdlv(resource.data.ministryId);
-      allow create: if isAuthenticated() && canManageUdlv(request.resource.data.ministryId);
-      allow update, delete: if isAuthenticated() && canManageUdlv(resource.data.ministryId);
+      allow read: if isAuthenticated() && canReadUdlv(resource.data.get('ministryId', ''));
+      allow create, update, delete: if isAuthenticated() && isAdmin();
     }
 
     // U de la Vida - Secciones
     match /udlv_sections/{sectionId} {
-      allow read: if isAuthenticated() && canReadUdlv(resource.data.ministryId);
-      allow create: if isAuthenticated() && canManageUdlv(request.resource.data.ministryId);
-      allow update, delete: if isAuthenticated() && canManageUdlv(resource.data.ministryId);
+      allow read: if isAuthenticated() && canReadUdlv(resource.data.get('ministryId', ''));
+      allow create, update, delete: if isAuthenticated() && isAdmin();
     }
 
     // U de la Vida - Clases
     match /udlv_classes/{classId} {
-      allow read: if isAuthenticated() && canReadUdlv(resource.data.ministryId);
-      allow create: if isAuthenticated() && canManageUdlv(request.resource.data.ministryId);
-      allow update, delete: if isAuthenticated() && canManageUdlv(resource.data.ministryId);
+      allow read: if isAuthenticated() && canReadUdlv(resource.data.get('ministryId', ''));
+      allow create, update, delete: if isAuthenticated() && isAdmin();
     }
 
     // U de la Vida - Asistencia y notas por clase
     match /udlv_class_records/{recordId} {
-      allow read: if isAuthenticated() && canReadUdlv(resource.data.ministryId);
-      allow create, update: if isAuthenticated() && canReadUdlv(request.resource.data.ministryId);
-      allow delete: if isAuthenticated() && canManageUdlv(resource.data.ministryId);
+      allow read: if isAuthenticated() && canReadUdlv(resource.data.get('ministryId', ''));
+      allow create: if isAuthenticated() && canRecordUdlv(request.resource.data.classId);
+      allow update: if isAuthenticated() && canRecordUdlv(resource.data.classId)
+        && request.resource.data.classId == resource.data.classId;
+      allow delete: if isAuthenticated() && isAdmin();
     }
 
     // Ensenanza de martes - listado semanal de miembros/servidores
@@ -194,33 +231,38 @@ service cloud.firestore {
       
       allow create: if isAuthenticated() && (
         isAdmin()
-        || isMinistryAdmin()
-        || (request.resource.data.keys().hasAny(['createdBy'])
-          && request.resource.data.createdBy == request.auth.uid)
+        || (isMinistryAdmin() && request.resource.data.createdBy == request.auth.uid)
       );
       
       allow update: if isAuthenticated() && (
         isAdmin()
-        || isMinistryAdmin()
-        || resource.data.createdBy == request.auth.uid
+        || (isMinistryAdmin() && resource.data.createdBy == request.auth.uid
+          && request.resource.data.createdBy == resource.data.createdBy)
       );
       
       allow delete: if isAuthenticated() && (
         isAdmin()
-        || isMinistryAdmin()
-        || resource.data.createdBy == request.auth.uid
+        || (isMinistryAdmin() && resource.data.createdBy == request.auth.uid)
       );
       
       // Subcollection: Assignments - ministry admins canmanage assignments for their ministry
       match /assignments/{assignmentId} {
-        allow read: if isAuthenticated();
+        allow read: if canReadAssignment(resource.data);
         allow create: if isAuthenticated() && (isAdmin() || canManageAssignmentArea(request.resource.data.areaId));
         allow delete: if isAuthenticated() && (isAdmin() || canManageAssignmentArea(resource.data.areaId));
         allow update: if isAuthenticated() && (
           isAdmin()
-          || resource.data.userId == request.auth.uid
-          || canManageAssignmentArea(resource.data.areaId)
+          || safeOwnAttendance()
+          || (canManageAssignmentArea(resource.data.areaId)
+            && canManageAssignmentArea(request.resource.data.areaId))
         );
+      }
+
+      // Server-maintained minimal roster. Never contains photos, GPS, personal names,
+      // check-in/out times or other private attendance evidence.
+      match /assignment_roster/{assignmentId} {
+        allow read: if isAuthenticated();
+        allow write: if false;
       }
 
       // Subcollection: Repertoire - only full admins can edit
@@ -285,7 +327,12 @@ service cloud.firestore {
 
     // Collection Group Queries
     match /{path=**}/assignments/{assignmentId} {
+      allow read: if canReadAssignment(resource.data);
+    }
+
+    match /{path=**}/assignment_roster/{assignmentId} {
       allow read: if isAuthenticated();
+      allow write: if false;
     }
 
     // App Telemetry (para diagnosticar picos de descargas)
@@ -297,16 +344,10 @@ service cloud.firestore {
 
     // Command queue (backend workers)
     match /commands/{commandId} {
-      // Lectura solo para admins; escritura permitida a usuarios autenticados para encolar comandos controlados desde el frontend.
+      // The Admin SDK worker revalidates the actor and this schema independently.
       allow read: if isAuthenticated() && isAdmin();
-      allow create: if isAuthenticated();
+      allow create: if isAuthenticated() && isAdmin() && validQueuedCommand(request.resource.data);
       allow update, delete: if false;
-    }
-
-    // App Cache (for filters, meta, etc) - Read for everyone, Write for Admins/System
-    match /app_cache/{docId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdmin();
     }
 
     // Meta / sync markers (solo lectura desde clientes)
@@ -324,12 +365,23 @@ service cloud.firestore {
 
     // Private Chats - Parent document (for metadata like clearedAt)
     match /private_chats/{userId} {
-      allow read, write: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAuthenticated() && isAdmin();
     }
 
     // Private Chats - User can access their own chat, Admins can access all
     match /private_chats/{userId}/messages/{messageId} {
-      allow read, write: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow create: if isAuthenticated() && (request.auth.uid == userId || isAdmin())
+        && request.resource.data.keys().hasOnly(['text', 'senderId', 'senderName', 'senderPhotoURL', 'createdAt', 'isAdmin'])
+        && request.resource.data.senderId == request.auth.uid
+        && request.resource.data.isAdmin == isAdmin()
+        && request.resource.data.text is string && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 5000
+        && request.resource.data.createdAt is timestamp;
+      allow update: if false;
+      allow delete: if isAuthenticated() && (isAdmin()
+        || (request.auth.uid == userId && resource.data.senderId == request.auth.uid));
     }
   }
 }

@@ -1,0 +1,1020 @@
+{
+  "generatedAt": "2026-10-30T01:26:05.512Z",
+  "project": "demo-mci-servidores",
+  "environment": "running Auth/Firestore/Storage demo emulators",
+  "productionServicesUsed": false,
+  "existingFixturesReset": false,
+  "passed": 21,
+  "failed": 0,
+  "flows": [
+    {
+      "name": "profile additions and deletions cannot grant or remove privileged fields",
+      "status": "passed"
+    },
+    {
+      "name": "master-admin profile management remains authorized",
+      "status": "passed"
+    },
+    {
+      "name": "command queue rejects anonymous, ordinary and ministry-admin authors",
+      "status": "passed"
+    },
+    {
+      "name": "command queue validates payload, type, status, document IDs and actor binding",
+      "status": "passed"
+    },
+    {
+      "name": "all four legitimate commands remain accepted for full administrators",
+      "status": "passed"
+    },
+    {
+      "name": "assigned users update attendance but cannot rewrite ownership or assignment scope",
+      "status": "passed"
+    },
+    {
+      "name": "private assignment reads and collection-group queries enforce owner or ministry scope",
+      "status": "passed"
+    },
+    {
+      "name": "minimal assignment roster is readable to authenticated users and never writable by clients",
+      "status": "passed"
+    },
+    {
+      "name": "server projection strips private fields, replaces old data and follows source deletion",
+      "status": "passed"
+    },
+    {
+      "name": "Udlv course management is administrative and class records are teacher-bound",
+      "status": "passed"
+    },
+    {
+      "name": "event writes require administrative roles and ministry creators cannot take other events",
+      "status": "passed"
+    },
+    {
+      "name": "private chat authors cannot impersonate administrators and system caches stay server-only",
+      "status": "passed"
+    },
+    {
+      "name": "Storage profile owner writes remain allowed, other-user writes and non-images fail",
+      "status": "passed"
+    },
+    {
+      "name": "Storage materials require full administrator for create, replace and delete",
+      "status": "passed"
+    },
+    {
+      "name": "Storage attendance objects enforce assignment ownership on reads and writes",
+      "status": "passed"
+    },
+    {
+      "name": "Storage image writes use event scope and administrative global configuration",
+      "status": "passed"
+    },
+    {
+      "name": "Storage default grants cannot bypass private attendance or unknown-path restrictions",
+      "status": "passed"
+    },
+    {
+      "name": "user listing requires a session and prevents browser caching of authenticated profiles",
+      "status": "passed"
+    },
+    {
+      "name": "notification HTTP entry points require an actor and reject cross-user sends and CSRF",
+      "status": "passed"
+    },
+    {
+      "name": "maintenance entry points reject anonymous, ordinary and non-master administrators",
+      "status": "passed"
+    },
+    {
+      "name": "command HTTP and trigger guards independently reject malicious queued work",
+      "status": "passed"
+    }
+  ],
+  "requests": [
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "users/<fixture>-other",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "roles/<fixture>",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-1",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-2",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-3",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-4",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-5",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-6",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-7",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-8",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-9",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-10",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-11",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-12",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-13",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-14",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-15",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-16",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-17",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-18",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-19",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-20",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "commands/<fixture>-21",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "events/<fixture>-event/assignments/<fixture>-assignment",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/unscoped",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/userId",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/userId",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/areaId",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/areaId",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/areaId",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/areaId",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/areaId",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/areaId",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/areaId",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/unscoped",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignments/userId",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "events/<fixture>-event/assignment_roster/<fixture>-assignment",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "events/<fixture>-event/assignment_roster/<fixture>-assignment",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "POST",
+      "path": "<fixture-query>/assignment_roster/unscoped",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-event/assignment_roster/<fixture>-assignment",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "DELETE",
+      "path": "events/<fixture>-event/assignment_roster/<fixture>-assignment",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "events/<fixture>-event/assignments/<fixture>-projection",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "events/<fixture>-event/assignment_roster/<fixture>-projection",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "udlv_classes/<fixture>-class",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "udlv_classes/<fixture>-class",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "udlv_classes/<fixture>-class",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "udlv_class_records/<fixture>-record",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "udlv_class_records/<fixture>-record",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "udlv_class_records/<fixture>-record",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-own-event",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-own-event",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-own-event",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-own-event",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "events/<fixture>-other-event",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "DELETE",
+      "path": "events/<fixture>-other-event",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "DELETE",
+      "path": "events/<fixture>-own-event",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "private_chats/<fixture>-user/messages/<fixture>",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "private_chats/<fixture>-user/messages/<fixture>",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "private_chats/<fixture>-user/messages/<fixture>",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "private_chats/<fixture>-user/messages/<fixture>",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "private_chats/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "private_chats/<fixture>-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "app_cache/<fixture>",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "profile-photos/<fixture>-user/rule.png",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "profile-photos/<fixture>-user/rule.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "profile-photos/<fixture>-user/rule.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "DELETE",
+      "path": "profile-photos/<fixture>-user/rule.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "DELETE",
+      "path": "profile-photos/<fixture>-user/rule.png",
+      "status": 204
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "events/<fixture>-event/materials/<fixture>.txt",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "events/<fixture>-event/materials/<fixture>.txt",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "events/<fixture>-event/materials/<fixture>.txt",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "GET",
+      "path": "events/<fixture>-event/materials/<fixture>.txt",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "DELETE",
+      "path": "events/<fixture>-event/materials/<fixture>.txt",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "DELETE",
+      "path": "events/<fixture>-event/materials/<fixture>.txt",
+      "status": 204
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "attendance/<fixture>-event/<fixture>-assignment/photo.png",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "GET",
+      "path": "attendance/<fixture>-event/<fixture>-assignment/photo.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "attendance/<fixture>-event/<fixture>-assignment/photo.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "DELETE",
+      "path": "attendance/<fixture>-event/<fixture>-assignment/photo.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "GET",
+      "path": "attendance/<fixture>-event/<fixture>-assignment/photo.png",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "GET",
+      "path": "attendance/<fixture>-event/<fixture>-assignment/photo.png",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "GET",
+      "path": "attendance/<fixture>-event/<fixture>-assignment/photo.png",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "DELETE",
+      "path": "attendance/<fixture>-event/<fixture>-assignment/photo.png",
+      "status": 204
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "event-images/<fixture>-event/photo.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "event-images/<fixture>-event/photo.png",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "event-images/<fixture>-other-event/photo.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "event-images/<fixture>-event/photo.png",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "event-images/<fixture>-other-event/photo.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "event-template-images/<fixture>/photo.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "event-template-images/<fixture>/photo.png",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "DELETE",
+      "path": "event-template-images/<fixture>/photo.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "ministry-images/<fixture>.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "ministry-images/<fixture>.png",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "DELETE",
+      "path": "ministry-images/<fixture>.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "events/<fixture>.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "POST",
+      "path": "events/<fixture>.png",
+      "status": 200
+    },
+    {
+      "service": "storage-rules",
+      "method": "DELETE",
+      "path": "events/<fixture>.png",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "GET",
+      "path": "<fixture>/unknown.txt",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "GET",
+      "path": "<fixture>/unknown.txt",
+      "status": 403
+    },
+    {
+      "service": "storage-rules",
+      "method": "GET",
+      "path": "event-images/<fixture>-event/photo.png",
+      "status": 200
+    },
+    {
+      "service": "functions-http",
+      "method": "GET",
+      "path": "/api/users",
+      "status": 401
+    },
+    {
+      "service": "functions-http",
+      "method": "GET",
+      "path": "/api/users",
+      "status": 200
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/user",
+      "status": 401
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/user",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/users",
+      "status": 401
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/users",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/repertoire",
+      "status": 401
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/repertoire",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/materials",
+      "status": 401
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/materials",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/all",
+      "status": 401
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/all",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/week",
+      "status": 401
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/week",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/user",
+      "status": 404
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/user",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/user",
+      "status": 400
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/notify/user",
+      "status": 401
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/fixStorageCors",
+      "status": 401
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/fixStorageCors",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/fixStorageCors",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/backfillPendingUsers",
+      "status": 401
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/backfillPendingUsers",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/backfillPendingUsers",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/commands",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/commands",
+      "status": 403
+    },
+    {
+      "service": "functions-http",
+      "method": "POST",
+      "path": "/api/commands",
+      "status": 200
+    }
+  ],
+  "limitations": [
+    "Emulator rule evaluation does not prove production deployment or Storage cross-service IAM.",
+    "The exported command worker is invoked directly with a real emulator snapshot; this does not verify Eventarc delivery or scheduling.",
+    "Admin SDK and download-token URLs bypass client rules; backend guards and token exposure require separate review."
+  ]
+}

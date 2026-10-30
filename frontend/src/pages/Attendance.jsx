@@ -1,15 +1,23 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
+import { PrivateImage } from "../components/PrivateImage.jsx";
+import { releaseProtectedImage } from "../services/private-image-client.js";
+import {
+  assignmentPrivacyKey,
+  assignmentManagedAreas,
+  readScopedAssignments,
+  watchScopedAssignments,
+  trackedAssignmentCollection as de,
+  trackedAssignmentQuery as we,
+  trackedAssignmentWhere as ie,
+} from "../services/assignment-client.js";
 import { _ as Fa } from "../vendor/vendor-pdf-Cf03QSry.js";
 import { jsxRuntime } from "../vendor/jsx-runtime.js";
 import { r as React } from "../vendor/vendor-react-BwINE3B3.js";
 import {
   H as gt,
-  I as we,
   L as Pa,
   J as ta,
-  E as de,
   A as Xe,
-  K as ie,
   w as ye,
   S as Mt,
   M as Sn,
@@ -359,33 +367,15 @@ const Fn = (m) => {
     (P.includes("requires a") && P.includes("index"))
   );
 };
-const ks = async (m, k) => {
-  try {
-    const p = await ye(
-      we(de(firestoreDb, "events", m, "assignments"), ie("userId", "==", k)),
-    );
-    return (
-      B("getAssignmentDocsForUserInEvent(query)", {
-        eventId: m,
-        userId: k,
-        count: p.docs.length,
-      }),
-      p.docs
-    );
-  } catch (p) {
-    if (!Fn(p)) throw p;
-    const P = await ye(de(firestoreDb, "events", m, "assignments")),
-      w = P.docs.filter((Z) => Z.data()?.userId === k);
-    return (
-      B("getAssignmentDocsForUserInEvent(fallback)", {
-        eventId: m,
-        userId: k,
-        scanned: P.docs.length,
-        count: w.length,
-      }),
-      w
-    );
-  }
+const ks = async (eventId, userId, privacyProfile) => {
+  const snapshot = await readScopedAssignments(
+    we(
+      de(firestoreDb, "events", eventId, "assignments"),
+      ie("userId", "==", userId),
+    ),
+    privacyProfile,
+  );
+  return snapshot.docs;
 };
 const Ae = (m, k) => {
   if (!m) return new Date(NaN);
@@ -601,47 +591,42 @@ const Attendance = () => {
       e.startsWith("data:") ||
       e.startsWith("blob:") ||
       e.startsWith("/"),
-    Ze = (e) => {
-      const a = String(e ?? "").trim();
-      if ((ra(a || null), !a)) {
-        (ot(""), lt(!1));
-        return;
-      }
-      if (tn(a)) {
-        (ot(a), lt(!1));
-        return;
-      }
-      (ot(""), lt(!0));
+    Ze = (source) => {
+      const value = String(source ?? "").trim();
+      ra(value || null);
+      ot("");
+      lt(!!value);
     },
     sn = () => {
       (ra(null), ot(""), lt(!1));
     };
   React.useEffect(() => {
-    let e = !1;
-    return (
-      (async () => {
-        const s = typeof wt == "string" ? wt.trim() : "";
-        if (!s) {
-          (ot(""), lt(!1));
-          return;
-        }
-        lt(!0);
-        try {
-          const n = await resolveCachedImageUrl(s);
-          if (e) return;
-          ot(n || "");
-        } catch {
-          if (e) return;
-          ot("");
-        } finally {
-          e || lt(!1);
-        }
-      })(),
-      () => {
-        e = !0;
-      }
-    );
-  }, [wt]);
+    const controller = new AbortController();
+    let resolved;
+    ot("");
+    lt(!!wt);
+    if (wt)
+      resolveCachedImageUrl(wt, {
+        signal: controller.signal,
+      })
+        .then((url) => {
+          if (controller.signal.aborted) releaseProtectedImage(url);
+          else {
+            resolved = url;
+            ot(url || "");
+          }
+        })
+        .catch(() => {
+          if (!controller.signal.aborted) ot("");
+        })
+        .finally(() => {
+          if (!controller.signal.aborted) lt(false);
+        });
+    return () => {
+      controller.abort();
+      releaseProtectedImage(resolved);
+    };
+  }, [wt, assignmentPrivacyKey(re)]);
   const [ue, We] = React.useState(null),
     [Ts, ia] = React.useState(""),
     [an, Zt] = React.useState(!1),
@@ -670,7 +655,7 @@ const Attendance = () => {
     return () => {
       window.clearTimeout(a);
     };
-  }, [ue?.lat, ue?.lng, ue?.title]);
+  }, [ue?.lat, ue?.lng, ue?.title, assignmentPrivacyKey(re)]);
   const [je, on] = React.useState("all"),
     [ln, cn] = React.useState(new Map()),
     [fe, dn] = React.useState([]),
@@ -704,6 +689,11 @@ const Attendance = () => {
     [qe, os] = React.useState(() => new Date().getMonth() + 1),
     pa = React.useRef(m);
   React.useEffect(() => {
+    Qt([]);
+    jt({});
+    Xt([]);
+  }, [assignmentPrivacyKey(re)]);
+  React.useEffect(() => {
     const e = pa.current;
     if (((pa.current = m), m !== "reports" || e === "reports")) return;
     const [a, s] = te.to.split("-"),
@@ -717,7 +707,7 @@ const Attendance = () => {
       Number.isFinite(r) && rs(r),
       Number.isFinite(n) && Hs(n),
       Number.isFinite(r) && os(r));
-  }, [m, te.to]);
+  }, [m, te.to, assignmentPrivacyKey(re)]);
   const ls = [
       "Enero",
       "Febrero",
@@ -884,7 +874,7 @@ const Attendance = () => {
       }
       Ct.length > 0 && !Ct.some((e) => e.weekNum === Ye) && xa(Ct[0].weekNum);
     }
-  }, [D, ae, Ws, St, Ct, ke, Le, Ye]),
+  }, [D, ae, Ws, St, Ct, ke, Le, Ye, assignmentPrivacyKey(re)]),
     React.useEffect(() => {
       if (D.size !== 0) {
         if (!ae.has(Se)) {
@@ -894,7 +884,7 @@ const Attendance = () => {
         }
         Tt.length > 0 && !Tt.includes(Be) && ns(Tt[Tt.length - 1]);
       }
-    }, [D, ae, Ys, Tt, Se, Be]),
+    }, [D, ae, Ys, Tt, Se, Be, assignmentPrivacyKey(re)]),
     React.useEffect(() => {
       if (D.size !== 0) {
         if (!ae.has(Te)) {
@@ -904,7 +894,7 @@ const Attendance = () => {
         }
         Dt.length > 0 && !Dt.includes(Ve) && rs(Dt[Dt.length - 1]);
       }
-    }, [D, ae, Bs, Dt, Te, Ve]),
+    }, [D, ae, Bs, Dt, Te, Ve, assignmentPrivacyKey(re)]),
     React.useEffect(() => {
       if (D.size !== 0) {
         if (!ae.has(De)) {
@@ -914,9 +904,9 @@ const Attendance = () => {
         }
         It.length > 0 && !It.includes(qe) && os(It[It.length - 1]);
       }
-    }, [D, ae, Vs, It, De, qe]),
+    }, [D, ae, Vs, It, De, qe, assignmentPrivacyKey(re)]),
     React.useEffect(() => {
-      const e = _() ? le() : [],
+      const e = _() ? assignmentManagedAreas(re) : [],
         a = e.length > 0 ? fe.filter((s) => e.includes(s.id)) : fe;
       if (a.length === 0) {
         Ge && is("");
@@ -927,7 +917,7 @@ const Attendance = () => {
         return;
       }
       e.length > 0 && !e.includes(Ge) && is(a[0].id);
-    }, [fe, Ge, _, le]));
+    }, [fe, Ge, _, le, assignmentPrivacyKey(re)]));
   const [I, va] = React.useState(null),
     [Q, st] = React.useState({
       checkInTime: "",
@@ -972,7 +962,7 @@ const Attendance = () => {
         name: e.name,
       })),
     );
-  }, [He]),
+  }, [He, assignmentPrivacyKey(re)]),
     React.useEffect(() => {
       const e = new Map();
       (Rt.forEach((a) => {
@@ -980,10 +970,10 @@ const Attendance = () => {
         s && e.set(a.id, s);
       }),
         cn(e));
-    }, [Rt]),
+    }, [Rt, assignmentPrivacyKey(re)]),
     React.useEffect(() => {
       m === "people" && Ie();
-    }, [m, pe]),
+    }, [m, pe, assignmentPrivacyKey(re)]),
     React.useEffect(() => {
       if (isBffEnabled()) {
         (async () => {
@@ -1001,8 +991,9 @@ const Attendance = () => {
         })();
         return;
       }
-      const e = gt(
+      const e = watchScopedAssignments(
         we(de(firestoreDb, "events"), ta("date", "desc"), Pa(500)),
+        re,
         (a) => {
           const s = new Set(),
             n = new Set();
@@ -1018,7 +1009,7 @@ const Attendance = () => {
       return () => {
         e();
       };
-    }, []),
+    }, [assignmentPrivacyKey(re)]),
     React.useEffect(() => {
       if (D.size === 0) return;
       const e = Array.from(D).sort().at(-1);
@@ -1026,7 +1017,7 @@ const Attendance = () => {
       const a = D.has(p),
         s = D.has(w);
       (a && s) || (P(e), Z(e));
-    }, [D, p, w]));
+    }, [D, p, w, assignmentPrivacyKey(re)]));
   const qs = React.useMemo(() => {
     const e = new Set();
     for (const a of Oe) a >= te.startDate && a <= te.endDate && e.add(a);
@@ -1039,7 +1030,7 @@ const Attendance = () => {
       return;
     }
     (zt(te.startDate), kt(te.endDate));
-  }, [te.startDate, te.endDate, qs]);
+  }, [te.startDate, te.endDate, qs, assignmentPrivacyKey(re)]);
   const Da = React.useRef(0);
   React.useEffect(() => {
     if (m !== "people" || isBffEnabled()) return;
@@ -1054,8 +1045,9 @@ const Attendance = () => {
       a = () => {
         document.visibilityState === "visible" && e();
       },
-      s = gt(
+      s = watchScopedAssignments(
         Xe(firestoreDb, "meta", "attendanceSync"),
+        re,
         (n) => {
           (B("attendanceSync(marker)", {
             view: m,
@@ -1078,7 +1070,7 @@ const Attendance = () => {
           s());
       }
     );
-  }, [m, pe]);
+  }, [m, pe, assignmentPrivacyKey(re)]);
   const Ia = React.useRef(0);
   (useChangeFeed({
     enabled: isBffEnabled(),
@@ -1101,7 +1093,7 @@ const Attendance = () => {
         return;
       const e = te.startDate,
         a = te.endDate,
-        s = _() ? le() : [],
+        s = _() ? assignmentManagedAreas(re) : [],
         n =
           s.length > 0
             ? fe.filter((x) => s.includes(x.id)).map((x) => x.name)
@@ -1118,8 +1110,9 @@ const Attendance = () => {
         d = new Map(),
         g = de(firestoreDb, "events"),
         b = we(g, ie("date", ">=", e), ie("date", "<=", a)),
-        c = gt(
+        c = watchScopedAssignments(
           b,
+          re,
           (x) => {
             const v = new Set();
             for (const y of x.docs) {
@@ -1130,8 +1123,9 @@ const Attendance = () => {
               }
               if ((v.add(y.id), i.has(y.id))) continue;
               const A = de(firestoreDb, "events", y.id, "assignments"),
-                O = gt(
+                O = watchScopedAssignments(
                   A,
+                  re,
                   (U) => {
                     (_() &&
                       n.length > 0 &&
@@ -1156,13 +1150,15 @@ const Attendance = () => {
         for (const x of i.values()) x();
         for (const x of d.values()) x();
       };
-    }, [m, te.startDate, te.endDate, fe, _, le]));
+    }, [m, te.startDate, te.endDate, fe, _, le, assignmentPrivacyKey(re)]));
   const Ie = async (e) => {
       const a = !!e?.silent;
       a || $(!0);
       try {
-        const s = _() ? le() : [],
-          n = `attendance_peopleStats_${te.from}_${te.to}_min_${s.slice().sort().join("-") || "all"}`,
+        const s = _() ? assignmentManagedAreas(re) : [],
+          n =
+            assignmentPrivacyKey(re) +
+            `attendance_peopleStats_${te.from}_${te.to}_min_${s.slice().sort().join("-") || "all"}`,
           r = Ln(n);
         if (!e?.force && r && Date.now() - r.ts < $n) {
           (Qt(r.value.userStats), jt(r.value.assignmentsByUser), a || $(!1));
@@ -1191,7 +1187,7 @@ const Attendance = () => {
           c = Array.isArray(h?.events) ? h.events : [];
         } else
           c = (
-            await ye(
+            await readScopedAssignments(
               we(
                 de(firestoreDb, "events"),
                 ie("date", ">=", g),
@@ -1199,6 +1195,7 @@ const Attendance = () => {
                 ta("date", "desc"),
                 Pa(Rn),
               ),
+              re,
             )
           ).docs.map((A) => ({
             id: A.id,
@@ -1232,8 +1229,9 @@ const Attendance = () => {
         } else {
           const h = c.map(async (O) => {
               try {
-                const U = await ye(
+                const U = await readScopedAssignments(
                   de(firestoreDb, "events", O.id, "assignments"),
+                  re,
                 );
                 return {
                   eventData: O,
@@ -1556,7 +1554,7 @@ const Attendance = () => {
               wasLate: a,
               wasCheckOutLate: s,
             },
-            r = await ks(I.eventId, I.userId);
+            r = await ks(I.eventId, I.userId, re);
           if (
             (B("handleEditRecordSubmit(docsToUpdate)", {
               count: r.length,
@@ -1669,7 +1667,7 @@ const Attendance = () => {
                   wasLate: i,
                   wasCheckOutLate: d,
                 },
-                b = await ks(e.eventId, e.userId);
+                b = await ks(e.eventId, e.userId, re);
               if (
                 (B("handleMarkPresent(docsToUpdate)", {
                   count: b.length,
@@ -1791,7 +1789,7 @@ const Attendance = () => {
                   wasLate: b,
                   wasCheckOutLate: c,
                 },
-                v = await ks(e.eventId, e.userId);
+                v = await ks(e.eventId, e.userId, re);
               if (
                 (B("handleCompleteAttendance(docsToUpdate)", {
                   count: v.length,
@@ -1896,7 +1894,7 @@ const Attendance = () => {
                   wasLate: null,
                   wasCheckOutLate: null,
                 },
-                s = await ks(e.eventId, e.userId);
+                s = await ks(e.eventId, e.userId, re);
               if (
                 (B("handleMarkAbsent(docsToUpdate)", {
                   count: s.length,
@@ -1974,7 +1972,7 @@ const Attendance = () => {
       const a = !!e?.silent;
       a || $(!0);
       try {
-        const s = _() ? le() : [];
+        const s = _() ? assignmentManagedAreas(re) : [];
         let n = [];
         if (s.length > 0)
           if (isBffEnabled()) {
@@ -2020,7 +2018,7 @@ const Attendance = () => {
         }
         const r = de(firestoreDb, "events"),
           i = we(r, ie("date", ">=", $e), ie("date", "<=", Re)),
-          d = await ye(i),
+          d = await readScopedAssignments(i, re),
           g = new Map();
         d.docs.forEach((c) => {
           g.set(c.id, {
@@ -2036,7 +2034,7 @@ const Attendance = () => {
             if (!h.some((O) => s.includes(O)) && h.length > 0) continue;
           }
           const v = de(firestoreDb, "events", c.id, "assignments");
-          (await ye(v)).docs.forEach((h) => {
+          (await readScopedAssignments(v, re)).docs.forEach((h) => {
             const A = h.data();
             (_() && n.length > 0 && !n.includes(A.areaName)) ||
               b.push({
@@ -2062,7 +2060,7 @@ const Attendance = () => {
         a || $(!1);
       }
     };
-  React.useEffect(() => (at(), () => {}), [$e, Re]);
+  React.useEffect(() => (at(), () => {}), [$e, Re, assignmentPrivacyKey(re)]);
   const Ks = React.useRef(!1);
   useChangeFeed({
     enabled: isBffEnabled(),
@@ -2100,7 +2098,7 @@ const Attendance = () => {
   const Oa = React.useRef(0);
   React.useEffect(() => {
     if ((m !== "events" && m !== "reports") || isBffEnabled()) return;
-    const e = _() ? le() : [],
+    const e = _() ? assignmentManagedAreas(re) : [],
       a =
         e.length > 0
           ? fe.filter((g) => e.includes(g.id)).map((g) => g.name)
@@ -2112,8 +2110,9 @@ const Attendance = () => {
       n = new Map(),
       r = de(firestoreDb, "events"),
       i = we(r, ie("date", ">=", $e), ie("date", "<=", Re)),
-      d = gt(
+      d = watchScopedAssignments(
         i,
+        re,
         (g) => {
           const b = new Set();
           for (const c of g.docs) {
@@ -2124,8 +2123,9 @@ const Attendance = () => {
             }
             if ((b.add(c.id), n.has(c.id))) continue;
             const v = de(firestoreDb, "events", c.id, "assignments"),
-              y = gt(
+              y = watchScopedAssignments(
                 v,
+                re,
                 (h) => {
                   (_() &&
                     a.length > 0 &&
@@ -2148,7 +2148,7 @@ const Attendance = () => {
       d();
       for (const g of n.values()) g();
     };
-  }, [m, $e, Re, fe, _, le]);
+  }, [m, $e, Re, fe, _, le, assignmentPrivacyKey(re)]);
   const $a = React.useRef(0);
   React.useEffect(() => {
     if ((m !== "events" && m !== "reports") || isBffEnabled()) return;
@@ -2156,8 +2156,9 @@ const Attendance = () => {
         const s = Date.now();
         s - $a.current < 3e4 || (($a.current = s), at());
       },
-      a = gt(
+      a = watchScopedAssignments(
         Xe(firestoreDb, "meta", "attendanceSync"),
+        re,
         (s) => {
           (B("attendanceSync(marker)", {
             view: m,
@@ -2170,7 +2171,7 @@ const Attendance = () => {
         () => {},
       );
     return () => a();
-  }, [m, $e, Re, _, le]);
+  }, [m, $e, Re, _, le, assignmentPrivacyKey(re)]);
   const Je = (e) => {
       const a = ws(e.eventDate, e.endTime, e.eventTime, e.eventStatus);
       if (e.checkInTime && e.checkOutTime) {
@@ -2290,16 +2291,17 @@ const Attendance = () => {
           d = r.end,
           g = `${ke}-${String(Le).padStart(2, "0")}-${String(i).padStart(2, "0")}`,
           b = `${ke}-${String(Le).padStart(2, "0")}-${String(d).padStart(2, "0")}`,
-          c = _() ? le() : [];
+          c = _() ? assignmentManagedAreas(re) : [];
         let x = [];
         c.length > 0 &&
           (x = He.filter((l) => c.includes(l.id)).map((l) => l.name));
-        const v = await ye(
+        const v = await readScopedAssignments(
             we(
               de(firestoreDb, "events"),
               ie("date", ">=", g),
               ie("date", "<=", b),
             ),
+            re,
           ),
           y = [],
           h = new Set();
@@ -2317,7 +2319,7 @@ const Attendance = () => {
             c.length > 0 &&
             c.length <= 10 &&
             (E = we(E, ie("areaId", "in", c))),
-            (await ye(E)).docs.forEach((f) => {
+            (await readScopedAssignments(E, re)).docs.forEach((f) => {
               const j = f.data();
               (_() && x.length > 0 && !x.includes(j.areaName)) ||
                 y.push({
@@ -2622,16 +2624,17 @@ ${N} ${E}/${u}`,
           r = `${Se}-${String(Be).padStart(2, "0")}-01`,
           i = new Date(Se, Be, 0).getDate(),
           d = `${Se}-${String(Be).padStart(2, "0")}-${String(i).padStart(2, "0")}`,
-          g = _() ? le() : [];
+          g = _() ? assignmentManagedAreas(re) : [];
         let b = [];
         g.length > 0 &&
           (b = He.filter((W) => g.includes(W.id)).map((W) => W.name));
-        const c = await ye(
+        const c = await readScopedAssignments(
             we(
               de(firestoreDb, "events"),
               ie("date", ">=", r),
               ie("date", "<=", d),
             ),
+            re,
           ),
           x = [],
           v = new Set();
@@ -2649,7 +2652,7 @@ ${N} ${E}/${u}`,
             g.length > 0 &&
             g.length <= 10 &&
             (N = we(N, ie("areaId", "in", g))),
-            (await ye(N)).docs.forEach((u) => {
+            (await readScopedAssignments(N, re)).docs.forEach((u) => {
               const f = u.data();
               (_() && b.length > 0 && !b.includes(f.areaName)) ||
                 x.push({
@@ -2983,17 +2986,18 @@ ${j} ${H}/${M}`,
           d = `${Te}-${String(Ve).padStart(2, "0")}-01`,
           g = new Date(Te, Ve, 0).getDate(),
           b = `${Te}-${String(Ve).padStart(2, "0")}-${String(g).padStart(2, "0")}`,
-          c = _() ? le() : [];
+          c = _() ? assignmentManagedAreas(re) : [];
         let x = [];
         c.length > 0 &&
           (x = He.filter((u) => c.includes(u.id)).map((u) => u.name));
-        const v = await ye(
+        const v = await readScopedAssignments(
             we(
               de(firestoreDb, "events"),
               ie("date", ">=", d),
               ie("date", "<=", b),
               ta("date", "desc"),
             ),
+            re,
           ),
           y = [];
         for (const u of v.docs) {
@@ -3005,11 +3009,12 @@ ${j} ${H}/${M}`,
             if (!M.some((X) => c.includes(X)) && M.length > 0) continue;
           }
           (
-            await ye(
+            await readScopedAssignments(
               we(
                 de(firestoreDb, "events", u.id, "assignments"),
                 ie("userId", "==", tt),
               ),
+              re,
             )
           ).docs.forEach((M) => {
             const C = M.data();
@@ -3366,7 +3371,7 @@ ${Qe} ${Ke}/${ce}`,
         );
         return;
       }
-      const e = _() ? le() : [];
+      const e = _() ? assignmentManagedAreas(re) : [];
       if (e.length > 0 && !e.includes(Ge)) {
         F.showInfo(
           "No tienes permiso para generar reportes de este ministerio.",
@@ -3394,12 +3399,13 @@ ${Qe} ${Ke}/${ce}`,
           g = `${De}-${String(qe).padStart(2, "0")}-01`,
           b = new Date(De, qe, 0).getDate(),
           c = `${De}-${String(qe).padStart(2, "0")}-${String(b).padStart(2, "0")}`,
-          x = await ye(
+          x = await readScopedAssignments(
             we(
               de(firestoreDb, "events"),
               ie("date", ">=", g),
               ie("date", "<=", c),
             ),
+            re,
           ),
           v = [],
           y = new Set();
@@ -3410,7 +3416,10 @@ ${Qe} ${Ke}/${ce}`,
           const f = E.activeMinistries || [];
           if (Array.isArray(f) && f.length > 0 && !f.includes(Ge)) continue;
           (
-            await ye(de(firestoreDb, "events", N.id, "assignments"))
+            await readScopedAssignments(
+              de(firestoreDb, "events", N.id, "assignments"),
+              re,
+            )
           ).docs.forEach((H) => {
             const M = H.data();
             String(M.areaName || "") === r &&
@@ -3808,7 +3817,7 @@ ${q} ${se}/${z}`,
     }, [_t, mt]);
   React.useEffect(() => {
     ut !== "all" && (Xs.includes(Number(ut)) || Pt("all"));
-  }, [Xs, ut]);
+  }, [Xs, ut, assignmentPrivacyKey(re)]);
   const za = Ft ? _e.find((e) => e.id === Ft) : null,
     Zs = (() => {
       const e = new Map();
@@ -5384,7 +5393,11 @@ ${q} ${se}/${z}`,
                                       value={Ge}
                                       onChange={(e) => is(e)}
                                       options={(_()
-                                        ? fe.filter((e) => le().includes(e.id))
+                                        ? fe.filter((e) =>
+                                            assignmentManagedAreas(re).includes(
+                                              e.id,
+                                            ),
+                                          )
                                         : fe
                                       )
                                         .slice()
@@ -6714,7 +6727,7 @@ ${q} ${se}/${z}`,
                         <LoaderCircleIcon size={20} className="animate-spin" />
                       </div>
                     ) : Ss ? (
-                      <img
+                      <PrivateImage
                         src={Ss}
                         alt="Evidencia"
                         className="w-full h-auto max-h-[60vh] object-contain gpu-accelerated"
@@ -6730,7 +6743,7 @@ ${q} ${se}/${z}`,
                   </div>,
                   <div className="flex justify-end">
                     <a
-                      href={Ss || wt}
+                      href={Ss || undefined}
                       download="evidencia.jpg"
                       target="_blank"
                       rel="noreferrer"

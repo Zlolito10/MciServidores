@@ -1,4 +1,16 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
+import { PrivateImage } from "../components/PrivateImage.jsx";
+import { releaseProtectedImage } from "../services/private-image-client.js";
+import {
+  assignmentPrivacyKey,
+  assignmentManagedAreas,
+  watchAssignmentView,
+  prepareAssignmentView,
+} from "../services/assignment-client.js";
+import {
+  sendNotification,
+  getCommandAuthor,
+} from "../services/notification-client.js";
 import { extractEmulatorStoragePath } from "../utils/storage-path.js";
 import { jsxRuntime } from "../vendor/jsx-runtime.js";
 import {
@@ -268,6 +280,9 @@ const EventDetails = () => {
     },
     Wr = (t) => `/api/download?path=${encodeURIComponent(t)}&inline=1`;
   React.useEffect(() => {
+    Fe([]);
+  }, [assignmentPrivacyKey(z)]);
+  React.useEffect(() => {
     let t = !1;
     return (
       (async () => {
@@ -304,8 +319,8 @@ const EventDetails = () => {
         t = !0;
       }
     );
-  }, [x?.imageUrl]);
-  const re = ee(),
+  }, [x?.imageUrl, assignmentPrivacyKey(z)]);
+  const re = assignmentManagedAreas(z),
     H = React.useMemo(
       () =>
         E
@@ -507,17 +522,11 @@ const EventDetails = () => {
       t.startsWith("data:") ||
       t.startsWith("blob:") ||
       t.startsWith("/"),
-    st = (t) => {
-      const r = String(t ?? "").trim();
-      if ((Cr(r || null), !r)) {
-        (ne(""), oe(!1));
-        return;
-      }
-      if (es(r)) {
-        (ne(r), oe(!1));
-        return;
-      }
-      (ne(""), oe(!0));
+    st = (source) => {
+      const value = String(source ?? "").trim();
+      Cr(value || null);
+      ne("");
+      oe(!!value);
     },
     ts = () => {
       (Cr(null), ne(""), oe(!1));
@@ -527,31 +536,32 @@ const EventDetails = () => {
     [rs, at] = React.useState(!1),
     [ss, zt] = React.useState(!1);
   React.useEffect(() => {
-    let t = !1;
-    return (
-      (async () => {
-        const s = typeof be == "string" ? be.trim() : "";
-        if (!s) {
-          (ne(""), oe(!1));
-          return;
-        }
-        oe(!0);
-        try {
-          const i = await resolveCachedImageUrl(s);
-          if (t) return;
-          ne(i || "");
-        } catch (i) {
-          if ((console.error("Error resolving photo:", i), t)) return;
-          ne("");
-        } finally {
-          t || oe(!1);
-        }
-      })(),
-      () => {
-        t = !0;
-      }
-    );
-  }, [be]);
+    const controller = new AbortController();
+    let resolved;
+    ne("");
+    oe(!!be);
+    if (be)
+      resolveCachedImageUrl(be, {
+        signal: controller.signal,
+      })
+        .then((url) => {
+          if (controller.signal.aborted) releaseProtectedImage(url);
+          else {
+            resolved = url;
+            ne(url || "");
+          }
+        })
+        .catch(() => {
+          if (!controller.signal.aborted) ne("");
+        })
+        .finally(() => {
+          if (!controller.signal.aborted) oe(false);
+        });
+    return () => {
+      controller.abort();
+      releaseProtectedImage(resolved);
+    };
+  }, [be, assignmentPrivacyKey(z)]);
   const as = (t, r) => {
     const i = r - 0.0025,
       a = r + 0.0025,
@@ -572,7 +582,7 @@ const EventDetails = () => {
     return () => {
       window.clearTimeout(r);
     };
-  }, [I?.lat, I?.lng, I?.title]);
+  }, [I?.lat, I?.lng, I?.title, assignmentPrivacyKey(z)]);
   const Ir = (t) => {
       const r = t.getFullYear(),
         s = String(t.getMonth() + 1).padStart(2, "0"),
@@ -644,7 +654,7 @@ const EventDetails = () => {
               ...n.data(),
             }));
             if (Q()) {
-              const n = ee();
+              const n = assignmentManagedAreas(z);
               n.length > 0 &&
                 (o = o.filter((d) => {
                   const p = d.activeMinistries || [];
@@ -687,7 +697,7 @@ const EventDetails = () => {
               ...n.data(),
             }));
             if (Q()) {
-              const n = ee();
+              const n = assignmentManagedAreas(z);
               n.length > 0 &&
                 (o = o.filter((d) => {
                   const p = d.activeMinistries || [];
@@ -730,6 +740,7 @@ const EventDetails = () => {
               sourceEventId: T,
               targetEventId: l,
               createdAt: qs(),
+              createdBy: getCommandAuthor(),
             });
           }
           (w("success", "Éxito", "Asignaciones replicadas correctamente"),
@@ -793,7 +804,7 @@ const EventDetails = () => {
               sourceEventId: T,
               targetEventId: l,
               createdAt: new Date(),
-              createdBy: Z?.uid || "unknown",
+              createdBy: getCommandAuthor(),
             });
           }
           (Ie(!1),
@@ -816,40 +827,24 @@ const EventDetails = () => {
     },
     ds = async () => {
       if (!l || !x) return;
-      ur(!0);
-      const r =
-        window.location.hostname === "localhost" ||
-        window.location.hostname === "127.0.0.1"
-          ? "https://us-central1-mcimachala-servidor.cloudfunctions.net/api/notify/repertoire"
-          : "/api/notify/repertoire";
+      ur(true);
       try {
-        const s = await fetch(r, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            eventId: l,
-          }),
+        await sendNotification("/api/notify/repertoire", {
+          eventId: l,
         });
-        let i = null;
-        try {
-          i = await s.json();
-        } catch {}
-        if (!s.ok || (i && !i.success)) {
-          const a =
-            i?.error || `Error enviando notificación (status ${s.status})`;
-          throw new Error(a);
-        }
         w(
           "success",
           "Notificación enviada",
           "Se notificó a los servidores asignados sobre el repertorio.",
         );
-      } catch (s) {
-        w("error", "Error enviando notificación", s?.message || "Error de red");
+      } catch (error) {
+        w(
+          "error",
+          "Error enviando notificación",
+          error?.message || "Error de red",
+        );
       } finally {
-        ur(!1);
+        ur(false);
       }
     },
     cs = async () => {
@@ -927,7 +922,7 @@ const EventDetails = () => {
             backupId: o,
             collection: a.col,
             createdAt: new Date(),
-            createdBy: Z?.uid || "unknown",
+            createdBy: getCommandAuthor(),
             status: "pending",
           }),
             w(
@@ -1031,7 +1026,7 @@ const EventDetails = () => {
               sourceEventId: _,
               targetEventId: l,
               createdAt: new Date(),
-              createdBy: Z?.uid || "unknown",
+              createdBy: getCommandAuthor(),
             });
           }
           (Me(!1),
@@ -1054,40 +1049,24 @@ const EventDetails = () => {
     },
     us = async () => {
       if (!l || !x) return;
-      wr(!0);
-      const r =
-        window.location.hostname === "localhost" ||
-        window.location.hostname === "127.0.0.1"
-          ? "https://us-central1-mcimachala-servidor.cloudfunctions.net/api/notify/materials"
-          : "/api/notify/materials";
+      wr(true);
       try {
-        const s = await fetch(r, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            eventId: l,
-          }),
+        await sendNotification("/api/notify/materials", {
+          eventId: l,
         });
-        let i = null;
-        try {
-          i = await s.json();
-        } catch {}
-        if (!s.ok || (i && !i.success)) {
-          const a =
-            i?.error || `Error enviando notificación (status ${s.status})`;
-          throw new Error(a);
-        }
         w(
           "success",
           "Notificación enviada",
           "Se notificó a los servidores asignados sobre los materiales.",
         );
-      } catch (s) {
-        w("error", "Error enviando notificación", s?.message || "Error de red");
+      } catch (error) {
+        w(
+          "error",
+          "Error enviando notificación",
+          error?.message || "Error de red",
+        );
       } finally {
-        wr(!1);
+        wr(false);
       }
     },
     gs = async () => {
@@ -1402,7 +1381,14 @@ const EventDetails = () => {
           ]);
           if (u) return;
           (he(le.event),
-            Fe(Array.isArray(le.assignments) ? le.assignments : []));
+            Fe(
+              prepareAssignmentView(
+                Array.isArray(le.assignments) ? le.assignments : [],
+                z,
+                ue,
+                ge,
+              ),
+            ));
           const Tr = Array.isArray(le.repertoire) ? le.repertoire : [];
           (Tr.sort(($t, Pt) => {
             const Dr =
@@ -1534,19 +1520,12 @@ const EventDetails = () => {
           console.error("Error listening to event:", u);
         },
       ),
-      o = lt(
+      o = watchAssignmentView(
         r,
-        (u) => {
-          Fe(
-            u.docs.map((m) => ({
-              id: m.id,
-              ...m.data(),
-            })),
-          );
-        },
-        (u) => {
-          console.error("Error listening to assignments:", u);
-        },
+        z,
+        (rows) => Fe(prepareAssignmentView(rows, z, ue, ge)),
+        (error) =>
+          console.error("Error listening to authorized assignment view", error),
       ),
       n = lt(
         s,
@@ -1598,7 +1577,7 @@ const EventDetails = () => {
           d());
       }
     );
-  }, [l]),
+  }, [l, assignmentPrivacyKey(z), ue, ge]),
     React.useEffect(() => {
       if (!l || isBffEnabled() || !$ || !Rt.current || !It.current) return;
       const t = Sr();
@@ -1611,7 +1590,7 @@ const EventDetails = () => {
             console.error("[AutoBackup] error", s);
           });
         }, 4e3)));
-    }, [l, $, S, X]));
+    }, [l, $, S, X, assignmentPrivacyKey(z), ue, ge]));
   const fs = async (t, r, s, i) => {
       if (!l || !i) return;
       if (!ft(t)) {
@@ -2106,7 +2085,7 @@ const EventDetails = () => {
     };
   React.useEffect(() => {
     (wt || Y) && Is();
-  }, [wt, Y]);
+  }, [wt, Y, assignmentPrivacyKey(z)]);
   const As = async (t) => {
       t.preventDefault();
       const r = new FormData(t.currentTarget),
@@ -4093,7 +4072,9 @@ El archivo anterior se eliminará al guardar.`,
               K === "attendance" && (
                 <div className="space-y-6">
                   {(() => {
-                    const t = Q() ? q.filter((r) => re.includes(r.areaId)) : q;
+                    const t = (
+                      Q() ? q.filter((r) => re.includes(r.areaId)) : q
+                    ).filter((row) => row.attendanceVisible === true);
                     return (
                       <jsxRuntime.Fragment>
                         {[
@@ -4814,7 +4795,7 @@ El archivo anterior se eliminará al guardar.`,
                         <LoaderCircleIcon size={20} className="animate-spin" />
                       </div>
                     ) : Tt ? (
-                      <img
+                      <PrivateImage
                         src={Tt}
                         alt="Evidencia"
                         className="w-full h-auto max-h-[60vh] object-contain gpu-accelerated"
@@ -4830,7 +4811,7 @@ El archivo anterior se eliminará al guardar.`,
                   </div>,
                   <div className="flex justify-end">
                     <a
-                      href={Tt || be}
+                      href={Tt || undefined}
                       download="evidencia.jpg"
                       target="_blank"
                       rel="noreferrer"

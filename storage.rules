@@ -5,13 +5,50 @@ service firebase.storage {
       return request.auth != null;
     }
 
+    function userData() {
+      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && userData().get('role', '') in ['admin', 'master_admin'];
+    }
+
+    function isMinistryAdmin() {
+      let role = userData().get('role', '');
+      return role is string && (role == 'ministry_admin' || role == 'ministry_subadmin'
+        || role.matches('ministry_admin_.*') || role.matches('ministry_subadmin_.*'));
+    }
+
+    function managedAreaIds() {
+      let role = userData().get('role', '');
+      return role.matches('ministry_admin_.+') ? [role.replace('^ministry_admin_', '')]
+        : role.matches('ministry_subadmin_.+') ? [role.replace('^ministry_subadmin_', '')]
+        : role in ['ministry_admin', 'ministry_subadmin'] ? userData().get('assignedMinistries', [])
+        : [];
+    }
+
+    function canManageEvent(eventId) {
+      let event = firestore.get(/databases/(default)/documents/events/$(eventId)).data;
+      return isAdmin() || (isAuthenticated() && isMinistryAdmin()
+        && (event.get('createdBy', '') == request.auth.uid
+          || event.get('activeMinistries', []).hasAny(managedAreaIds())));
+    }
+
+    function canAccessAttendance(eventId, assignmentId) {
+      let assignment = firestore.get(/databases/(default)/documents/events/$(eventId)/assignments/$(assignmentId)).data;
+      return isAdmin() || (isAuthenticated() && (
+        assignment.get('userId', '') == request.auth.uid
+        || (isMinistryAdmin() && managedAreaIds().hasAny([assignment.get('areaId', '')]))
+      ));
+    }
+
     // Profile photos: only the owner can write/delete their own photos.
-    match /profile-photos/{uid}/{fileName} {
+    match /profile-photos/{uid}/{fileName=**} {
       allow read: if isAuthenticated();
       allow write: if isAuthenticated()
         && request.auth.uid == uid
         && (
-          request.method == 'delete'
+          request.resource == null
           || (
             request.resource.size < 5 * 1024 * 1024
             && request.resource.contentType.matches('image/.*')
@@ -19,12 +56,12 @@ service firebase.storage {
         );
     }
 
-    // Event images: todos los usuarios autenticados pueden subir
-    match /event-images/{eventId}/{fileName} {
+    // Event image changes require authority over the event, not just a session.
+    match /event-images/{eventId}/{fileName=**} {
       allow read: if true;
-      allow write: if isAuthenticated()
+      allow write: if isAuthenticated() && canManageEvent(eventId)
         && (
-          request.method == 'delete'
+          request.resource == null
           || (
             request.resource.size < 10 * 1024 * 1024
             && request.resource.contentType.matches('image/.*')
@@ -32,12 +69,12 @@ service firebase.storage {
         );
     }
 
-    // Event template images: todos los usuarios autenticados pueden subir
-    match /event-template-images/{templateId}/{fileName} {
+    // Templates are globally managed by full administrators.
+    match /event-template-images/{templateId}/{fileName=**} {
       allow read: if true;
-      allow write: if isAuthenticated()
+      allow write: if isAdmin()
         && (
-          request.method == 'delete'
+          request.resource == null
           || (
             request.resource.size < 10 * 1024 * 1024
             && request.resource.contentType.matches('image/.*')
@@ -45,12 +82,12 @@ service firebase.storage {
         );
     }
 
-    // Ministry images: authenticated users can upload
+    // Ministry configuration is globally managed by full administrators.
     match /ministry-images/{fileName} {
       allow read: if true;
-      allow write: if isAuthenticated()
+      allow write: if isAdmin()
         && (
-          request.method == 'delete'
+          request.resource == null
           || (
             request.resource.size < 10 * 1024 * 1024
             && request.resource.contentType.matches('image/.*')
@@ -61,9 +98,12 @@ service firebase.storage {
     // Event Coover Images (Direct events/ folder)
     match /events/{fileName} {
       allow read: if true;
-      allow write: if isAuthenticated()
+      // Legacy cover paths have no event ID. Ministry admins may create a new
+      // object before creating their event; only full admins replace/delete it.
+      allow write: if isAuthenticated() && (isAdmin()
+          || (isMinistryAdmin() && resource == null && request.resource != null))
         && (
-          request.method == 'delete'
+          request.resource == null
           || (
             request.resource.size < 10 * 1024 * 1024
             && request.resource.contentType.matches('image/.*')
@@ -71,22 +111,22 @@ service firebase.storage {
         );
     }
 
-    // Event materials: todos los usuarios autenticados pueden subir
-    match /events/{eventId}/materials/{fileName} {
+    // Material metadata and binary data use the same full-admin permission.
+    match /events/{eventId}/materials/{fileName=**} {
       allow read: if isAuthenticated();
-      allow write: if isAuthenticated()
+      allow write: if isAdmin()
         && (
-          request.method == 'delete'
+          request.resource == null
           || request.resource.size < 25 * 1024 * 1024
         );
     }
 
-    // Attendance photos: todos los usuarios autenticados pueden subir
-    match /attendance/{eventId}/{assignmentId}/{fileName} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated()
+    // Attendance photos are accessible only to the assigned user or managers.
+    match /attendance/{eventId}/{assignmentId}/{fileName=**} {
+      allow read: if isAuthenticated() && canAccessAttendance(eventId, assignmentId);
+      allow write: if isAuthenticated() && canAccessAttendance(eventId, assignmentId)
         && (
-          request.method == 'delete'
+          request.resource == null
           || (
             request.resource.size < 10 * 1024 * 1024
             && request.resource.contentType.matches('image/.*')
@@ -94,9 +134,9 @@ service firebase.storage {
         );
     }
 
-    // Default: allow reads to authenticated users, deny writes.
+    // No fallback grant: it would override the attendance restrictions above.
     match /{allPaths=**} {
-      allow read: if isAuthenticated();
+      allow read: if false;
       allow write: if false;
     }
   }

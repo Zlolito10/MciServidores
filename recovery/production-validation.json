@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-30T01:26:05.728Z",
+  "status": "passed",
+  "sourceDigest": "617aeab7f31823bb7cc2f754bab3222a760fcee447208d0bab4691f1f5ff2d55",
+  "backendBuildDigest": "87f3f750a9644a596e0d57e9f4f68cb63c293167dbf3f87ced351ae4a358b202",
+  "backendChangedDuringValidation": false,
+  "sourceChangedDuringValidation": false,
+  "manifestSha256": "efa72d96a60f72026e2e6a9a8ce16337e2ea6f6f0c5b501c9c4e2e2877eed9e6",
+  "commands": [
+    {
+      "label": "frontend-build",
+      "exitCode": 0
+    },
+    {
+      "label": "backend-build",
+      "exitCode": 0
+    },
+    {
+      "label": "node",
+      "exitCode": 0,
+      "tests": 221,
+      "passed": 221,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "python",
+      "exitCode": 0,
+      "tests": 15,
+      "skipped": 0
+    },
+    {
+      "label": "emulator",
+      "exitCode": 0,
+      "tests": 65,
+      "passed": 65,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "environment": "local Firebase emulators only",
+  "productionServicesUsed": false,
+  "productionDeploymentPerformed": false
+}

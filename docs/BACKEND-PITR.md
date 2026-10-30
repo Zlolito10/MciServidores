@@ -1,0 +1,11 @@
+# Lecturas históricas de asignaciones
+
+La fuente recuperada pasaba `{readTime}` a `Query.get()` y `DocumentReference.get()`. El SDK Node instalado declara ambos métodos sin argumentos y la implementación de `Query.get()` no transmite esa opción. Ese patrón podía presentar datos actuales como históricos.
+
+Los dos endpoints PITR ahora usan `readHistoricalAssignments` con `runTransaction(callback, {readOnly: true, readTime})`. Es la forma documentada para Node en [Google Cloud PITR](https://docs.cloud.google.com/firestore/native/docs/use-pitr#node); no se usa un fallback a una lectura actual. La referencia general de [transacciones de Firestore](https://docs.cloud.google.com/nodejs/docs/reference/firestore/latest/firestore/firestore#_google_cloud_firestore_Firestore_runTransaction_member_1_) expone las opciones de lectura.
+
+El helper valida la fecha, exige un momento pasado dentro de siete días y no redondea silenciosamente. Más allá de una hora exige minutos enteros, según la precisión admitida por PITR. Lee evento y asignaciones con el mismo `readTime`; comprueba ese valor en el snapshot del evento, el snapshot de consulta y cada documento. Si falta o difiere, devuelve `501 PITR_UNAVAILABLE`. Los errores de transporte o retención también se convierten en ese error fijo, sin mensajes privados. No se inicia la restauración hasta completar todas esas comprobaciones. Un resultado de más de 500 asignaciones se rechaza antes de escribir para evitar una restauración parcial por límites del batch.
+
+Las pruebas sustituyen únicamente el transporte del SDK Firestore instalado. Verifican que los RPC reales construidos por el SDK (`batchGetDocuments` y `runQuery`) llevan exactamente el `readTime` solicitado, y rechazan un snapshot actual, un transporte no disponible y fechas inválidas. El caso de una consulta vacía también debe demostrar su tiempo de lectura. No se inicializan ADC ni conexiones Cloud en estas pruebas.
+
+Esto verifica la construcción de solicitudes y las guardias del código. No demuestra que PITR esté habilitado, que exista una versión concreta o que el runtime posea permisos en el proyecto publicado. No se cambió la retención, se consultó historia real ni se restauraron datos de producción durante esta revisión.

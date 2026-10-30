@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-30T00:48:26.257Z",
+  "project": "mcimachala-servidor",
+  "method": "Read-only projects.getIamPolicy",
+  "httpStatus": 200,
+  "requiredRole": "roles/firebaserules.firestoreServiceAgent",
+  "directUnconditionalRoleBindingFound": false,
+  "crossServiceRoleBindingVerified": false,
+  "effectivePermissionsVerified": false,
+  "iamChangesPerformed": 0,
+  "productionDeployments": 0
+}

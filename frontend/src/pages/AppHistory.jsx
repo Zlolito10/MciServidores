@@ -21,7 +21,6 @@ import {
   U as UserIcon,
   aq as ClipboardCheckIcon,
 } from "../vendor/vendor-ui-CnvYSvQL.js";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 import "../vendor/vendor-firebase-BjYbfC3F.js";
 const U = (n) => {
   try {
@@ -234,11 +233,12 @@ const AppHistory = () => {
     Y = React.useRef(!1),
     Z = React.useRef(""),
     J = React.useRef(0),
+    directoryFetchedAt = React.useRef(0),
     g = isBffEnabled(),
     X = React.useRef(!1),
     be = React.useRef(0),
     he = async () => {
-      if (!i || !g) return;
+      if (!i || !g || document.visibilityState !== "visible") return;
       const t = Date.now();
       if (!(t - be.current < 6e4) && !X.current) {
         X.current = !0;
@@ -275,7 +275,7 @@ const AppHistory = () => {
   const ee = React.useRef(!1),
     pe = React.useRef(0),
     fe = async () => {
-      if (!i || !g) return;
+      if (!i || !g || document.visibilityState !== "visible") return;
       const t = Date.now();
       if (!(t - pe.current < 6e4) && !ee.current) {
         ee.current = !0;
@@ -301,7 +301,7 @@ const AppHistory = () => {
       }
     },
     ye = async () => {
-      if (!i || !g) return;
+      if (!i || !g || document.visibilityState !== "visible") return;
       const t = Date.now();
       if (!(t - q.current < 6e4) && !O.current) {
         O.current = !0;
@@ -337,7 +337,7 @@ const AppHistory = () => {
       }
     },
     ke = async () => {
-      if (!i || !g) return;
+      if (!i || !g || document.visibilityState !== "visible") return;
       const t = Date.now();
       if (!(t - H.current < 6e4) && !K.current) {
         K.current = !0;
@@ -362,15 +362,19 @@ const AppHistory = () => {
       const s = t?.showLoading !== !1;
       (s && y(!0), ie(""));
       try {
-        const l = `/api/admin/app-history?limit=200&${`__t=${Date.now().toString(36)}`}`,
+        const includeUsers = Date.now() - directoryFetchedAt.current > 5 * 6e4;
+        const l = `/api/admin/app-history?limit=200&includeUsers=${includeUsers ? 1 : 0}&${`__t=${Date.now().toString(36)}`}`,
           o = await bffFetch(l, {
             method: "GET",
             cache: "no-store",
             timeoutMs: 15e3,
           });
-        (Ie(Array.isArray(o.logs) ? o.logs : []),
-          Te(Array.isArray(o.users) ? o.users : []),
-          (J.current = Date.now()));
+        Ie(Array.isArray(o.logs) ? o.logs : []);
+        if (Array.isArray(o.users)) {
+          Te(o.users);
+          directoryFetchedAt.current = Date.now();
+        }
+        J.current = Date.now();
       } catch (r) {
         const l =
           r instanceof BffError
@@ -411,7 +415,7 @@ const AppHistory = () => {
       ke());
   }, [i, g]),
     React.useEffect(() => {
-      if (!i || !g) return;
+      if (!i || !g || document.visibilityState !== "visible") return;
       const t = () => void he(),
         s = window.setInterval(t, 2 * 6e4);
       return (
@@ -422,7 +426,7 @@ const AppHistory = () => {
       );
     }, [i, g]),
     React.useEffect(() => {
-      if (!i || !g) return;
+      if (!i || !g || document.visibilityState !== "visible") return;
       const t = () => void fe(),
         s = window.setInterval(t, 5 * 6e4);
       return (
@@ -433,7 +437,7 @@ const AppHistory = () => {
       );
     }, [i, g]),
     React.useEffect(() => {
-      if (!i || !g) return;
+      if (!i || !g || document.visibilityState !== "visible") return;
       const t = () => void ye(),
         s = window.setInterval(t, 5 * 6e4);
       return (
@@ -444,7 +448,7 @@ const AppHistory = () => {
       );
     }, [i, g]),
     React.useEffect(() => {
-      if (!i || !g) return;
+      if (!i || !g || document.visibilityState !== "visible") return;
       const t = () => void ke(),
         s = window.setInterval(t, 5 * 6e4);
       return (

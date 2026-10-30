@@ -12,7 +12,7 @@ const __vite__mapDeps = (
       "assets/index-B05fqWAG.css",
     ]),
 ) => i.map((i) => d[i]);
-import { _ as ct } from "../vendor/vendor-pdf-Cf03QSry.js";
+import { loadModule as ct } from "../services/module-loader.js";
 import { jsxRuntime } from "../vendor/jsx-runtime.js";
 import {
   u as useNavigate,
@@ -586,7 +586,7 @@ const Dashboard = () => {
         const x = await Promise.all(
           i.map(async (c) => {
             try {
-              const u = await Yt(Ge(firestoreDb, "users", c)),
+              const u = await Yt(Ge(firestoreDb, "user_directory", c)),
                 d = u.exists() ? u.data() : null,
                 b =
                   d && typeof d.name == "string" && d.name.trim()

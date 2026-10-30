@@ -1,6 +1,6 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
 import { recoveryEnvironment } from "../config/environment.js";
-import { _ as S } from "../vendor/vendor-pdf-Cf03QSry.js";
+import { loadModule as S } from "../services/module-loader.js";
 import { r as React, L as Link } from "../vendor/vendor-react-BwINE3B3.js";
 import {
   s as as,
@@ -17,42 +17,8 @@ import {
 } from "../firebase/client.js";
 import { yt } from "../firebase/functions-sdk.js";
 import { Modal } from "../components/Modal.jsx";
-const __vite__mapDeps = (
-  i,
-  m = __vite__mapDeps,
-  d = m.f ||
-    (m.f = [
-      "assets/NotificationsAutoRegister-Dn_C-rjK.js",
-      "assets/useNotifications-fJ3DWoi9.js",
-      "assets/vendor-react-BwINE3B3.js",
-      "assets/notifications-BEtI2pcG.js",
-      "assets/index-BU_ZgoWo.js",
-      "assets/vendor-ui-CnvYSvQL.js",
-      "assets/index-B05fqWAG.css",
-      "assets/Dashboard-DN8eeJDA.js",
-      "assets/roleUtils-BDLO6O1S.js",
-      "assets/LoadingSpinner-DQ5LcqWB.js",
-      "assets/optimistic-Pk6VB-2G.js",
-      "assets/EventsGrid-BNb5ngU2.js",
-      "assets/LoadingButton-DoDnirDC.js",
-      "assets/Events-CIOfy-8U.js",
-      "assets/SelectPicker-D1mnbmt-.js",
-      "assets/ManageMinistriesModal-BO1rzanM.js",
-      "assets/EventDetails-CpDlqXqO.js",
-      "assets/ServiceAreas-CFqvjtqq.js",
-      "assets/Volunteers-CUDiGEOd.js",
-      "assets/Roles-23Dg9NXW.js",
-      "assets/Attendance-BoRlsPo1.js",
-      "assets/TuesdayTeaching-B3nMLJdY.js",
-      "assets/Udlv-B63vtmB5.js",
-      "assets/ServiceHistory-k07fUeOW.js",
-      "assets/Settings-BtbU5gHm.js",
-      "assets/AppHistory-oOipttKZ.js",
-      "assets/PendingAssignment-BisqKKqT.js",
-      "assets/useOptimizedChat-D_A1-F_L.js",
-      "assets/PendingRequests-ofGtBucD.js",
-    ]),
-) => i.map((i) => d[i]);
+// Current esbuild imports resolve their own chunks; legacy preload URLs are retired.
+const __vite__mapDeps = () => [];
 emulatorsEnabled &&
   !firebaseRuntimeState.__mciFirebaseEmulatorsConnected &&
   (as(firestoreDb, "127.0.0.1", 8080),

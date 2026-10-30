@@ -1,205 +1,112 @@
-// Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
-import {
-  releaseProtectedImage,
-  protectedImageProxy,
-} from "../services/private-image-client.js";
-import { jsxRuntime } from "../vendor/jsx-runtime.js";
+// Maintained component reconstructed from the published application's image contract.
 import { r as React } from "../vendor/vendor-react-BwINE3B3.js";
+import { releaseProtectedImage } from "../services/private-image-client.js";
 import { resolveCachedImageUrl } from "../utils/images.js";
+
+/**
+ * Protected images are fetched only near the viewport, through the authenticated
+ * no-store transport. A thumbnail does not implicitly download its original.
+ * Detail/zoom views may opt in with loadFullImage; a lone fullSrc remains usable.
+ */
 const OptimizedImage = ({
-  src: t,
-  fullSrc: s,
-  alt: r,
-  className: n = "",
-  placeholderClassName: a = "",
-  fallbackIcon: l,
-  loading: c = "lazy",
-  eager: f = !1,
-  fetchPriority: h,
-  imgClassName: b = "object-cover",
-  onImageLoad: p,
+  src,
+  fullSrc,
+  loadFullImage = false,
+  alt,
+  className = "",
+  placeholderClassName = "",
+  fallbackIcon,
+  loading = "lazy",
+  eager = false,
+  fetchPriority,
+  imgClassName = "object-cover",
+  onImageLoad,
 }) => {
-  const [u, E] = React.useState(protectedImageProxy(t) ? "" : t),
-    [v, _] = React.useState(protectedImageProxy(s) ? "" : s),
-    [k, y] = React.useState(!1),
-    [L, T] = React.useState(!1),
-    [A, N] = React.useState(!1),
-    [I, i] = React.useState(!1),
-    [m, g] = React.useState(f),
-    d = React.useRef(null),
-    w = React.useRef(null),
-    j = React.useRef(null),
-    R =
-      typeof window < "u" &&
-      ((typeof window.matchMedia == "function" &&
-        window.matchMedia("(display-mode: standalone)").matches) ||
-        (typeof navigator < "u" && navigator.standalone === !0));
-  (React.useEffect(() => {
-    const controller = new AbortController();
-    let thumbnail, full;
-    y(false);
-    T(false);
-    N(false);
-    i(false);
-    E(protectedImageProxy(t) ? "" : t);
-    _(protectedImageProxy(s) ? "" : s);
-    (async () => {
-      try {
-        if (!t) {
-          E("");
-          N(true);
-          y(true);
-          return;
-        }
-        thumbnail = await resolveCachedImageUrl(t, {
-          signal: controller.signal,
-        });
-        full = s
-          ? await resolveCachedImageUrl(s, {
-              signal: controller.signal,
-            })
-          : undefined;
-        if (controller.signal.aborted) {
-          releaseProtectedImage(thumbnail);
-          releaseProtectedImage(full);
-          return;
-        }
-        E(thumbnail);
-        _(full);
-      } catch {
-        releaseProtectedImage(thumbnail);
-        releaseProtectedImage(full);
-        if (!controller.signal.aborted) {
-          E("");
-          _(undefined);
-          N(true);
-          y(true);
-        }
+  const container = React.useRef(null);
+  const source = (loadFullImage && fullSrc) || src || fullSrc || "";
+  const visibilityKey = JSON.stringify([src, fullSrc]);
+  const requestKey = JSON.stringify([source, src, fullSrc, loadFullImage]);
+  const [visibleKey, setVisibleKey] = React.useState("");
+  const [image, setImage] = React.useState(null);
+  const shouldLoad = eager || loading === "eager" || visibleKey === visibilityKey;
+
+  React.useEffect(() => {
+    if (eager || loading === "eager") return;
+    if (typeof IntersectionObserver === "undefined") {
+      setVisibleKey(visibilityKey);
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        setVisibleKey(visibilityKey);
+        observer.disconnect();
       }
-    })();
+    }, { rootMargin: "100px", threshold: 0.01 });
+    if (container.current) observer.observe(container.current);
+    return () => observer.disconnect();
+  }, [visibilityKey, eager, loading]);
+
+  React.useEffect(() => {
+    if (!shouldLoad) return;
+    const controller = new AbortController();
+    let ownedImage;
+    setImage({ key: requestKey, url: "", loaded: false, failed: !source });
+    if (source) {
+      (async () => {
+        try {
+          ownedImage = await resolveCachedImageUrl(source, { signal: controller.signal });
+          if (controller.signal.aborted) {
+            releaseProtectedImage(ownedImage);
+            return;
+          }
+          setImage({ key: requestKey, url: ownedImage, loaded: false, failed: !ownedImage });
+        } catch {
+          if (!controller.signal.aborted) {
+            setImage({ key: requestKey, url: "", loaded: false, failed: true });
+          }
+        }
+      })();
+    }
     return () => {
       controller.abort();
-      releaseProtectedImage(thumbnail);
-      releaseProtectedImage(full);
+      releaseProtectedImage(ownedImage);
     };
-  }, [t, s]),
-    React.useEffect(() => {
-      if (f || R || typeof IntersectionObserver > "u") {
-        g(!0);
-        return;
-      }
-      const x = new IntersectionObserver(
-        ([P]) => {
-          P.isIntersecting && (g(!0), x.disconnect());
-        },
-        {
-          rootMargin: "100px",
-          threshold: 0.1,
-        },
-      );
-      return (d.current && x.observe(d.current), () => x.disconnect());
-    }, []),
-    React.useEffect(() => {
-      (y(!1), T(!1), N(!1), i(!1), (f || R) && g(!0));
-    }, [t, s, u, v, f]),
-    React.useEffect(() => {
-      if (!m) return;
-      const x = () => {
-        const $ = w.current;
-        return $ && $.complete ? ($.naturalWidth > 0 ? y(!0) : N(!0), !0) : !1;
-      };
-      if (x()) return;
-      const P = setInterval(() => {
-          x() && clearInterval(P);
-        }, 100),
-        z = setTimeout(() => clearInterval(P), 2e3);
-      return () => {
-        (clearInterval(P), clearTimeout(z));
-      };
-    }, [u, m]),
-    React.useEffect(() => {
-      if (!m || !v) return;
-      const x = () => {
-        const $ = j.current;
-        return $ && $.complete ? ($.naturalWidth > 0 ? T(!0) : i(!0), !0) : !1;
-      };
-      if (x()) return;
-      const P = setInterval(() => {
-          x() && clearInterval(P);
-        }, 100),
-        z = setTimeout(() => clearInterval(P), 2e3);
-      return () => {
-        (clearInterval(P), clearTimeout(z));
-      };
-    }, [v, m]));
-  const U = k || L,
-    C = A && (!v || I),
-    H = !!v && !I;
+  }, [requestKey, source, shouldLoad]);
+
+  const current = image?.key === requestKey ? image : null;
+  const failed = current?.failed;
+  const loaded = current?.loaded;
   return (
-    <div ref={d} className={`relative overflow-hidden ${n}`}>
-      {[
-        !U && !C && (
-          <div
-            className={`absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-700 dark:to-slate-800 animate-pulse ${a}`}
-          />
-        ),
-        C && l && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-700">
-            {l}
-          </div>
-        ),
-        m && !!u && !C && (
-          <jsxRuntime.Fragment>
-            {[
-              <img
-                ref={w}
-                src={u}
-                alt={r}
-                className={`absolute inset-0 w-full h-full ${b} transition-opacity duration-300 card-image ${f || (k && !A) ? (L ? "opacity-0" : "opacity-100") : "opacity-0"}`}
-                onLoad={(x) => {
-                  (y(!0),
-                    p &&
-                      x.currentTarget.naturalWidth &&
-                      x.currentTarget.naturalHeight &&
-                      p({
-                        width: x.currentTarget.naturalWidth,
-                        height: x.currentTarget.naturalHeight,
-                      }));
-                }}
-                onError={() => N(!0)}
-                loading={c}
-                decoding="async"
-                {...(h
-                  ? {
-                      fetchPriority: h,
-                    }
-                  : null)}
-              />,
-              H && (
-                <img
-                  ref={j}
-                  src={v}
-                  alt={r}
-                  className={`absolute inset-0 w-full h-full ${b} transition-opacity duration-300 card-image ${L ? "opacity-100" : "opacity-0"}`}
-                  onLoad={(x) => {
-                    (T(!0),
-                      p &&
-                        x.currentTarget.naturalWidth &&
-                        x.currentTarget.naturalHeight &&
-                        p({
-                          width: x.currentTarget.naturalWidth,
-                          height: x.currentTarget.naturalHeight,
-                        }));
-                  }}
-                  onError={() => i(!0)}
-                  loading={c}
-                  decoding="async"
-                />
-              ),
-            ]}
-          </jsxRuntime.Fragment>
-        ),
-      ]}
+    <div
+      ref={container}
+      className={`relative overflow-hidden ${className}`}
+      aria-busy={shouldLoad && !loaded && !failed}
+      data-image-state={!shouldLoad ? "deferred" : failed ? "error" : loaded ? "ready" : "loading"}
+    >
+      {!loaded && !failed && (
+        <div aria-hidden="true" className={`absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-700 dark:to-slate-800 animate-pulse ${placeholderClassName}`} />
+      )}
+      {failed && fallbackIcon && (
+        <div role="img" aria-label={alt} className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-700">
+          {fallbackIcon}
+        </div>
+      )}
+      {shouldLoad && current?.url && !failed && (
+        <img
+          src={current.url}
+          alt={alt}
+          className={`absolute inset-0 w-full h-full ${imgClassName} transition-opacity duration-300 card-image ${loaded ? "opacity-100" : "opacity-0"}`}
+          loading={eager ? "eager" : loading}
+          decoding="async"
+          {...(fetchPriority ? { fetchPriority } : {})}
+          onLoad={(event) => {
+            setImage((previous) => previous?.key === requestKey ? { ...previous, loaded: true } : previous);
+            const { naturalWidth: width, naturalHeight: height } = event.currentTarget;
+            if (width && height) onImageLoad?.({ width, height });
+          }}
+          onError={() => setImage((previous) => previous?.key === requestKey ? { ...previous, failed: true } : previous)}
+        />
+      )}
     </div>
   );
 };

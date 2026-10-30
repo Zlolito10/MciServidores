@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const workerFiles = ['firebase-messaging-logic.js', 'firebase-messaging-sw.js'];
 
-export async function buildServiceWorker({destination = path.join(root, 'dist')} = {}) {
+export async function buildServiceWorker({destination = path.join(root, 'dist'),criticalAssets = []} = {}) {
   await mkdir(destination, {recursive: true});
   const assets = [];
   async function walk(directory, prefix = '') {
@@ -24,6 +24,11 @@ export async function buildServiceWorker({destination = path.join(root, 'dist')}
   await walk(destination);
   assets.push('/index.html');
   assets.sort();
+  // Install only the anonymous shell and its static dependency graph. Route,
+  // PDF and camera chunks enter the cache when requested, not on every update.
+  const shell = ['/index.html','/registerSW.js','/assets/index-B05fqWAG.css','/mci-logo.png','/mci-logo-pagina.png','/manifest.webmanifest'];
+  for(const asset of criticalAssets)if(!assets.includes(asset))throw new Error('Critical asset outside public manifest');
+  const precache=[...new Set([...shell.filter(asset=>assets.includes(asset)),...criticalAssets])].sort();
 
   let releaseVersion = 'unversioned';
   try {
@@ -35,12 +40,14 @@ export async function buildServiceWorker({destination = path.join(root, 'dist')}
   }
 
   const digest = createHash('sha256');
+  digest.update(JSON.stringify(precache));
   for (const asset of assets) digest.update(asset).update(await readFile(path.join(destination, asset.slice(1))));
   for (const file of workerFiles) digest.update(file).update(await readFile(path.join(root, 'frontend/public', file)));
   const version = releaseVersion + '-reconstructed-' + digest.digest('hex').slice(0, 12);
   for (const file of workerFiles) await copyFile(path.join(root, 'frontend/public', file), path.join(destination, file));
-  await writeFile(path.join(destination, 'service-worker-config.js'), 'self.__MCI_SW_CONFIG__ = ' + JSON.stringify({version, assets}) + ';\n');
-  return {version, assets: assets.length};
+  await writeFile(path.join(destination, 'service-worker-config.js'), 'self.__MCI_SW_CONFIG__ = ' + JSON.stringify({version, assets,precache}) + ';\n');
+  const precacheBytes=(await Promise.all(precache.map(asset=>readFile(path.join(destination,asset.slice(1)))))).reduce((total,bytes)=>total+bytes.length,0);
+  return {version, assets: assets.length,precacheAssets:precache.length,precacheUncompressedBytes:precacheBytes};
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) console.log(await buildServiceWorker());

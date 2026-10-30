@@ -5,6 +5,14 @@ import {
   watchAssignmentView,
   prepareAssignmentView,
 } from "../services/assignment-client.js";
+import {
+  boundedEventQuery,
+  eventDateWindow,
+  eventPage,
+  ecuadorCalendarDate,
+  EVENT_PAGE_SIZE,
+  EVENT_RESULT_LIMIT,
+} from "../services/bounded-event-queries.js";
 import { sendNotification } from "../services/notification-client.js";
 import { jsxRuntime } from "../vendor/jsx-runtime.js";
 import {
@@ -14,6 +22,7 @@ import {
 } from "../vendor/vendor-react-BwINE3B3.js";
 import {
   I as me,
+  K as IeWhere,
   E as Q,
   J as ue,
   w as Ue,
@@ -71,7 +80,6 @@ import {
   V as LayoutGridIcon,
 } from "../vendor/vendor-ui-CnvYSvQL.js";
 import { ManageMinistriesModal } from "../components/ManageMinistriesModal.jsx";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 const RenderComponent2 = ({ isOpen: u, onClose: d, users: D, onSend: c }) => {
   const [f, P] = React.useState("📢 Notificación"),
     [p, k] = React.useState(""),
@@ -2012,8 +2020,14 @@ const Events = () => {
       role: a.role,
     })),
     [h, i] = React.useState(""),
-    [N, r] = React.useState(new Date().getFullYear().toString()),
-    [w, A] = React.useState("all"),
+    [N, r] = React.useState(() => ecuadorCalendarDate().year),
+    [w, A] = React.useState(() =>
+      String(Number(ecuadorCalendarDate().month) - 1),
+    ),
+    [eventLimit, setEventLimit] = React.useState(EVENT_PAGE_SIZE),
+    [hasMoreEvents, setHasMoreEvents] = React.useState(false),
+    [eventError, setEventError] = React.useState(""),
+    [advancedFilters, setAdvancedFilters] = React.useState(false),
     [L, He] = React.useState("all"),
     [ie, fe] = React.useState("all"),
     _e =
@@ -2075,27 +2089,39 @@ const Events = () => {
   }, [assignmentPrivacyKey(d)]);
   (React.useEffect(() => {
     o(!0);
-    const a = me(Q(firestoreDb, "events"), ue("date", "desc"), Ze(25)),
-      g = we(
-        a,
-        (y) => {
-          const B = y.docs.map((q) => ({
-            id: q.id,
-            ...q.data(),
-          }));
-          (T(B), o(!1));
-        },
-        (y) => {
-          (console.error("Error listening to events:", y), o(!1));
-        },
-      );
-    return () => g();
-  }, []),
+    setEventError("");
+    const source = boundedEventQuery(
+      { query: me, where: IeWhere, orderBy: ue, limit: Ze },
+      Q(firestoreDb, "events"),
+      eventDateWindow(N, w, { zeroBasedMonth: true }),
+      eventLimit,
+    );
+    return we(
+      source,
+      (snapshot) => {
+        const page = eventPage(snapshot, eventLimit);
+        T(page.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        setHasMoreEvents(page.hasMore);
+        o(!1);
+      },
+      (error) => {
+        console.error("Error listening to events:", error);
+        T([]);
+        setHasMoreEvents(false);
+        setEventError(
+          "No se pudieron cargar los eventos. Comprueba la conexión y vuelve a intentar.",
+        );
+        o(!1);
+      },
+    );
+  }, [N, w, eventLimit]),
     React.useEffect(() => {
       if (H.length === 0) {
         x([]);
         return;
       }
+      const visibleIds = new Set(H.slice(0, 10).map((event) => event.id));
+      x((rows) => rows.filter((row) => visibleIds.has(row.eventId)));
       const a = [];
       return (
         H.map((y) => y.id)
@@ -2106,12 +2132,10 @@ const Events = () => {
                 B,
                 d,
                 (rows) => {
-                  const assignments = prepareAssignmentView(rows, d, P, p).map(
-                    (row) => ({
-                      ...row,
-                      eventId: y,
-                    }),
-                  );
+                  const assignments = rows.map((row) => ({
+                    ...row,
+                    eventId: y,
+                  }));
                   x((previous) => [
                     ...previous.filter((row) => row.eventId !== y),
                     ...assignments,
@@ -2129,20 +2153,12 @@ const Events = () => {
           a.forEach((y) => y());
         }
       );
-    }, [H, assignmentPrivacyKey(d), P, p]));
-  const [ve, qe] = React.useState(!1);
-  React.useEffect(() => {
-    if (H.length > 0 && !ve) {
-      const a = H[0];
-      if (a && a.date) {
-        const g = new Date(a.date + "T12:00:00");
-        (r(g.getFullYear().toString()), A(g.getMonth().toString()));
-        const y = oe(g).toString();
-        fe(y);
-      }
-      qe(!0);
-    }
-  }, [H, ve, assignmentPrivacyKey(d), P, p]);
+    }, [
+      H.map((event) => event.id)
+        .slice(0, 10)
+        .join("|"),
+      assignmentPrivacyKey(d),
+    ]));
   const ye = () => {},
     je = H.filter((a) => {
       const g = (a.title || "").toLowerCase().includes(h.toLowerCase()),
@@ -2150,20 +2166,32 @@ const Events = () => {
         B = N === "all" || y.getFullYear().toString() === N,
         q = w === "all" || y.getMonth().toString() === w,
         K = oe(y).toString();
-      return g && B && q && (ie === "all" || K === ie);
+      return (
+        g &&
+        B &&
+        q &&
+        (L === "all" || (a.type || "service") === L) &&
+        (ie === "all" || K === ie)
+      );
     }),
     Je = [...je].sort((a, g) => {
       const y = new Date(a.date + "T" + (a.time || "00:00")).getTime();
       return new Date(g.date + "T" + (g.time || "00:00")).getTime() - y;
     }),
     ne = {
-      years: Array.from(new Set(H.map((a) => a.date?.split("-")[0])))
-        .filter(Boolean)
+      years: Array.from(
+        new Set([
+          ...Array.from({ length: 31 }, (_, offset) =>
+            String(Number(ecuadorCalendarDate().year) + 5 - offset),
+          ),
+          ...H.map((event) => event.date?.split("-")[0]),
+          N,
+        ]),
+      )
+        .filter((year) => year && year !== "all")
         .sort()
         .reverse(),
-      months: Array.from(
-        new Set(H.map((a) => new Date(a.date + "T12:00:00").getMonth())),
-      ).sort((a, g) => a - g),
+      months: Array.from({ length: 12 }, (_, month) => month),
       weeks: Array.from(
         new Set(
           H.map((a) => {
@@ -2203,7 +2231,12 @@ const Events = () => {
                       {"Eventos"}
                     </h1>,
                     <p className="text-gray-500 dark:text-slate-400 text-sm">
-                      {[je.length, " eventos programados"]}
+                      {[
+                        je.length,
+                        je.length === 1
+                          ? " evento programado"
+                          : " eventos programados",
+                      ]}
                     </p>,
                   ]}
                 </div>,
@@ -2245,7 +2278,8 @@ const Events = () => {
                     />,
                     <input
                       type="text"
-                      placeholder="Buscar eventos..."
+                      aria-label="Buscar eventos cargados"
+                      placeholder="Buscar eventos cargados..."
                       value={h}
                       onChange={(a) => i(a.target.value)}
                       className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all outline-none"
@@ -2258,7 +2292,7 @@ const Events = () => {
                       onClick={() => {
                         v(!0);
                       }}
-                      className="px-4 py-3 bg-fuchsia-500 hover:bg-fuchsia-600 text-white rounded-xl font-medium flex items-center gap-2 transition-colors shadow-sm shadow-fuchsia-500/20"
+                      className="px-4 py-3 bg-white hover:bg-purple-50 text-purple-700 border border-purple-200 rounded-xl font-medium flex items-center gap-2 transition-colors"
                     >
                       {[<UsersIcon size={18} />, "Notificar usuarios"]}
                     </button>
@@ -2266,7 +2300,61 @@ const Events = () => {
                 ),
               ]}
             </div>,
-            <div className="flex flex-wrap items-center gap-3 p-2 pt-0 border-t border-gray-50 dark:border-slate-700/50 mt-2">
+            <p className="px-2 text-sm text-gray-500" role="status">
+              {N === "all" ? "Todos los años" : N}
+              {w !== "all" ? ` · ${Ye[Number(w)]}` : " · Todos los meses"}
+              {ie !== "all" ? ` · Semana ${ie}` : ""}
+              {L !== "all"
+                ? ` · ${L === "service" ? "Servicios" : L === "meeting" ? "Reuniones" : "Especiales"}`
+                : ""}
+            </p>,
+            <div className="flex flex-wrap gap-2 px-2 pb-2">
+              <button
+                type="button"
+                className="px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium"
+                onClick={() => {
+                  const today = ecuadorCalendarDate();
+                  setEventLimit(EVENT_PAGE_SIZE);
+                  r(today.year);
+                  A(String(Number(today.month) - 1));
+                  fe(
+                    oe(
+                      new Date(
+                        `${today.year}-${today.month}-${today.day}T12:00:00`,
+                      ),
+                    ).toString(),
+                  );
+                }}
+              >
+                Esta semana
+              </button>
+              <button
+                type="button"
+                className="px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium"
+                onClick={() => {
+                  const today = ecuadorCalendarDate();
+                  setEventLimit(EVENT_PAGE_SIZE);
+                  r(today.year);
+                  A(String(Number(today.month) - 1));
+                  fe("all");
+                }}
+              >
+                Este mes
+              </button>
+              <button
+                type="button"
+                className="sm:hidden px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium"
+                aria-expanded={advancedFilters}
+                aria-controls="event-date-filters"
+                onClick={() => setAdvancedFilters((value) => !value)}
+              >
+                Filtros
+              </button>
+            </div>,
+            <div
+              id="event-date-filters"
+              className={`${advancedFilters ? "flex" : "hidden"} sm:flex flex-wrap items-center gap-3 p-2 pt-0 border-t border-gray-50 dark:border-slate-700/50 mt-2`}
+            >
               {[
                 <div className="w-48">
                   <SelectPicker
@@ -2311,7 +2399,12 @@ const Events = () => {
                 <div className="w-32">
                   <SelectPicker
                     value={N}
-                    onChange={r}
+                    onChange={(year) => {
+                      r(year);
+                      fe("all");
+                      setEventLimit(EVENT_PAGE_SIZE);
+                      if (year === "all") A("all");
+                    }}
                     options={[
                       {
                         value: "all",
@@ -2334,7 +2427,13 @@ const Events = () => {
                 <div className="w-40">
                   <SelectPicker
                     value={w}
-                    onChange={A}
+                    onChange={(month) => {
+                      A(month);
+                      fe("all");
+                      setEventLimit(EVENT_PAGE_SIZE);
+                      if (N === "all" && month !== "all")
+                        r(ecuadorCalendarDate().year);
+                    }}
                     options={[
                       {
                         value: "all",
@@ -2394,7 +2493,7 @@ const Events = () => {
         ) : (
           <EventsGrid
             events={Je}
-            assignments={U}
+            assignments={prepareAssignmentView(U, d, P, p)}
             navigate={u}
             variant="detailed"
             onEdit={
@@ -2415,6 +2514,43 @@ const Events = () => {
             }
           />
         ),
+        eventError && (
+          <p
+            role="alert"
+            className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700"
+          >
+            {eventError}
+          </p>
+        ),
+        !M && !eventError && Je.length === 0 && (
+          <p
+            role="status"
+            className="rounded-xl bg-white border border-gray-200 p-6 text-gray-600"
+          >
+            No hay eventos que coincidan en este rango. Cambia los filtros o
+            carga más resultados.
+          </p>
+        ),
+        !M &&
+          hasMoreEvents &&
+          (eventLimit < EVENT_RESULT_LIMIT ? (
+            <button
+              type="button"
+              onClick={() =>
+                setEventLimit((limit) =>
+                  Math.min(EVENT_RESULT_LIMIT, limit + EVENT_PAGE_SIZE),
+                )
+              }
+              className="px-5 py-3 border border-purple-200 rounded-xl text-purple-700 font-medium"
+            >
+              Cargar más eventos
+            </button>
+          ) : (
+            <p role="status" className="text-sm text-gray-500">
+              Se muestran hasta {EVENT_RESULT_LIMIT} eventos. Selecciona un mes
+              para acotar la búsqueda.
+            </p>
+          )),
         <RenderComponent2
           isOpen={b}
           onClose={() => v(!1)}

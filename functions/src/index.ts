@@ -39,8 +39,10 @@ const Busboy = require("busboy");
 const path = require("path");
 const os = require("os");
 const fs = require("fs/promises");
-const sharp = require("sharp");
-const { google } = require("googleapis");
+// Image processing and the Drive SDK are not needed by login, rules guards or
+// ordinary reads. Load them on the first actual image/archive operation.
+const sharp = (...args) => require("sharp")(...args);
+const archiveGoogle = () => isLocalDemoRuntime() ? null : require("googleapis").google;
 const { isLocalDemoRuntime, passwordSignInUrl, normalizeLoginEmail, createRuntimeMessaging, createRuntimeDrive } = require("./runtime-services");
 const { normalizeFcmData, getEcuadorDateString, parseLocalEcuadorDateTimeToUtcMs, shouldRunInWindow } = require("./notification-utils");
 const { archiveOldEventFiles } = require("./cleanup");
@@ -50,6 +52,9 @@ const { releaseRequestGuard, releaseReadRequestGuard, requireMasterProfile, canW
 const { assignmentActorContext, assignmentForActor, syncAssignmentRoster, servePrivateAttendance } = require("./assignment-roster");
 const { readHistoricalAssignments } = require("./historical-assignments");
 const { archiveFunctionRuntimeOptions } = require("./backend-release");
+const { userDirectoryEntry, sanitizeUserDirectory, syncUserDirectory, registerDeviceToken } = require("./user-directory");
+const { createRequestCostGuard, notificationQuotaGuard, allowedRequestOrigin } = require("./request-cost-guard");
+const { userServiceHistory } = require("./service-history");
 const runtimeMessaging = () => createRuntimeMessaging(admin);
 const stream = require("stream");
 
@@ -84,6 +89,14 @@ const getRuntimeServiceAccountEmail = async () => {
 };
 const app = express();
 app.set("trust proxy", 1);
+app.use((req, res, next) => {
+  if (!allowedRequestOrigin(req.headers.origin, isLocalDemoRuntime(), process.env.MCI_ALLOWED_ORIGINS || "")) {
+    res.setHeader("Cache-Control", "private, no-store");
+    res.setHeader("Vary", "Origin");
+    return res.status(403).json({ error: "ORIGIN_NOT_ALLOWED" });
+  }
+  return next();
+});
 app.use(cors({ origin: true, credentials: true }));
 // Headers defensivos para reducir filtraciones accidentales (cache/referrer/sniffing).
 app.use((_req, res, next) => {
@@ -93,6 +106,7 @@ app.use((_req, res, next) => {
 });
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: false }));
+app.use(createRequestCostGuard());
 const isFirestorePermissionDenied = (err) => {
   var _a, _b;
   const code = String(
@@ -728,6 +742,7 @@ const passwordLoginHandler = async (req, res) => {
       ? req.body.password
       : "";
   if (!password) return res.status(400).json({ error: "MISSING_PASSWORD" });
+  if (password.length > 4096 || username.length > 128 || emailRaw.length > 320) return res.status(400).json({ error: "INVALID_CREDENTIALS" });
   const email = normalizeLoginEmail(emailRaw, username);
   if (!email || !email.includes("@")) {
     return res.status(400).json({ error: "MISSING_EMAIL" });
@@ -3066,15 +3081,15 @@ const getCachedOrFresh = async (collectionName) => {
     if (cacheSnap.exists) {
       const data = cacheSnap.data();
       if (Array.isArray(data.items)) {
-        return data.items;
+        return collectionName === "user_directory" ? sanitizeUserDirectory(data.items) : data.items;
       }
     }
   } catch (_a) {
     // ignore fetch error
   }
   // Fallback: Read full collection + Rebuild Cache
-  const snap = await db.collection(collectionName).get();
-  const items = snap.docs.map((d) => Object.assign({ id: d.id }, d.data()));
+  const snap = await db.collection(collectionName === "user_directory" ? "users" : collectionName).get();
+  const items = snap.docs.map((d) => collectionName === "user_directory" ? userDirectoryEntry(d.id, d.data()) : Object.assign({ id: d.id }, d.data()));
   // Fire-and-forget cache rebuild
   // We do it manually here to ensure next read hits cache even if triggers lagged
   try {
@@ -3161,7 +3176,8 @@ app.delete(
 app.get("/api/users", requireSession, async (_req, res) => {
   res.setHeader("Cache-Control", "private, no-store");
   res.setHeader("Vary", "Cookie, Authorization");
-  const items = await getCachedOrFresh("users");
+  const privileged = res.locals.role === "admin" || res.locals.role === "master_admin";
+  const items = await getCachedOrFresh(privileged ? "users" : "user_directory");
   return res.json({ ok: true, items });
 });
 // Users (self-service profile update)
@@ -3391,16 +3407,11 @@ app.post(
     if (!token) return res.status(400).json({ error: "MISSING_PUSH_KEY" });
     if (token.length > 4096)
       return res.status(400).json({ error: "INVALID_PUSH_KEY" });
-    await db
-      .collection("userTokens")
-      .doc(uid)
-      .set(
-        {
-          tokens: FieldValue.arrayUnion(token),
-          updatedAt: FieldValue.serverTimestamp(),
-        },
-        { merge: true },
-      );
+    try { await registerDeviceToken(db, uid, token, FieldValue.serverTimestamp()); }
+    catch (error) {
+      if (error?.status === 409) return res.status(409).json({ error: "DEVICE_LIMIT_REACHED" });
+      return res.status(503).json({ error: "TOKEN_REGISTRATION_UNAVAILABLE" });
+    }
     return res.json({ ok: true });
   },
 );
@@ -3424,16 +3435,11 @@ app.post(
     if (!pushKey) return res.status(400).json({ error: "MISSING_PUSH_KEY" });
     if (pushKey.length > 4096)
       return res.status(400).json({ error: "INVALID_PUSH_KEY" });
-    await db
-      .collection("userTokens")
-      .doc(uid)
-      .set(
-        {
-          tokens: FieldValue.arrayUnion(pushKey),
-          updatedAt: FieldValue.serverTimestamp(),
-        },
-        { merge: true },
-      );
+    try { await registerDeviceToken(db, uid, pushKey, FieldValue.serverTimestamp()); }
+    catch (error) {
+      if (error?.status === 409) return res.status(409).json({ error: "DEVICE_LIMIT_REACHED" });
+      return res.status(503).json({ error: "TOKEN_REGISTRATION_UNAVAILABLE" });
+    }
     // Suscribir al topic user_{uid} para recibir actualizaciones de datos instantáneas (BFF)
     // y a all_users para recibir notificaciones globales (comentarios, anuncios, etc.)
     try {
@@ -3577,72 +3583,16 @@ app.delete(
     return res.json({ ok: true });
   },
 );
-// Service History (authenticated user)
-// Devuelve las asignaciones del usuario autenticado con datos del evento.
-// OPTIMIZADO: Usa Collection Group Index (userId) para lectura directa y eficiente.
-// Costo: 1 lectura (query) + N lecturas (documentos encontrados).
-app.get("/api/service-history", requireSession, async (_req, res) => {
-  // Cache de 15 minutos
-  res.setHeader("Cache-Control", "private, max-age=900");
-  res.setHeader("Vary", "Cookie");
-
+// Service History: bounded event range, own assignments only, including legacy records.
+app.get("/api/service-history", requireSession, async (req, res) => {
+  res.setHeader("Cache-Control", "private, no-store");
+  res.setHeader("Vary", "Cookie, Authorization");
   const uid = String(res.locals.uid || "");
   if (!uid) return res.status(401).json({ error: "UNAUTHENTICATED" });
-
-  try {
-    // 1. Obtener todas las asignaciones del usuario (histórico completo y futuro)
-    // Requiere índice: collectionGroup "assignments" (userId ASC/DESC)
-    const assignmentsSnap = await db
-      .collectionGroup("assignments")
-      .where("userId", "==", uid)
-      .get();
-
-    if (assignmentsSnap.empty) {
-      return res.json({ ok: true, assignments: [], events: [] });
-    }
-
-    // 2. Extraer IDs de eventos únicos
-    // Nota: eventId suele estar en el doc, y también es el parent.id
-    const assignments = assignmentsSnap.docs.map((d) => {
-      const data = d.data();
-      // Aseguramos que tenga eventId (normalmente data.eventId o tomamos parent)
-      const eventId = data.eventId || d.ref.parent.parent.id;
-      return Object.assign({ id: d.id, eventId }, data);
-    });
-
-    const eventIds = Array.from(new Set(assignments.map((a) => a.eventId)));
-
-    // 3. Obtener eventos en paralelo (usando getAll si es posible, o Promise.all)
-    // Firestore Admin SDK tiene db.getAll(...refs) que es muy eficiente.
-    const eventRefs = eventIds.map((eid) => db.collection("events").doc(eid));
-    const eventsSnaps = await db.getAll(...eventRefs);
-
-    // 4. Mapear eventos encontrados (filtrar nulls si se borró alguno)
-    const events = eventsSnaps
-      .filter((snap) => snap.exists)
-      .map((snap) => {
-        const data = snap.data();
-        return {
-          id: snap.id,
-          title: data.title || "",
-          date: data.date || "",
-          time: data.time || "",
-          serviceTime: data.serviceTime,
-          endTime: data.endTime,
-          location: data.location || "",
-          status: data.status,
-          // NO incluir heavy data
-        };
-      })
-      .sort((a, b) => b.date.localeCompare(a.date)); // Ordenar descendente por fecha
-
-    return res.json({ ok: true, assignments, events });
-  } catch (err) {
-    console.error("[service-history] failed", {
-      uid,
-      message: err?.message,
-    });
-    return res.status(500).json({ error: "SERVER_ERROR" });
+  try { return res.json(await userServiceHistory(db, uid, req.query)); }
+  catch (error) {
+    if (error?.status === 400) return res.status(400).json({ error: error.message });
+    return res.status(500).json({ error: "SERVICE_HISTORY_FAILED" });
   }
 });
 const isIsoDate = (v) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
@@ -3828,7 +3778,9 @@ app.delete(
   },
 );
 const db = admin.firestore();
-const requireNotificationActor = releaseRequestGuard({ auth: admin.auth(), db }, "notification");
+const notificationAuthorization = releaseRequestGuard({ auth: admin.auth(), db }, "notification");
+const notificationQuota = notificationQuotaGuard(db);
+const requireNotificationActor = (req, res, next) => notificationAuthorization(req, res, () => notificationQuota(req, res, next));
 const requireMaintenanceActor = releaseRequestGuard({ auth: admin.auth(), db }, "maintenance");
 const requirePrivateReadActor = releaseReadRequestGuard({ auth: admin.auth(), db });
 const messaging = runtimeMessaging();
@@ -6075,7 +6027,7 @@ const notifyWeekHandler = async (req, res) => {
 // Registrar ambas rutas para notify/week
 app.post("/notify/week", requireNotificationActor, notifyWeekHandler);
 app.post("/api/notify/week", requireNotificationActor, notifyWeekHandler);
-exports.api = functions.https.onRequest(app);
+exports.api = functions.runWith({ maxInstances: 10 }).https.onRequest(app);
 // ELIMINADO: onVolunteerAssigned (legacy) - reemplazado por onAssignmentWritten moderno
 // ELIMINADO: onSongAdded (legacy) - reemplazado por onRepertoireWritten moderno
 // ELIMINADO: onMaterialAdded (legacy) - reemplazado por onMaterialWritten moderno
@@ -6654,6 +6606,10 @@ exports.onUserWritten = functions.firestore
     // Evitar bucle infinito: /api/me actualiza lastSeenAt
     const before = change.before.data() || {};
     const after = change.after.data() || {};
+    const directoryFields = ["name", "username", "photoURL", "photoThumbURL", "role", "areas", "ministryRoles", "isAssigned"];
+    if (!change.before.exists || !change.after.exists || directoryFields.some(field => JSON.stringify(before[field]) !== JSON.stringify(after[field]))) {
+      await syncUserDirectory({ db, userId: context.params.userId, timestamp: FieldValue.serverTimestamp() });
+    }
     const isIgnoredParams = (key) =>
       key.startsWith("lastSeen") || key === "updatedAt";
     if (!change.before.exists || !change.after.exists) {
@@ -7302,7 +7258,7 @@ exports.fixStorageCors = functions.https.onRequest(async (req, res) => {
 // Renamed to serverApi to fix deployment discovery issue
 // IMPORTANT: Updated firebase.json and vite.config.ts to match 'serverApi'
 exports.serverApi = functions
-  .runWith({ timeoutSeconds: 540, memory: "1GB" })
+  .runWith({ timeoutSeconds: 540, memory: "1GB", maxInstances: 10 })
   .https.onRequest(app);
 
 exports.onChatMessageWritten = functions.firestore
@@ -7449,7 +7405,7 @@ exports.cleanupOldFiles = functions.runWith(archiveFunctionRuntimeOptions()).pub
   .schedule("every sunday 03:00")
   .timeZone("America/Mexico_City")
   .onRun(async () => {
-    const drive = createRuntimeDrive(admin, google);
+    const drive = createRuntimeDrive(admin, archiveGoogle());
     await archiveOldEventFiles({ bucket: admin.storage().bucket(), drive, folderId: archiveFolderId(DRIVE_ARCHIVE_FOLDER_ID) });
     return null;
   });

@@ -105,7 +105,7 @@ const GlobalDataProvider = ({ children: t }) => {
               }));
             },
             [m, g, d] = await Promise.all([
-              I ? i("users") : Promise.resolve([]),
+              I ? i(N ? "users" : "user_directory") : Promise.resolve([]),
               i("roles"),
               i("service_areas"),
             ]),

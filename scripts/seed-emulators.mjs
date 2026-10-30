@@ -18,11 +18,18 @@ export async function seedEmulators(){
  process.env.FIRESTORE_EMULATOR_HOST='127.0.0.1:8080';
  const app=admin.apps.find(a=>a.name==='recovery-fixtures')||admin.initializeApp({projectId:project},'recovery-fixtures');
  const db=app.firestore();
+ const {syncUserDirectory,userDirectoryEntry}=require('./lib/user-directory.js');
  for(const fixture of fixtures){
   const email=fixture.username+'@church.app';
   try{await app.auth().getUser(fixture.uid);}catch(error){if(error.code!=='auth/user-not-found')throw error;await app.auth().createUser({uid:fixture.uid,email,password:fixturePassword});}
   await db.collection('users').doc(fixture.uid).set({...fixture,email,preferences:{notifications:false},createdAt:Timestamp.now()});
+  await syncUserDirectory({db,userId:fixture.uid,timestamp:Timestamp.now()});
  }
+ // Seed complete demo caches deterministically; a source write alone does not
+ // prove that its asynchronous trigger has reached a shared aggregate cache.
+ const profiles=await db.collection('users').get();
+ await db.doc('app_cache/users').set({items:profiles.docs.map(doc=>({id:doc.id,...doc.data()})),updatedAt:Timestamp.now()});
+ await db.doc('app_cache/user_directory').set({items:profiles.docs.map(doc=>userDirectoryEntry(doc.id,doc.data())),schemaVersion:1,updatedAt:Timestamp.now()});
  const perms=['view_dashboard','manage_users','manage_roles','manage_events','view_events','manage_services','view_reports'];
  await db.collection('roles').doc('master_admin').set({name:'Administrador',permissions:perms});
  await db.collection('roles').doc('user').set({name:'Servidor',permissions:['view_dashboard','view_events']});

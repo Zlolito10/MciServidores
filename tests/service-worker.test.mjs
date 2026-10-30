@@ -7,10 +7,11 @@ import {buildServiceWorker} from '../scripts/build-service-worker.mjs';
 import vm from 'node:vm';
 const logic=await readFile(new URL('../frontend/public/firebase-messaging-logic.js',import.meta.url),'utf8');
 const worker=await readFile(new URL('../frontend/public/firebase-messaging-sw.js',import.meta.url),'utf8');
-function setup({windows=[],fetchImpl,assets=['/index.html','/app/entry.js']}={}) {
+function setup({windows=[],fetchImpl,assets=['/index.html','/app/entry.js'],precache}={}) {
  const handlers={},shown=[],opened=[],messages=[],cached=[],deleted=[],requests=[];
- const self={location:{origin:'https://mci.test'},__MCI_SW_CONFIG__:{version:'test-v1',assets},addEventListener:(event,handler)=>{handlers[event]=handler;},skipWaiting:async()=>{},registration:{showNotification:async(title,options)=>shown.push({title,options})},clients:{matchAll:async()=>windows,openWindow:async url=>opened.push(url),claim:async()=>{}}};
- const caches={open:async()=>({put:async asset=>cached.push(asset),match:async url=>url==='/index.html'?new Response('offline app'):undefined}),keys:async()=>['other-site-cache','mci-recovery-static-old','mci-recovery-static-test-v1'],delete:async key=>deleted.push(key)};
+ const stored=new Map();
+ const self={location:{origin:'https://mci.test'},__MCI_SW_CONFIG__:{version:'test-v1',assets,...(precache?{precache}:{})},addEventListener:(event,handler)=>{handlers[event]=handler;},skipWaiting:async()=>{},registration:{showNotification:async(title,options)=>shown.push({title,options})},clients:{matchAll:async()=>windows,openWindow:async url=>opened.push(url),claim:async()=>{}}};
+ const caches={open:async()=>({put:async(asset,response)=>{cached.push(asset);stored.set(asset,response);},match:async url=>stored.get(url)?.clone()||(url==='/index.html'?new Response('offline app'):undefined)}),keys:async()=>['other-site-cache','mci-recovery-static-old','mci-recovery-static-test-v1'],delete:async key=>deleted.push(key)};
  const context=vm.createContext({self,URL,Map,Date,Request,Response,caches,fetch:async request=>{requests.push(request);if(fetchImpl)return fetchImpl(request);throw new Error('offline');},importScripts:()=>{}});
  vm.runInContext(logic,context);vm.runInContext(worker,context);
  async function fire(name,event={}) {let pending;handlers[name]({...event,waitUntil:p=>pending=p});await pending;}
@@ -24,6 +25,29 @@ test('notification clicks focus and navigate an existing application window',asy
 test('a click opens a new safe window when no app window exists',async()=>{const x=setup();await x.self.MciMessaging.clicked({notification:{close:()=>{},data:{url:'https://evil.test'}}});assert.deepEqual(x.opened,['https://mci.test/dashboard']);});
 test('malformed push data does not crash the worker',async()=>{const x=setup();await x.fire('push',{data:{json:()=>{throw Error('bad');}}});assert.equal(x.shown.length,0);});
 test('install precaches anonymous static assets without cookies or redirects',async()=>{const x=setup({fetchImpl:request=>new Response('public asset',{headers:{'Content-Type':request.url.endsWith('.html')?'text/html':'text/javascript'}})});await x.fire('install');assert.deepEqual(x.cached,['/index.html','/app/entry.js']);for(const r of x.requests){assert.equal(r.credentials,'omit');assert.equal(r.redirect,'error');assert.equal(r.cache,'reload');}});
+
+test('install leaves camera and report chunks deferred until their section is requested',async()=>{
+ const x=setup({assets:['/index.html','/app/entry.js','/app/camera.js','/app/pdf.js'],precache:['/index.html','/app/entry.js'],fetchImpl:r=>new Response('public',{headers:{'Content-Type':r.url.endsWith('.html')?'text/html':'text/javascript'}})});
+ await x.fire('install');assert.deepEqual(x.cached,['/index.html','/app/entry.js']);assert.equal(x.requests.length,2);
+});
+
+test('a visited lazy chunk is cached anonymously and the next visit uses its cached bytes',async()=>{
+ const x=setup({assets:['/app/camera.js'],precache:[],fetchImpl:()=>new Response('export const camera=true',{headers:{'Content-Type':'text/javascript','Cache-Control':'public,max-age=31536000'}})});
+ const request=()=>{let pending;x.handlers.fetch({request:{method:'GET',url:'https://mci.test/app/camera.js',mode:'cors'},respondWith:p=>pending=p});return pending;};
+ assert.equal(await(await request()).text(),'export const camera=true');assert.equal(await(await request()).text(),'export const camera=true');assert.equal(x.requests.length,1);assert.equal(x.requests[0].credentials,'omit');assert.deepEqual(x.cached,['/app/camera.js']);
+});
+
+test('on-demand caching refuses private responses, session cookies, failures and query variants',async()=>{
+ for(const headers of [{'Cache-Control':'private'},{'Cache-Control':'no-store'},{'Set-Cookie':'session=secret'},{'Content-Type':'text/html'}]){
+  const x=setup({assets:['/app/page.js'],fetchImpl:()=>new Response('response',{headers})});let pending;x.handlers.fetch({request:{method:'GET',url:'https://mci.test/app/page.js',mode:'cors'},respondWith:p=>pending=p});await pending;assert.deepEqual(x.cached,[]);
+ }
+ const x=setup({assets:['/app/page.js']});let intercepted=false;x.handlers.fetch({request:{method:'GET',url:'https://mci.test/app/page.js?private=1',mode:'cors'},respondWith:()=>intercepted=true});assert.equal(intercepted,false);
+});
+
+test('install accepts only the anonymous HTML shell with no-store, never scripts marked no-store',async()=>{
+ const shell=setup({assets:['/index.html'],fetchImpl:()=>new Response('shell',{headers:{'Content-Type':'text/html','Cache-Control':'no-store'}})});await shell.fire('install');assert.deepEqual(shell.cached,['/index.html']);
+ const script=setup({assets:['/app/page.js'],fetchImpl:()=>new Response('script',{headers:{'Content-Type':'text/javascript','Cache-Control':'no-store'}})});await assert.rejects(script.fire('install'));assert.deepEqual(script.cached,[]);
+});
 test('activation removes only obsolete MCI caches',async()=>{const x=setup();await x.fire('activate');assert.deepEqual(x.deleted,['mci-recovery-static-old']);});
 test('worker exposes its build version using the existing message port protocol',async()=>{const x=setup();let version;await x.fire('message',{data:{type:'GET_VERSION'},ports:[{postMessage:x=>version=x.version}]});assert.equal(version,'test-v1');});
 test('API, comments, version checks, writes and other origins bypass caches',()=>{const x=setup();for(const [url,method] of [['/api/me','GET'],['/%61pi/me','GET'],['/comments/react','GET'],['/app-version.json','GET'],['/app/entry.js','POST'],['https://firestore.googleapis.com/a','GET']]){let intercepted=false;x.handlers.fetch({request:{method,url:new URL(url,'https://mci.test').href,mode:'cors'},respondWith:()=>intercepted=true});assert.equal(intercepted,false);}});

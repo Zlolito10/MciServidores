@@ -119,10 +119,8 @@ service cloud.firestore {
 
     // Users Collection
     match /users/{userId} {
-      // NOTE: keep reads for authenticated users for current UI flows.
-      // If you want to hide emails/profiles from non-admins, we can tighten this
-      // after confirming which pages rely on listing users.
-      allow read: if isAuthenticated();
+      // Member names/photos live in user_directory. Full profiles stay private.
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
 
       // Prevent privilege escalation: users can only create their own profile.
       // Only master_admin can create profiles for other users.
@@ -151,9 +149,52 @@ service cloud.firestore {
       allow delete: if isMasterAdmin();
     }
 
-    // User Tokens Collection (for FCM)
+    match /user_directory/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Projection is maintained only by the backend.
+    }
+
+    function validFcmToken(value) {
+      return value is string && value.size() > 0 && value.size() <= 4096;
+    }
+    function validTokenList(tokens) {
+      return tokens is list && tokens.size() <= 10 && tokens.toSet().size() == tokens.size()
+        && (tokens.size() < 1 || validFcmToken(tokens[0]))
+        && (tokens.size() < 2 || validFcmToken(tokens[1]))
+        && (tokens.size() < 3 || validFcmToken(tokens[2]))
+        && (tokens.size() < 4 || validFcmToken(tokens[3]))
+        && (tokens.size() < 5 || validFcmToken(tokens[4]))
+        && (tokens.size() < 6 || validFcmToken(tokens[5]))
+        && (tokens.size() < 7 || validFcmToken(tokens[6]))
+        && (tokens.size() < 8 || validFcmToken(tokens[7]))
+        && (tokens.size() < 9 || validFcmToken(tokens[8]))
+        && (tokens.size() < 10 || validFcmToken(tokens[9]));
+    }
+    function validTokenDocument(userId) {
+      let data = request.resource.data;
+      return validTokenList(data.get('tokens', []))
+        && (!('userId' in data) || data.userId == userId)
+        && (!('updatedAt' in data) || data.updatedAt is timestamp
+          || (data.updatedAt is string && data.updatedAt.size() <= 40));
+    }
+    function shrinkingLegacyTokens() {
+      // Existing large lists can be cleaned up without granting new devices.
+      let before = resource.data.get('tokens', []);
+      let after = request.resource.data.get('tokens', []);
+      return before is list && after is list && before.size() > 10
+        && after.size() < before.size()
+        && after.toSet().difference(before.toSet()).size() == 0
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['tokens', 'updatedAt']);
+    }
+    // User Tokens Collection (for FCM): bounded devices and schema.
     match /userTokens/{userId} {
-      allow read, write: if isAuthenticated() && request.auth.uid == userId;
+      allow read, delete: if isAuthenticated() && request.auth.uid == userId;
+      allow create: if isAuthenticated() && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['userId', 'tokens', 'updatedAt'])
+        && validTokenDocument(userId);
+      allow update: if isAuthenticated() && request.auth.uid == userId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['userId', 'tokens', 'updatedAt'])
+        && (validTokenDocument(userId) || shrinkingLegacyTokens());
     }
 
     // U de la Vida - Cursos
@@ -296,7 +337,10 @@ service cloud.firestore {
 
     // App Cache (Optimization for frontend)
     match /app_cache/{docId} {
-      allow read: if isAuthenticated();
+      allow read: if isAuthenticated() && (
+        docId in ['user_directory', 'roles', 'service_areas', 'events_meta']
+        || (docId == 'users' && isAdmin())
+      );
       allow write: if false; // Only backend updates cache
     }
 
@@ -337,7 +381,7 @@ service cloud.firestore {
 
     // App Telemetry (para diagnosticar picos de descargas)
     match /app_telemetry/{docId} {
-      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow create: if false; // Ingestion is disabled; do not allow unbounded direct writes.
       allow read: if isMasterAdmin();
       allow update, delete: if isMasterAdmin();
     }

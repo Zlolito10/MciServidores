@@ -29,7 +29,6 @@ import {
   T as TriangleAlertIcon,
   L as LoaderCircleIcon,
 } from "../vendor/vendor-ui-CnvYSvQL.js";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 const Volunteers = () => {
   const y = useAppDialog(),
     { users: T, serviceAreas: S, roles: L } = useGlobalData(),

@@ -1,12 +1,24 @@
 {
-  "generatedAt": "2026-10-30T01:26:05.512Z",
+  "generatedAt": "2026-10-30T17:33:46.443Z",
   "project": "demo-mci-servidores",
   "environment": "running Auth/Firestore/Storage demo emulators",
   "productionServicesUsed": false,
   "existingFixturesReset": false,
-  "passed": 21,
+  "passed": 24,
   "failed": 0,
   "flows": [
+    {
+      "name": "member directory is server-owned and full profiles/caches require owner or administrator",
+      "status": "passed"
+    },
+    {
+      "name": "device tokens enforce owner, shape and ten-device limit while legacy lists can shrink",
+      "status": "passed"
+    },
+    {
+      "name": "disabled telemetry and actor quotas cannot be created or manipulated by clients",
+      "status": "passed"
+    },
     {
       "name": "profile additions and deletions cannot grant or remove privileged fields",
       "status": "passed"
@@ -93,6 +105,132 @@
     }
   ],
   "requests": [
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "users/<fixture>-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "users/<fixture>-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "users/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "app_cache/users",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "user_directory/<fixture>-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "user_directory/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "user_directory/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "userTokens/<fixture>-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "userTokens/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "userTokens/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "userTokens/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "userTokens/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "userTokens/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "userTokens/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "userTokens/<fixture>-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "userTokens/<fixture>-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "userTokens/<fixture>-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "app_telemetry/<fixture>-blocked",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "PATCH",
+      "path": "request_quotas/<fixture>-blocked",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "request_quotas/<fixture>-blocked",
+      "status": 403
+    },
     {
       "service": "firestore-rules",
       "method": "PATCH",

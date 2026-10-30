@@ -18,17 +18,27 @@ const publicAsset = value => {
       (url.pathname === '/index.html' || /\.(?:js|css|png|svg|webmanifest)$/.test(url.pathname));
   } catch { return false; }
 };
+const publicResponse = (response, asset, anonymousShell = false) => {
+  const type=response.headers.get('Content-Type')||'';
+  const mime=asset.endsWith('.js')?/^(?:text|application)\/(?:javascript|ecmascript)\b/i:
+    asset.endsWith('.css')?/^text\/css\b/i:asset.endsWith('.png')?/^image\/png\b/i:
+    asset.endsWith('.svg')?/^image\/svg\+xml\b/i:asset.endsWith('.webmanifest')?/^application\/(?:manifest\+json|json)\b/i:/^text\/html\b/i;
+  const control=response.headers.get('Cache-Control')||'';
+  // Hosting intentionally sends no-store on HTML. Only the known build shell,
+  // fetched anonymously at install time, may be stored for offline navigation.
+  return response.ok&&response.status===200&&!response.redirected&&mime.test(type)&&
+    !/\bprivate\b/i.test(control)&&(!/\bno-store\b/i.test(control)||(anonymousShell&&asset==='/index.html'))&&!response.headers.has('Set-Cookie');
+};
 
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(cacheName);
     // Cache an anonymous build shell, never a response obtained with user cookies.
-    for (const asset of settings.assets) {
-      if (!publicAsset(asset)) throw new Error('Invalid public cache asset');
+    for (const asset of settings.precache || settings.assets) {
+      if (!publicAsset(asset) || !settings.assets.includes(asset)) throw new Error('Invalid public cache asset');
       const url = new URL(asset, ownOrigin).href;
       const response = await fetch(new Request(url, { credentials: 'omit', cache: 'reload', redirect: 'error' }));
-      if (!response.ok || response.status !== 200 || response.redirected || /\bprivate\b/i.test(response.headers.get('Cache-Control') || '') || response.headers.has('Set-Cookie')) throw new Error('Uncacheable public asset response');
-      if (new URL(asset, ownOrigin).pathname === '/index.html' && !/^text\/html\b/i.test(response.headers.get('Content-Type') || '')) throw new Error('Invalid application shell MIME');
+      if (!publicResponse(response,asset,true)) throw new Error('Uncacheable public asset response');
       await cache.put(asset, response);
     }
     await self.skipWaiting();
@@ -59,9 +69,15 @@ self.addEventListener('fetch', event => {
     return;
   }
   if (!settings.assets.includes(url.pathname)) return;
+  if (url.search || !publicAsset(url.pathname)) return;
   event.respondWith((async () => {
     const cache = await caches.open(cacheName);
     const cached = await cache.match(url.pathname);
-    return cached || fetch(request);
+    if(cached)return cached;
+    // Never store a response fetched with session cookies. Private images and
+    // all API requests bypass this path entirely.
+    const response=await fetch(new Request(url.href,{credentials:'omit',redirect:'error'}));
+    if(publicResponse(response,url.pathname))await cache.put(url.pathname,response.clone());
+    return response;
   })());
 });

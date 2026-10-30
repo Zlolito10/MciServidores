@@ -43,11 +43,17 @@ export function registerAdminReadRoutes(app: any, dependencies: { db: any; requi
       if (!document.exists) return res.status(400).json({ error: "INVALID_CURSOR" });
       query = query.startAfter(document);
     }
-    const [logs, users] = await Promise.all([query.get(), db.collection("users").limit(2000).get()]);
-    return res.json({ ok: true, logs: logs.docs.slice(0, limit).map((doc: any) => pickRecord(doc, auditKeys)),
-      users: users.docs.map((doc: any) => ({ ...pickRecord(doc, userKeys), uid: doc.id })),
+    const logs = await query.get();
+    const page = logs.docs.slice(0, limit);
+    const authorIds: string[] = [...new Set<string>(page.map((doc: any) => doc.data().uid).filter((uid: unknown): uid is string => typeof uid === "string" && !!uid && uid.length <= 128 && !/[\/\x00-\x1f]/.test(uid)))];
+    const authors = authorIds.length ? await db.getAll(...authorIds.map(uid => db.collection("users").doc(uid))) : [];
+    // The independent recent-users pane is refreshed explicitly, not on every log page.
+    const users = req.query.includeUsers === "0" ? undefined : await db.collection("users").orderBy("lastSeenAt", "desc").limit(100).get();
+    return res.json({ ok: true, logs: page.map((doc: any) => pickRecord(doc, auditKeys)),
+      authors: authors.filter((doc: any) => doc.exists).map((doc: any) => ({ ...pickRecord(doc, userKeys), uid: doc.id })),
+      ...(users ? { users: users.docs.map((doc: any) => ({ ...pickRecord(doc, userKeys), uid: doc.id })) } : {}),
       nextCursor: logs.docs.length > limit ? logs.docs[limit - 1].id : null,
-      collectionEnabled: false, source: "stored-audit-records", userLimit: 2000 });
+      collectionEnabled: false, source: "stored-audit-records", userLimit: 100 });
   });
 
   route("/api/admin/app-history/meta", async (_req: any, res: any) => {

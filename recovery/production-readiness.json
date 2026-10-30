@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-10-30T01:29:45.820Z",
+  "checkedAt": "2026-10-30T17:35:12.101Z",
   "project": "mcimachala-servidor",
   "status": "blocked",
   "candidateStatus": "validated-locally",
   "readyToDeploy": false,
   "productionDeploymentPerformed": false,
-  "sourceDigest": "617aeab7f31823bb7cc2f754bab3222a760fcee447208d0bab4691f1f5ff2d55",
+  "sourceDigest": "ab6bbbca94c046603e858e31fab7bb39c2208c95b053df98c56fec4fd2719e53",
   "artifact": {
     "status": "passed",
     "project": "mcimachala-servidor",
     "configFile": "firebase.production.json",
     "publicPath": "dist-production",
-    "manifestSha256": "efa72d96a60f72026e2e6a9a8ce16337e2ea6f6f0c5b501c9c4e2e2877eed9e6",
-    "publicFiles": 96,
+    "manifestSha256": "e3b945bdefa6c8436855fa3adadb4b21b7e9df7aaf9f881ff5f8e73d40f6dc8c",
+    "publicFiles": 62,
     "checks": [
       {
         "id": "expected-project",
@@ -88,7 +88,7 @@
     },
     {
       "id": "attendance-privacy-migration",
-      "action": "Validate the bounded roster backfill and historical-token rotation plan, its rollback and rollout order; execute production mutations only in an authorized deployment."
+      "action": "Validate bounded assignment-roster and sanitized user-directory backfills, historical-token rotation, rollback and frontend/rules rollout order; execute production mutations only in an authorized deployment."
     },
     {
       "id": "physical-geolocation",

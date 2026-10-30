@@ -1,4 +1,6 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
+import { registerBoundedDevice } from "./device-registration.js";
+import { v as readTokenDocument } from "../vendor/vendor-firebase-BjYbfC3F.js";
 import { ensureMessagingWorker, createMessageSubscription, createTokenRequest, requestNotificationPermission, revokeBrowserRegistration } from "./notification-runtime.js";
 import { r as T, _ as k, C as I, b as D, a0 as ee, a1 as R, a2 as De, g as Re, c as F, a3 as Fe, a4 as Ke, a5 as Le, a6 as E, A as te, S as je, a7 as qe, B as $e, a8 as We } from "../vendor/vendor-firebase-BjYbfC3F.js";
 import { firebaseApp, firestoreDb } from "../firebase/client.js";
@@ -1002,12 +1004,14 @@ const En = async (e, t) => {
   }
   const n = te(firestoreDb, "userTokens", e);
   try {
-    await $e(n, {
-      userId: e,
-      tokens: We(t),
-      updatedAt: new Date().toISOString()
-    }, {
-      merge: !0
+    await registerBoundedDevice({
+      token: t,
+      readTokens: async () => (await readTokenDocument(n)).data()?.tokens,
+      writeToken: () => $e(n, {
+        userId: e,
+        tokens: We(t),
+        updatedAt: new Date().toISOString()
+      }, {merge: true})
     });
   } catch (o) {
     throw o;
@@ -1055,6 +1059,10 @@ const Mn = async e => {
       error: "No se pudo obtener el token de notificaciones. Verifica permisos, que la app esté instalada como PWA (iOS) y que el navegador soporte FCM."
     };
   } catch (t) {
+    if (t?.code === "DEVICE_LIMIT_REACHED" || t?.data?.error === "DEVICE_LIMIT_REACHED") return {
+      success: false,
+      error: "Ya tienes 10 dispositivos registrados. Desactiva las notificaciones en uno antes de añadir otro."
+    };
     if (t?.message === "NOTIFICATION_PERMISSION_PENDING") return {
       success: false,
       error: "El navegador no respondió al permiso. Revisa su indicador de notificaciones y vuelve a intentarlo."

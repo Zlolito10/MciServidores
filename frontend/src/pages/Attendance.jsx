@@ -1,4 +1,8 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
+import {
+  createEventAssignmentFeed,
+  ecuadorCalendarDate,
+} from "../services/bounded-event-queries.js";
 import { PrivateImage } from "../components/PrivateImage.jsx";
 import { releaseProtectedImage } from "../services/private-image-client.js";
 import {
@@ -10,7 +14,7 @@ import {
   trackedAssignmentQuery as we,
   trackedAssignmentWhere as ie,
 } from "../services/assignment-client.js";
-import { _ as Fa } from "../vendor/vendor-pdf-Cf03QSry.js";
+import { loadModule as Fa } from "../services/module-loader.js";
 import { jsxRuntime } from "../vendor/jsx-runtime.js";
 import { r as React } from "../vendor/vendor-react-BwINE3B3.js";
 import {
@@ -497,11 +501,15 @@ const ws = (m, k, p, P) => {
 };
 const Attendance = () => {
   const [m, k] = React.useState("people"),
-    [p, P] = React.useState(() => new Date().toISOString().slice(0, 7)),
-    [w, Z] = React.useState(() => new Date().toISOString().slice(0, 7)),
+    [p, P] = React.useState(
+      () => `${ecuadorCalendarDate().year}-${ecuadorCalendarDate().month}`,
+    ),
+    [w, Z] = React.useState(
+      () => `${ecuadorCalendarDate().year}-${ecuadorCalendarDate().month}`,
+    ),
     [ee, oe] = React.useState(!1),
     [be, ne] = React.useState(!1),
-    [V, he] = React.useState(new Date().getFullYear()),
+    [V, he] = React.useState(Number(ecuadorCalendarDate().year)),
     [D, Ue] = React.useState(() => new Set()),
     [Oe, xe] = React.useState(() => new Set()),
     G = React.useMemo(() => {
@@ -539,7 +547,7 @@ const Attendance = () => {
       getAssignedMinistries: le,
     } = useAuth(),
     F = useAppDialog(),
-    { users: Rt, serviceAreas: He } = useGlobalData(),
+    { users: Rt, serviceAreas: He, loading: globalDataLoading } = useGlobalData(),
     Lt = re?.role === "master_admin",
     me = (() => {
       const e = re?.role || "";
@@ -573,11 +581,15 @@ const Attendance = () => {
       };
     }, [p, w]),
     [$e, zt] = React.useState(() => {
-      const { start: e } = Ns(new Date().toISOString().slice(0, 7));
+      const { start: e } = Ns(
+        `${ecuadorCalendarDate().year}-${ecuadorCalendarDate().month}`,
+      );
       return e;
     }),
     [Re, kt] = React.useState(() => {
-      const { end: e } = Ns(new Date().toISOString().slice(0, 7));
+      const { end: e } = Ns(
+        `${ecuadorCalendarDate().year}-${ecuadorCalendarDate().month}`,
+      );
       return e;
     }),
     [Nt, Xa] = React.useState(""),
@@ -674,24 +686,26 @@ const Attendance = () => {
     [Ls, ss] = React.useState(!1),
     [mt, zs] = React.useState("all"),
     [ut, Pt] = React.useState("all"),
-    [ke, Fs] = React.useState(() => new Date().getFullYear()),
-    [Le, as] = React.useState(() => new Date().getMonth() + 1),
+    [ke, Fs] = React.useState(() => Number(ecuadorCalendarDate().year)),
+    [Le, as] = React.useState(() => Number(ecuadorCalendarDate().month)),
     [Ye, xa] = React.useState(1),
-    [Se, Ps] = React.useState(() => new Date().getFullYear()),
-    [Be, ns] = React.useState(() => new Date().getMonth() + 1),
+    [Se, Ps] = React.useState(() => Number(ecuadorCalendarDate().year)),
+    [Be, ns] = React.useState(() => Number(ecuadorCalendarDate().month)),
     [tt, un] = React.useState(""),
     [hn, Us] = React.useState(!1),
     [fa, ba] = React.useState(""),
-    [Te, _s] = React.useState(() => new Date().getFullYear()),
-    [Ve, rs] = React.useState(() => new Date().getMonth() + 1),
+    [Te, _s] = React.useState(() => Number(ecuadorCalendarDate().year)),
+    [Ve, rs] = React.useState(() => Number(ecuadorCalendarDate().month)),
     [Ge, is] = React.useState(""),
-    [De, Hs] = React.useState(() => new Date().getFullYear()),
-    [qe, os] = React.useState(() => new Date().getMonth() + 1),
+    [De, Hs] = React.useState(() => Number(ecuadorCalendarDate().year)),
+    [qe, os] = React.useState(() => Number(ecuadorCalendarDate().month)),
     pa = React.useRef(m);
   React.useEffect(() => {
     Qt([]);
     jt({});
     Xt([]);
+    peopleFeed.current = null;
+    recordFeed.current = null;
   }, [assignmentPrivacyKey(re)]);
   React.useEffect(() => {
     const e = pa.current;
@@ -761,12 +775,32 @@ const Attendance = () => {
       return s;
     },
     Ws = React.useMemo(
-      () => (G.length > 0 ? G : [new Date().getFullYear()]),
-      [G],
+      () =>
+        Array.from(
+          new Set([
+            ...G,
+            ke,
+            ...Array.from(
+              { length: 31 },
+              (_, offset) => Number(ecuadorCalendarDate().year) + 5 - offset,
+            ),
+          ]),
+        ).sort((a, b) => b - a),
+      [G, ke],
     ),
     Ys = React.useMemo(
-      () => (G.length > 0 ? G : [new Date().getFullYear()]),
-      [G],
+      () =>
+        Array.from(
+          new Set([
+            ...G,
+            Se,
+            ...Array.from(
+              { length: 31 },
+              (_, offset) => Number(ecuadorCalendarDate().year) + 5 - offset,
+            ),
+          ]),
+        ).sort((a, b) => b - a),
+      [G, Se],
     ),
     St = React.useMemo(() => {
       if (D.size === 0)
@@ -803,12 +837,32 @@ const Attendance = () => {
       return Array.from(e).sort((s, n) => s - n);
     }, [D, Se]),
     Bs = React.useMemo(
-      () => (G.length > 0 ? G : [new Date().getFullYear()]),
-      [G],
+      () =>
+        Array.from(
+          new Set([
+            ...G,
+            Te,
+            ...Array.from(
+              { length: 31 },
+              (_, offset) => Number(ecuadorCalendarDate().year) + 5 - offset,
+            ),
+          ]),
+        ).sort((a, b) => b - a),
+      [G, Te],
     ),
     Vs = React.useMemo(
-      () => (G.length > 0 ? G : [new Date().getFullYear()]),
-      [G],
+      () =>
+        Array.from(
+          new Set([
+            ...G,
+            De,
+            ...Array.from(
+              { length: 31 },
+              (_, offset) => Number(ecuadorCalendarDate().year) + 5 - offset,
+            ),
+          ]),
+        ).sort((a, b) => b - a),
+      [G, De],
     ),
     Dt = React.useMemo(() => {
       if (D.size === 0)
@@ -955,6 +1009,10 @@ const Attendance = () => {
           isOpen: !1,
         }));
     };
+  const peopleFeed = React.useRef(null),
+    recordFeed = React.useRef(null),
+    peopleLoadRef = React.useRef(null),
+    recordLoadRef = React.useRef(null);
   (React.useEffect(() => {
     dn(
       He.map((e) => ({
@@ -972,52 +1030,10 @@ const Attendance = () => {
         cn(e));
     }, [Rt, assignmentPrivacyKey(re)]),
     React.useEffect(() => {
-      m === "people" && Ie();
-    }, [m, pe, assignmentPrivacyKey(re)]),
-    React.useEffect(() => {
-      if (isBffEnabled()) {
-        (async () => {
-          try {
-            const a = await bffFetch("/api/events?limit=500"),
-              s = Array.isArray(a?.items) ? a.items : [],
-              n = new Set(),
-              r = new Set();
-            for (const i of s) {
-              const d = String(i?.date || "").trim();
-              /^\d{4}-\d{2}-\d{2}$/.test(d) && (r.add(d), n.add(d.slice(0, 7)));
-            }
-            (Ue(n), xe(r));
-          } catch {}
-        })();
-        return;
-      }
-      const e = watchScopedAssignments(
-        we(de(firestoreDb, "events"), ta("date", "desc"), Pa(500)),
-        re,
-        (a) => {
-          const s = new Set(),
-            n = new Set();
-          for (const r of a.docs) {
-            const i = r.data(),
-              d = String(i?.date || "").trim();
-            /^\d{4}-\d{2}-\d{2}$/.test(d) && (n.add(d), s.add(d.slice(0, 7)));
-          }
-          (Ue(s), xe(n));
-        },
-        () => {},
-      );
-      return () => {
-        e();
-      };
-    }, [assignmentPrivacyKey(re)]),
-    React.useEffect(() => {
-      if (D.size === 0) return;
-      const e = Array.from(D).sort().at(-1);
-      if (!e) return;
-      const a = D.has(p),
-        s = D.has(w);
-      (a && s) || (P(e), Z(e));
-    }, [D, p, w, assignmentPrivacyKey(re)]));
+      m === "people" && isBffEnabled() && Ie();
+    }, [m, pe, assignmentPrivacyKey(re)]));
+  // Calendar controls remain navigable without downloading hundreds of events
+  // merely to disable empty dates. The active range is queried below.
   const qs = React.useMemo(() => {
     const e = new Set();
     for (const a of Oe) a >= te.startDate && a <= te.endDate && e.add(a);
@@ -1031,136 +1047,20 @@ const Attendance = () => {
     }
     (zt(te.startDate), kt(te.endDate));
   }, [te.startDate, te.endDate, qs, assignmentPrivacyKey(re)]);
-  const Da = React.useRef(0);
-  React.useEffect(() => {
-    if (m !== "people" || isBffEnabled()) return;
-    const e = () => {
-        const n = Date.now();
-        n - Da.current < 3e4 ||
-          ((Da.current = n),
-          Ie({
-            force: !0,
-          }));
-      },
-      a = () => {
-        document.visibilityState === "visible" && e();
-      },
-      s = watchScopedAssignments(
-        Xe(firestoreDb, "meta", "attendanceSync"),
-        re,
-        (n) => {
-          (B("attendanceSync(marker)", {
-            view: m,
-            visible: document.visibilityState === "visible",
-            version: n.data()?.version,
-            updatedAt: n.data()?.updatedAt,
-          }),
-            e());
-        },
-        () => {},
-      );
-    return (
-      window.addEventListener("focus", e),
-      window.addEventListener("online", e),
-      document.addEventListener("visibilitychange", a),
-      () => {
-        (window.removeEventListener("focus", e),
-          window.removeEventListener("online", e),
-          document.removeEventListener("visibilitychange", a),
-          s());
-      }
-    );
-  }, [m, pe, assignmentPrivacyKey(re)]);
-  const Ia = React.useRef(0);
-  (useChangeFeed({
-    enabled: isBffEnabled(),
-    resources: [
-      "attendance",
-      "events",
-      "users",
-      "service_areas",
-      "assignments",
-    ],
-    onChange: () => {
-      Ie({
-        force: !0,
-        silent: !0,
-      });
-    },
-  }),
-    React.useEffect(() => {
-      if (isBffEnabled() || m !== "people" || !te.startDate || !te.endDate)
-        return;
-      const e = te.startDate,
-        a = te.endDate,
-        s = _() ? assignmentManagedAreas(re) : [],
-        n =
-          s.length > 0
-            ? fe.filter((x) => s.includes(x.id)).map((x) => x.name)
-            : [],
-        r = (x) => {
-          const v = Date.now();
-          v - Ia.current < 3e3 ||
-            ((Ia.current = v),
-            Ie({
-              force: !0,
-            }));
-        },
-        i = new Map(),
-        d = new Map(),
-        g = de(firestoreDb, "events"),
-        b = we(g, ie("date", ">=", e), ie("date", "<=", a)),
-        c = watchScopedAssignments(
-          b,
-          re,
-          (x) => {
-            const v = new Set();
-            for (const y of x.docs) {
-              const h = y.data();
-              if (_() && s.length > 0) {
-                const U = h.activeMinistries || [];
-                if (!U.some((L) => s.includes(L)) && U.length > 0) continue;
-              }
-              if ((v.add(y.id), i.has(y.id))) continue;
-              const A = de(firestoreDb, "events", y.id, "assignments"),
-                O = watchScopedAssignments(
-                  A,
-                  re,
-                  (U) => {
-                    (_() &&
-                      n.length > 0 &&
-                      !U.docs.some((L) => {
-                        const K = L.data();
-                        return n.includes(K?.areaName);
-                      })) ||
-                      r();
-                  },
-                  () => {},
-                );
-              (i.set(y.id, O), d.set(y.id, O));
-            }
-            for (const [y, h] of i.entries())
-              v.has(y) || (h(), i.delete(y), d.delete(y));
-            r();
-          },
-          () => {},
-        );
-      return () => {
-        c();
-        for (const x of i.values()) x();
-        for (const x of d.values()) x();
-      };
-    }, [m, te.startDate, te.endDate, fe, _, le, assignmentPrivacyKey(re)]));
   const Ie = async (e) => {
       const a = !!e?.silent;
       a || $(!0);
+      const liveKey = assignmentPrivacyKey(re) + pe;
+      const live =
+        e?.snapshotData ||
+        (peopleFeed.current?.key === liveKey ? peopleFeed.current.data : null);
       try {
         const s = _() ? assignmentManagedAreas(re) : [],
           n =
             assignmentPrivacyKey(re) +
             `attendance_peopleStats_${te.from}_${te.to}_min_${s.slice().sort().join("-") || "all"}`,
           r = Ln(n);
-        if (!e?.force && r && Date.now() - r.ts < $n) {
+        if (!live && !e?.force && r && Date.now() - r.ts < $n) {
           (Qt(r.value.userStats), jt(r.value.assignmentsByUser), a || $(!1));
           return;
         }
@@ -1180,7 +1080,8 @@ const Attendance = () => {
         const g = te.startDate,
           b = te.endDate;
         let c = [];
-        if (isBffEnabled()) {
+        if (live) c = live.events;
+        else if (isBffEnabled()) {
           const h = await bffFetch(
             `/api/attendance/events?startDate=${encodeURIComponent(g)}&endDate=${encodeURIComponent(b)}`,
           );
@@ -1227,30 +1128,37 @@ const Attendance = () => {
             ge && (v[ge] || (v[ge] = []), v[ge].push(K));
           }
         } else {
-          const h = c.map(async (O) => {
-              try {
-                const U = await readScopedAssignments(
-                  de(firestoreDb, "events", O.id, "assignments"),
-                  re,
-                );
-                return {
-                  eventData: O,
-                  snap: U,
-                };
-              } catch (U) {
-                return (
-                  console.error(
-                    `Error fetching assignments for event ${O.id}:`,
-                    U,
-                  ),
-                  {
-                    eventData: O,
-                    snap: null,
+          const h = live
+              ? []
+              : c.map(async (O) => {
+                  try {
+                    const U = await readScopedAssignments(
+                      de(firestoreDb, "events", O.id, "assignments"),
+                      re,
+                    );
+                    return {
+                      eventData: O,
+                      snap: U,
+                    };
+                  } catch (U) {
+                    return (
+                      console.error(
+                        `Error fetching assignments for event ${O.id}:`,
+                        U,
+                      ),
+                      {
+                        eventData: O,
+                        snap: null,
+                      }
+                    );
                   }
-                );
-              }
-            }),
-            A = await Promise.all(h);
+                }),
+            A = live
+              ? c.map((eventData) => ({
+                  eventData,
+                  snap: live.assignments.get(eventData.id),
+                }))
+              : await Promise.all(h);
           for (const { eventData: O, snap: U } of A)
             U &&
               U.docs.forEach((R) => {
@@ -1971,6 +1879,10 @@ const Attendance = () => {
     at = async (e) => {
       const a = !!e?.silent;
       a || $(!0);
+      const liveKey = assignmentPrivacyKey(re) + $e + Re;
+      const live =
+        e?.snapshotData ||
+        (recordFeed.current?.key === liveKey ? recordFeed.current.data : null);
       try {
         const s = _() ? assignmentManagedAreas(re) : [];
         let n = [];
@@ -2018,7 +1930,14 @@ const Attendance = () => {
         }
         const r = de(firestoreDb, "events"),
           i = we(r, ie("date", ">=", $e), ie("date", "<=", Re)),
-          d = await readScopedAssignments(i, re),
+          d = live
+            ? {
+                docs: live.events.map((event) => ({
+                  id: event.id,
+                  data: () => event,
+                })),
+              }
+            : await readScopedAssignments(i, re),
           g = new Map();
         d.docs.forEach((c) => {
           g.set(c.id, {
@@ -2034,7 +1953,10 @@ const Attendance = () => {
             if (!h.some((O) => s.includes(O)) && h.length > 0) continue;
           }
           const v = de(firestoreDb, "events", c.id, "assignments");
-          (await readScopedAssignments(v, re)).docs.forEach((h) => {
+          (live
+            ? live.assignments.get(c.id)
+            : await readScopedAssignments(v, re)
+          ).docs.forEach((h) => {
             const A = h.data();
             (_() && n.length > 0 && !n.includes(A.areaName)) ||
               b.push({
@@ -2060,7 +1982,11 @@ const Attendance = () => {
         a || $(!1);
       }
     };
-  React.useEffect(() => (at(), () => {}), [$e, Re, assignmentPrivacyKey(re)]);
+  peopleLoadRef.current = Ie;
+  recordLoadRef.current = at;
+  React.useEffect(() => {
+    if ((m === "events" || m === "reports") && isBffEnabled()) at();
+  }, [m, $e, Re, assignmentPrivacyKey(re)]);
   const Ks = React.useRef(!1);
   useChangeFeed({
     enabled: isBffEnabled(),
@@ -2095,83 +2021,64 @@ const Attendance = () => {
     },
     debounceMs: 900,
   });
-  const Oa = React.useRef(0);
   React.useEffect(() => {
-    if ((m !== "events" && m !== "reports") || isBffEnabled()) return;
-    const e = _() ? assignmentManagedAreas(re) : [],
-      a =
-        e.length > 0
-          ? fe.filter((g) => e.includes(g.id)).map((g) => g.name)
-          : [],
-      s = (g) => {
-        const b = Date.now();
-        b - Oa.current < 2e3 || ((Oa.current = b), at());
+    if (isBffEnabled()) return;
+    const people = m === "people";
+    if (!people && m !== "events" && m !== "reports") return;
+    const start = people ? te.startDate : $e,
+      end = people ? te.endDate : Re;
+    const holder = people ? peopleFeed : recordFeed;
+    const loader = people ? peopleLoadRef : recordLoadRef;
+    const key = assignmentPrivacyKey(re) + (people ? pe : $e + Re);
+    holder.current = null;
+    $(!0);
+    return createEventAssignmentFeed({
+      watchEvents: (next, error) =>
+        watchScopedAssignments(
+          we(
+            de(firestoreDb, "events"),
+            ie("date", ">=", start),
+            ie("date", "<=", end),
+            ta("date", "desc"),
+          ),
+          re,
+          next,
+          error,
+        ),
+      watchAssignments: (eventId, next, error) =>
+        watchScopedAssignments(
+          de(firestoreDb, "events", eventId, "assignments"),
+          re,
+          next,
+          error,
+        ),
+      next: (data) => {
+        holder.current = { key, data };
+        Promise.resolve(
+          loader.current?.({ snapshotData: data, force: true, silent: true }),
+        ).finally(() => $(!1));
       },
-      n = new Map(),
-      r = de(firestoreDb, "events"),
-      i = we(r, ie("date", ">=", $e), ie("date", "<=", Re)),
-      d = watchScopedAssignments(
-        i,
-        re,
-        (g) => {
-          const b = new Set();
-          for (const c of g.docs) {
-            const x = c.data();
-            if (_() && e.length > 0) {
-              const h = x.activeMinistries || [];
-              if (!h.some((O) => e.includes(O)) && h.length > 0) continue;
-            }
-            if ((b.add(c.id), n.has(c.id))) continue;
-            const v = de(firestoreDb, "events", c.id, "assignments"),
-              y = watchScopedAssignments(
-                v,
-                re,
-                (h) => {
-                  (_() &&
-                    a.length > 0 &&
-                    !h.docs.some((O) => {
-                      const U = O.data();
-                      return a.includes(U?.areaName);
-                    })) ||
-                    s();
-                },
-                () => {},
-              );
-            n.set(c.id, y);
-          }
-          for (const [c, x] of n.entries()) b.has(c) || (x(), n.delete(c));
-          s();
-        },
-        () => {},
-      );
-    return () => {
-      d();
-      for (const g of n.values()) g();
-    };
-  }, [m, $e, Re, fe, _, le, assignmentPrivacyKey(re)]);
-  const $a = React.useRef(0);
+      error: (error) => {
+        console.error("Error loading authorized attendance view", error);
+        F.showError(
+          "No se pudo actualizar la asistencia. Comprueba la conexión e inténtalo de nuevo.",
+        );
+        $(!1);
+      },
+    });
+  }, [m, te.startDate, te.endDate, $e, Re, assignmentPrivacyKey(re)]);
   React.useEffect(() => {
-    if ((m !== "events" && m !== "reports") || isBffEnabled()) return;
-    const e = () => {
-        const s = Date.now();
-        s - $a.current < 3e4 || (($a.current = s), at());
-      },
-      a = watchScopedAssignments(
-        Xe(firestoreDb, "meta", "attendanceSync"),
-        re,
-        (s) => {
-          (B("attendanceSync(marker)", {
-            view: m,
-            visible: document.visibilityState === "visible",
-            version: s.data()?.version,
-            updatedAt: s.data()?.updatedAt,
-          }),
-            e());
-        },
-        () => {},
-      );
-    return () => a();
-  }, [m, $e, Re, _, le, assignmentPrivacyKey(re)]);
+    const people = m === "people",
+      cached = (people ? peopleFeed : recordFeed).current;
+    const key = assignmentPrivacyKey(re) + (people ? pe : $e + Re);
+    if (!isBffEnabled() && cached?.key === key) {
+      (people ? peopleLoadRef : recordLoadRef).current?.({
+        snapshotData: cached.data,
+        force: true,
+        silent: true,
+      });
+    }
+  }, [Rt, He, fe, m, pe, $e, Re, assignmentPrivacyKey(re)]);
   const Je = (e) => {
       const a = ws(e.eventDate, e.endTime, e.eventTime, e.eventStatus);
       if (e.checkInTime && e.checkOutTime) {
@@ -4146,7 +4053,7 @@ ${q} ${se}/${z}`,
                   ]}
                 </div>,
                 <div className="space-y-4 max-w-2xl lg:max-w-none mx-auto">
-                  {S ? (
+                  {S || globalDataLoading ? (
                     <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 text-center text-gray-500 dark:text-slate-400 border border-gray-100 dark:border-slate-700">
                       <div className="flex flex-col items-center gap-4">
                         {[

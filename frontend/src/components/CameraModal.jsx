@@ -9,7 +9,6 @@ import {
   l as CircleCheckIcon,
   as as ScanIcon,
 } from "../vendor/vendor-ui-CnvYSvQL.js";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 import "../vendor/vendor-firebase-BjYbfC3F.js";
 const CameraModal = ({
   isOpen: isOpen,

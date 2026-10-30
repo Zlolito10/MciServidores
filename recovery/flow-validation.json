@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-10-30T01:25:37.157Z",
+  "generatedAt": "2026-10-30T17:33:31.236Z",
   "project": "demo-mci-servidores",
   "environment": "local Firebase Auth/Firestore/Storage/Functions emulators",
   "productionServicesUsed": false,
-  "passed": 42,
+  "passed": 43,
   "failed": 0,
   "flows": [
     {
@@ -16,6 +16,10 @@
     },
     {
       "name": "actual emulator sign-in exchanges tokens for session cookies",
+      "status": "passed"
+    },
+    {
+      "name": "private profiles stay owner/admin-only while member directory retains safe names and photos",
       "status": "passed"
     },
     {
@@ -225,6 +229,54 @@
       "status": 200
     },
     {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "users/recovery-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "users/recovery-user",
+      "status": 200
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "users/recovery-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "users/recovery-user",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "app_cache/users",
+      "status": 403
+    },
+    {
+      "service": "firestore-rules",
+      "method": "GET",
+      "path": "user_directory/recovery-user",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/users",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/users",
+      "status": 200
+    },
+    {
       "service": "functions",
       "method": "PUT",
       "path": "/api/roles/recovery-test",
@@ -317,7 +369,7 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/events/recovery-event/repertoire/vZagjtCyuQmJkkY5mFS0",
+      "path": "/api/events/recovery-event/repertoire/Acz3TR85aDdpBGWvUXQB",
       "status": 200
     },
     {
@@ -359,13 +411,13 @@
     {
       "service": "functions",
       "method": "PATCH",
-      "path": "/api/events/li85FL1J4dCOkYnaH4TV",
+      "path": "/api/events/WPn78q12WjIdjhEgnthV",
       "status": 200
     },
     {
       "service": "functions",
       "method": "GET",
-      "path": "/api/events/li85FL1J4dCOkYnaH4TV/details",
+      "path": "/api/events/WPn78q12WjIdjhEgnthV/details",
       "status": 200
     },
     {
@@ -377,7 +429,7 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/events/li85FL1J4dCOkYnaH4TV",
+      "path": "/api/events/WPn78q12WjIdjhEgnthV",
       "status": 200
     },
     {
@@ -413,7 +465,7 @@
     {
       "service": "functions",
       "method": "PUT",
-      "path": "/api/event_templates/638HiSe62STS5ZkzC4kw",
+      "path": "/api/event_templates/Ewy5mmoNZZtDyh73Urux",
       "status": 200
     },
     {
@@ -425,13 +477,13 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/event_templates/638HiSe62STS5ZkzC4kw",
+      "path": "/api/event_templates/Ewy5mmoNZZtDyh73Urux",
       "status": 403
     },
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/event_templates/638HiSe62STS5ZkzC4kw",
+      "path": "/api/event_templates/Ewy5mmoNZZtDyh73Urux",
       "status": 200
     },
     {
@@ -443,13 +495,13 @@
     {
       "service": "functions",
       "method": "PUT",
-      "path": "/api/service_areas/QZSo4Kz2EQeenVwcg36a",
+      "path": "/api/service_areas/1wHUqFj5tW6lPZb4uebz",
       "status": 200
     },
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/service_areas/QZSo4Kz2EQeenVwcg36a",
+      "path": "/api/service_areas/1wHUqFj5tW6lPZb4uebz",
       "status": 200
     },
     {
@@ -461,7 +513,7 @@
     {
       "service": "functions",
       "method": "PATCH",
-      "path": "/api/events/recovery-event/repertoire/tinUzva8qcGt4vm5wvME",
+      "path": "/api/events/recovery-event/repertoire/kFcJq41lvEMMN3Mcycrd",
       "status": 200
     },
     {
@@ -473,7 +525,7 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/events/recovery-event/repertoire/tinUzva8qcGt4vm5wvME",
+      "path": "/api/events/recovery-event/repertoire/kFcJq41lvEMMN3Mcycrd",
       "status": 200
     },
     {
@@ -485,7 +537,7 @@
     {
       "service": "functions",
       "method": "PATCH",
-      "path": "/api/events/recovery-event/materials/N0ixOqyta9LUo37jAKod",
+      "path": "/api/events/recovery-event/materials/bpPcry3LLH1jlYDUl8tu",
       "status": 200
     },
     {
@@ -509,13 +561,13 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/materials_library/EPgATAFObabWuv6fx433",
+      "path": "/api/materials_library/csbF3WsqPUHrUq3HssdT",
       "status": 200
     },
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/events/recovery-event/materials/N0ixOqyta9LUo37jAKod",
+      "path": "/api/events/recovery-event/materials/bpPcry3LLH1jlYDUl8tu",
       "status": 200
     },
     {
@@ -527,7 +579,7 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/events/recovery-event/materials/DJxeH67LaMx7dRGlDXw9",
+      "path": "/api/events/recovery-event/materials/hS1mFLBJ2vN1Ys4oujxt",
       "status": 200
     },
     {
@@ -605,13 +657,13 @@
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/comments/QFaU7Zv9cPfuka1t5Myf",
+      "path": "/api/comments/Dul5Gv24QrxaoociwIwI",
       "status": 403
     },
     {
       "service": "functions",
       "method": "DELETE",
-      "path": "/api/comments/QFaU7Zv9cPfuka1t5Myf",
+      "path": "/api/comments/Dul5Gv24QrxaoociwIwI",
       "status": 200
     },
     {
@@ -648,6 +700,24 @@
       "service": "functions",
       "method": "GET",
       "path": "/api/attendance/events",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/service-history",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/service-history",
+      "status": 400
+    },
+    {
+      "service": "functions",
+      "method": "GET",
+      "path": "/api/service-history",
       "status": 400
     },
     {
@@ -887,6 +957,12 @@
     {
       "service": "functions",
       "method": "POST",
+      "path": "/api/sessionLogin",
+      "status": 200
+    },
+    {
+      "service": "functions",
+      "method": "POST",
       "path": "/api/users/me/delete",
       "status": 200
     },
@@ -1067,7 +1143,7 @@
     {
       "service": "firestore-rules",
       "method": "PATCH",
-      "path": "users/BFGA6eEYuZHgD5achnEKkD1cV2mt",
+      "path": "users/31MfCwNI6AU9LrLtgk6LkcULF6DQ",
       "status": 200
     },
     {
@@ -1085,13 +1161,13 @@
     {
       "service": "firestore-rules",
       "method": "PATCH",
-      "path": "users/51KR2GTXsWzAVyVTMEeANI9pNOJQ",
+      "path": "users/ZGFUAl9EI5GQb2yajMSTNwpnTju7",
       "status": 200
     },
     {
       "service": "firestore-rules",
       "method": "PATCH",
-      "path": "pending_assignments/51KR2GTXsWzAVyVTMEeANI9pNOJQ",
+      "path": "pending_assignments/ZGFUAl9EI5GQb2yajMSTNwpnTju7",
       "status": 200
     },
     {

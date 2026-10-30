@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-10-30T01:26:05.728Z",
+  "checkedAt": "2026-10-30T17:33:46.681Z",
   "status": "passed",
-  "sourceDigest": "617aeab7f31823bb7cc2f754bab3222a760fcee447208d0bab4691f1f5ff2d55",
-  "backendBuildDigest": "87f3f750a9644a596e0d57e9f4f68cb63c293167dbf3f87ced351ae4a358b202",
+  "sourceDigest": "ab6bbbca94c046603e858e31fab7bb39c2208c95b053df98c56fec4fd2719e53",
+  "backendBuildDigest": "ddf74628ff3386492af0323e54c721487a6f6b1c77742ee47eba89057d7d3d0a",
   "backendChangedDuringValidation": false,
   "sourceChangedDuringValidation": false,
-  "manifestSha256": "efa72d96a60f72026e2e6a9a8ce16337e2ea6f6f0c5b501c9c4e2e2877eed9e6",
+  "manifestSha256": "e3b945bdefa6c8436855fa3adadb4b21b7e9df7aaf9f881ff5f8e73d40f6dc8c",
   "commands": [
     {
       "label": "frontend-build",
@@ -19,8 +19,8 @@
     {
       "label": "node",
       "exitCode": 0,
-      "tests": 221,
-      "passed": 221,
+      "tests": 266,
+      "passed": 266,
       "failed": 0,
       "skipped": 0
     },
@@ -33,8 +33,8 @@
     {
       "label": "emulator",
       "exitCode": 0,
-      "tests": 65,
-      "passed": 65,
+      "tests": 69,
+      "passed": 69,
       "failed": 0,
       "skipped": 0
     }

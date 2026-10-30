@@ -47,7 +47,6 @@ import {
   a5 as ChartColumnIcon,
   am as AwardIcon,
 } from "../vendor/vendor-ui-CnvYSvQL.js";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 const Udlv = () => {
   const { userProfile: y } = useAuth(),
     { users: b, serviceAreas: de, loading: _e } = useGlobalData(),

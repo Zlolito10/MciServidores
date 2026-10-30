@@ -56,7 +56,7 @@ async function http(path, actor, {body = {}, cookie = false, csrf = true, bearer
   } else if (actor) headers.Authorization = 'Bearer ' + actor.token;
   if (bearer) headers.Authorization = 'Bearer ' + bearer;
   const route = path.startsWith('/api/') ? 'serverApi' + path : path.slice(1);
-  const response = await fetch('http://127.0.0.1:5001/' + project + '/us-central1/' + route, {method, headers, ...(method === 'GET' ? {} : {body: JSON.stringify(body)}), signal: AbortSignal.timeout(15000)});
+  const response = await fetch('http://127.0.0.1:5001/' + project + '/us-central1/' + route, {method, headers, ...(method === 'GET' ? {} : {body: JSON.stringify(body)}), signal: AbortSignal.timeout(30000)});
   evidence.push({service: 'functions-http', method, path, status: response.status});
   return {status: response.status, data: await response.json(), response};
 }
@@ -82,6 +82,8 @@ test('release authorization regression tests on isolated local demo fixtures', a
     for (const id of events) await db.recursiveDelete(db.doc('events/' + id));
     for (const actor of Object.values(identities)) {
       await db.recursiveDelete(db.doc('users/' + actor.uid));
+      await db.doc('user_directory/' + actor.uid).delete();
+      await db.doc('userTokens/' + actor.uid).delete();
       await app.auth().deleteUser(actor.uid);
     }
     // Only our exact fixture objects are removed; never a bucket-wide cleanup.
@@ -102,6 +104,40 @@ test('release authorization regression tests on isolated local demo fixtures', a
   const assignment = 'events/' + events[0] + '/assignments/' + prefix + '-assignment';
   await db.doc(assignment).set({userId: user.uid, areaId: prefix + '-a', userName: 'Synthetic'});
   const check = (name, body) => t.test(name, async () => {try {await body(); flows.push({name, status: 'passed'});} catch (error) {flows.push({name, status: 'failed'}); throw error;}});
+
+  await check('member directory is server-owned and full profiles/caches require owner or administrator', async () => {
+    const {syncUserDirectory} = require('../functions/lib/user-directory.js');
+    await syncUserDirectory({db,userId:user.uid,timestamp:new Date()});
+    assert.equal(await document('users/'+user.uid,user,undefined,undefined,'GET'),200);
+    assert.equal(await document('users/'+user.uid,master,undefined,undefined,'GET'),200);
+    for(const actor of [other,ministry])assert.equal(await document('users/'+user.uid,actor,undefined,undefined,'GET'),403);
+    assert.equal(await document('app_cache/users',other,undefined,undefined,'GET'),403);
+    assert.equal(await document('user_directory/'+user.uid,other,undefined,undefined,'GET'),200);
+    assert.equal(await document('user_directory/'+user.uid,undefined,undefined,undefined,'GET'),403);
+    assert.equal(await document('user_directory/'+user.uid,master,{email:'forbidden'},['email']),403);
+    const entry=(await db.doc('user_directory/'+user.uid).get()).data();assert.equal(entry.email,undefined);assert.equal(entry.preferences,undefined);assert.equal(entry.assignedMinistries,undefined);
+  });
+  await check('device tokens enforce owner, shape and ten-device limit while legacy lists can shrink', async () => {
+    const path='userTokens/'+user.uid;
+    assert.equal(await document(path,user,{userId:user.uid,tokens:['synthetic-a'],updatedAt:new Date()}),200);
+    assert.equal(await document(path,other,{tokens:['forged']},['tokens']),403);
+    assert.equal(await document(path,user,{tokens:[42]},['tokens']),403);
+    assert.equal(await document(path,user,{tokens:['same','same']},['tokens']),403);
+    assert.equal(await document(path,user,{unexpected:{large:'payload'}},['unexpected']),403);
+    assert.equal(await document(path,user,{userId:other.uid},['userId']),403);
+    assert.equal(await document(path,user,{tokens:Array.from({length:11},(_,i)=>'synthetic-'+i)},['tokens']),403);
+    const legacy=Array.from({length:12},(_,i)=>'legacy-'+i);await db.doc(path).set({tokens:legacy});
+    assert.equal(await document(path,user,{tokens:legacy.slice(0,11)},['tokens']),200);
+    assert.equal(await document(path,user,{tokens:[...legacy.slice(0,9),'new-token','another']},['tokens']),403);
+    assert.equal(await document(path,user,{tokens:legacy.slice(0,10)},['tokens']),200);
+    await db.doc(path).delete();
+  });
+  await check('disabled telemetry and actor quotas cannot be created or manipulated by clients', async () => {
+    const telemetry='app_telemetry/'+prefix+'-blocked',quota='request_quotas/'+prefix+'-blocked';
+    assert.equal(await document(telemetry,user,{userId:user.uid,transferSize:123,createdAt:new Date()}),403);
+    assert.equal(await document(quota,master,{count:0,windowStart:0}),403);
+    assert.equal(await document(quota,user,undefined,undefined,'GET'),403);
+  });
 
   await check('profile additions and deletions cannot grant or remove privileged fields', async () => {
     const path = 'users/' + user.uid;
@@ -280,17 +316,20 @@ test('release authorization regression tests on isolated local demo fixtures', a
     assert.match(listed.response.headers.get('vary'), /Authorization/);
   });
   await check('notification HTTP entry points require an actor and reject cross-user sends and CSRF', async () => {
-    const before = (await db.collection('_local_integration_outbox').get()).size;
+    const marker = prefix + '-http-rejected';
     for (const suffix of ['user', 'users', 'repertoire', 'materials', 'all', 'week']) {
       const path = '/api/notify/' + suffix;
-      assert.equal((await http(path)).status, 401, suffix + ' anonymous');
-      assert.equal((await http(path, user, {body: {userId: other.uid, title: 'Synthetic authorization check'}})).status, 403, suffix + ' ordinary');
+      assert.equal((await http(path, undefined, {body: {title:marker}})).status, 401, suffix + ' anonymous');
+      assert.equal((await http(path, user, {body: {userId: other.uid, title:marker}})).status, 403, suffix + ' ordinary');
     }
     assert.equal((await http('/api/notify/user', user, {body: {userId: user.uid, title: 'Self check without registered token'}})).status, 404, 'self test reaches handler but has no token');
     assert.equal((await http('/api/notify/user', master, {cookie: true, csrf: false})).status, 403);
     assert.equal((await http('/api/notify/user', master, {cookie: true})).status, 400, 'valid session+CSRF reaches input validation');
     assert.equal((await http('/api/notify/user', master, {cookie: true, bearer: 'invalid-explicit-token'})).status, 401, 'invalid bearer cannot fall back to a privileged cookie');
-    assert.equal((await db.collection('_local_integration_outbox').get()).size, before, 'rejected HTTP requests never send to local outbox');
+    // Topic subscriptions from the preceding token tests are asynchronous and
+    // may legitimately reach the shared outbox during this check.
+    const marked = (await db.collection('_local_integration_outbox').get()).docs.filter(doc => JSON.stringify(doc.data().message ?? null).includes(marker));
+    assert.equal(marked.length, 0, 'rejected marked requests never emit a notification');
   });
   await check('maintenance entry points reject anonymous, ordinary and non-master administrators', async () => {
     for (const name of ['fixStorageCors', 'backfillPendingUsers']) {

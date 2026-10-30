@@ -33,7 +33,6 @@ import {
   A as se,
   R as Me,
 } from "../vendor/vendor-firebase-BjYbfC3F.js";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 const Be = {
   present: {
     label: "Presente",

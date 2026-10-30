@@ -52,7 +52,6 @@ import {
   E as EyeOffIcon,
   b as EyeIcon,
 } from "../vendor/vendor-ui-CnvYSvQL.js";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 import "../services/notifications.js";
 const Settings = () => {
   const {

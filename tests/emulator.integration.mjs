@@ -15,8 +15,8 @@ async function api(route,{session,method='GET',body,csrf=true,headers:extraHeade
  let data;try{data=await response.json();}catch{data=null;}
  return {status:response.status,data,response};
 }
-async function sessionFor(username){
- const r=await fetch('http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=demo-mci-local-key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:username+'@church.app',password:fixturePassword,returnSecureToken:true})});
+async function sessionFor(username,password=fixturePassword){
+ const r=await fetch('http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=demo-mci-local-key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:username+'@church.app',password,returnSecureToken:true})});
  assert.equal(r.status,200);const auth=await r.json();
  const result=await api('/api/sessionLogin',{method:'POST',body:{idToken:auth.idToken}});
  assert.equal(result.status,200);assert.equal(result.data.ok,true);
@@ -64,6 +64,17 @@ test('Recovered backend, Auth, Firestore and Storage integration on local demo p
  await check('actual emulator sign-in exchanges tokens for session cookies',async()=>{
   admin=await sessionFor('recoveryadmin');user=await sessionFor('recoveryuser');other=await sessionFor('recoveryother');ministry=await sessionFor('recoveryministry');
   const me=await api('/api/me',{session:admin});assert.equal(me.data.user.uid,'recovery-admin');assert.equal(me.data.user.role,'master_admin');
+ });
+ await check('private profiles stay owner/admin-only while member directory retains safe names and photos',async()=>{
+  assert.equal((await clientDocument('users/recovery-user',{session:user})).status,200);
+  assert.equal((await clientDocument('users/recovery-user',{session:admin})).status,200);
+  for(const actor of [other,ministry])assert.equal((await clientDocument('users/recovery-user',{session:actor})).status,403);
+  assert.equal((await clientDocument('app_cache/users',{session:other})).status,403);
+  const directory=await clientDocument('user_directory/recovery-user',{session:other});assert.equal(directory.status,200);
+  const fields=(await directory.json()).fields;assert.ok(fields.name);assert.equal(fields.email,undefined);assert.equal(fields.preferences,undefined);assert.equal(fields.assignedMinistries,undefined);
+  const member=await api('/api/users',{session:other});assert.equal(member.status,200);assert.ok(member.data.items.some(item=>item.id==='recovery-user'));
+  for(const item of member.data.items){assert.equal(item.email,undefined);assert.equal(item.preferences,undefined);assert.equal(item.lastSeenAt,undefined);}
+  const privileged=await api('/api/users',{session:admin});assert.equal(privileged.status,200);assert.ok(privileged.data.items.find(item=>item.id==='recovery-user').email);
  });
  await check('writes reject missing CSRF and insufficient role',async()=>{
   assert.equal((await api('/api/roles/recovery-test',{session:admin,method:'PUT',body:{name:'Test'},csrf:false})).status,403);
@@ -222,7 +233,11 @@ test('Recovered backend, Auth, Firestore and Storage integration on local demo p
   assert.equal((await api('/api/attendance/events?startDate=invalid&endDate=x',{session:admin})).status,400);
  });
  await check('service history and dashboard aggregate local data',async()=>{
-  const history=await api('/api/service-history',{session:user});assert.equal(history.status,200);assert.ok(history.data.assignments.some(x=>x.id==='recovery-assignment'));
+  const history=await api('/api/service-history?startDate='+recoveryEventDate+'&endDate='+recoveryEventDate+'&limit=50',{session:user});assert.equal(history.status,200);assert.ok(history.data.assignments.some(x=>x.id==='recovery-assignment'));
+  assert.match(history.response.headers.get('cache-control'),/no-store/);assert.equal(history.data.limit,50);
+  assert.equal((await api('/api/service-history?limit=201',{session:user})).status,400);
+  assert.equal((await api('/api/service-history?startDate=2026-02-30',{session:user})).status,400);
+  const foreign=await api('/api/service-history?startDate='+recoveryEventDate+'&endDate='+recoveryEventDate,{session:other});assert.deepEqual(foreign.data.assignments,[]);
   assert.equal((await api('/api/dashboard',{session:admin})).status,200);assert.equal((await api('/api/changes/meta',{session:admin})).status,200);
  });
  await check('private chats permit owner/admin and reject another user',async()=>{
@@ -259,8 +274,10 @@ test('Recovered backend, Auth, Firestore and Storage integration on local demo p
   await app.auth().createUser({uid,email:'recoverydisposable@church.app',password:fixturePassword});await db.doc('users/'+uid).set({uid,email:'recoverydisposable@church.app',name:'Cuenta desechable',role:'user',assignedMinistries:[]});
   const session=await sessionFor('recoverydisposable');assert.equal((await api('/api/users/me/password',{session,method:'POST',body:{newPassword:'x'}})).status,400);
   const changed=fixturePassword+'Changed';assert.equal((await api('/api/users/me/password',{session,method:'POST',body:{newPassword:changed}})).status,200);
-  const signIn=await fetch('http://127.0.0.1:9099/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=demo-mci-local-key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'recoverydisposable@church.app',password:changed,returnSecureToken:true})});assert.equal(signIn.status,200);
-  assert.equal((await api('/api/users/me/delete',{session,method:'POST',body:{}})).status,200);assert.equal((await db.doc('users/'+uid).get()).exists,false);await assert.rejects(()=>app.auth().getUser(uid),{code:'auth/user-not-found'});
+  // A password change can revoke the earlier cookie. Match the real Settings
+  // flow: authenticate with the new password and exchange a fresh session.
+  const freshSession=await sessionFor('recoverydisposable',changed);
+  assert.equal((await api('/api/users/me/delete',{session:freshSession,method:'POST',body:{}})).status,200);assert.equal((await db.doc('users/'+uid).get()).exists,false);await assert.rejects(()=>app.auth().getUser(uid),{code:'auth/user-not-found'});
  });
  await check('direct backend password login uses local Auth and rejects invalid credentials',async()=>{
   const good=await api('/api/passwordLogin',{method:'POST',body:{username:'recoveryuser',password:fixturePassword}});assert.equal(good.status,200);assert.equal(good.data.ok,true);assert.ok(good.response.headers.getSetCookie().some(x=>x.startsWith('__session=')));

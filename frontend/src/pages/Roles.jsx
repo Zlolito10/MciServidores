@@ -38,7 +38,6 @@ import {
   a6 as UserCogIcon,
   a7 as CrownIcon,
 } from "../vendor/vendor-ui-CnvYSvQL.js";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 const N = [
   {
     id: "view_dashboard",

@@ -31,7 +31,6 @@ import {
   z as SendIcon,
   f as UsersIcon,
 } from "../vendor/vendor-ui-CnvYSvQL.js";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 const R = (u) => {
   const d = String(u || "").trim();
   if (!d) return "?";

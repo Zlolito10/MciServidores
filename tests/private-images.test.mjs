@@ -64,17 +64,51 @@ test('only the known legacy image cache is retired; no photos are placed in pers
 
 const componentText = (await readFile(new URL('../frontend/src/components/PrivateImage.jsx', import.meta.url), 'utf8')).replace(/^import .*;\r?\n/gm, '').replace('export function PrivateImage', 'function PrivateImage');
 const componentCode = transformSync(componentText, { loader: 'jsx', jsx: 'transform', jsxFactory: 'React.createElement' }).code;
-function mountedImage(app) {
-  let state, initialized = false, cleanup, effect;
+function mountedImage(app, initialProps = { loading: 'eager' }, { observerAvailable = true } = {}) {
+  let cursor, pending, dirty, tree;
+  let props = { src: 'attendance/e/a/photo.jpg', alt: 'Imagen privada', ...initialProps };
+  const hooks = [], observers = [];
   const React = {
-    useState(initial) { if (!initialized) { state = typeof initial === 'function' ? initial() : initial; initialized = true; } return [state, (value) => { state = value; }]; },
-    useEffect(callback) { if (!cleanup && !effect) effect = callback; },
-    createElement: (type, props) => ({ type, props }),
+    useRef(initial) { const index = cursor++; if (!hooks[index]) hooks[index] = { current: initial }; return hooks[index]; },
+    useState(initial) {
+      const index = cursor++;
+      if (!hooks[index]) hooks[index] = { value: typeof initial === 'function' ? initial() : initial };
+      return [hooks[index].value, (value) => {
+        const next = typeof value === 'function' ? value(hooks[index].value) : value;
+        if (!Object.is(next, hooks[index].value)) { hooks[index].value = next; dirty = true; }
+      }];
+    },
+    useEffect(callback, dependencies) {
+      const index = cursor++, previous = hooks[index];
+      if (!previous || dependencies.some((value, item) => !Object.is(value, previous.dependencies[item]))) {
+        pending.push(() => { previous?.cleanup?.(); hooks[index] = { dependencies, cleanup: callback() }; });
+      }
+    },
+    createElement(type, attributes) { attributes?.ref?.({ element: type }); return { type, props: attributes }; },
   };
-  const component = vm.runInNewContext(`(function(){${componentCode};return PrivateImage;})()`, { React, AbortController, protectedImageProxy, resolveProtectedImage: (source, options) => app.loader.load(source, options), releaseProtectedImage: (source) => app.loader.release(source) });
+  class Observer {
+    constructor(callback) { this.callback = callback; observers.push(this); }
+    observe(element) { this.element = element; }
+    disconnect() { this.disconnected = true; }
+  }
+  const context = { React, AbortController, resolveProtectedImage: (source, options) => app.loader.load(source, options), releaseProtectedImage: (source) => app.loader.release(source) };
+  if (observerAvailable) context.IntersectionObserver = Observer;
+  const component = vm.runInNewContext(`(function(){${componentCode};return PrivateImage;})()`, context);
+  const render = (next = props) => {
+    props = next;
+    let renders = 0;
+    do {
+      dirty = false; cursor = 0; pending = [];
+      tree = component(props);
+      pending.forEach((effect) => effect());
+      assert.ok(renders++ < 15, 'native image settles');
+    } while (dirty);
+    return tree;
+  };
   return {
-    render() { const rendered = component({ src: 'attendance/e/a/photo.jpg', alt: 'Imagen privada' }); if (effect) { cleanup = effect(); effect = null; } return rendered; },
-    unmount() { cleanup?.(); },
+    render, observers,
+    visible() { observers.at(-1).callback([{ isIntersecting: true }]); return render(); },
+    unmount() { hooks.forEach((hook) => hook?.cleanup?.()); },
   };
 }
 test('PrivateImage keeps native src empty until authenticated success and revokes its blob on unmount', async () => {
@@ -87,6 +121,47 @@ test('PrivateImage unmount aborts a pending fetch and ignores its late successfu
   let complete;
   const app = loaderFixture({ request: () => new Promise((resolve) => { complete = resolve; }) });
   const mounted = mountedImage(app); mounted.render(); await flush();
+  mounted.unmount(); assert.equal(app.calls[0][1].signal.aborted, true);
+  complete(response()); await flush(); assert.equal(app.created.length, 0);
+});
+
+test('PrivateImage defaults to lazy transport and reserves a minimal observation target without replacing caller sizes', async () => {
+  const app = loaderFixture(), mounted = mountedImage(app, { className: 'w-full h-auto', width: 320, height: 240, style: { maxHeight: '60vh' }, decoding: 'async' });
+  const initial = mounted.render(); await flush();
+  assert.equal(initial.props.loading, 'lazy'); assert.equal(initial.props.src, undefined); assert.equal(app.calls.length, 0);
+  assert.equal(initial.props.width, 320); assert.equal(initial.props.height, 240); assert.equal(initial.props.alt, 'Imagen privada');
+  assert.equal(initial.props.style.maxHeight, '60vh'); assert.equal(initial.props.style.minHeight, 1); assert.equal(initial.props.style.minWidth, 1);
+  assert.equal(mounted.observers.length, 1);
+  mounted.visible(); await flush();
+  const loaded = mounted.render();
+  assert.equal(app.calls.length, 1); assert.equal(loaded.props.src, 'blob:synthetic-1');
+  assert.equal(loaded.props.style.minHeight, undefined); assert.equal(loaded.props.style.maxHeight, '60vh');
+  mounted.unmount(); assert.deepEqual(app.revoked, ['blob:synthetic-1']);
+});
+
+test('PrivateImage source replacement revokes the previous blob and waits for the new image visibility', async () => {
+  const app = loaderFixture(), mounted = mountedImage(app, {});
+  mounted.render(); mounted.visible(); await flush(); mounted.render();
+  const next = mounted.render({ src: 'attendance/other/a/photo.jpg', alt: 'Otra evidencia' }); await flush();
+  assert.equal(next.props.src, undefined); assert.equal(app.calls.length, 1); assert.deepEqual(app.revoked, ['blob:synthetic-1']);
+  mounted.visible(); await flush();
+  assert.equal(mounted.render().props.src, 'blob:synthetic-2'); assert.equal(app.calls.length, 2);
+  mounted.unmount(); assert.deepEqual(app.revoked, ['blob:synthetic-1', 'blob:synthetic-2']);
+});
+
+test('PrivateImage works without IntersectionObserver and supports explicit priority with forwarded refs', async () => {
+  const fallback = loaderFixture(), unavailable = mountedImage(fallback, {}, { observerAvailable: false });
+  unavailable.render(); await flush(); assert.equal(unavailable.render().props.src, 'blob:synthetic-1'); unavailable.unmount();
+  const app = loaderFixture(), ref = { current: null }, priority = mountedImage(app, { fetchPriority: 'high', ref });
+  priority.render(); await flush();
+  assert.equal(priority.observers.length, 0); assert.equal(app.calls.length, 1); assert.equal(ref.current.element, 'img');
+  priority.unmount(); assert.deepEqual(app.revoked, ['blob:synthetic-1']);
+});
+
+test('PrivateImage cancels a visible lazy request and creates no URL from its late response', async () => {
+  let complete;
+  const app = loaderFixture({ request: () => new Promise((resolve) => { complete = resolve; }) });
+  const mounted = mountedImage(app, {}); mounted.render(); mounted.visible(); await flush();
   mounted.unmount(); assert.equal(app.calls[0][1].signal.aborted, true);
   complete(response()); await flush(); assert.equal(app.created.length, 0);
 });

@@ -18,7 +18,6 @@ import {
   A as ArrowRightIcon,
   k as LogOutIcon,
 } from "../vendor/vendor-ui-CnvYSvQL.js";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 const PendingAssignment = () => {
   const { user: r, userProfile: a, logout: m } = useAuth(),
     d = useNavigate(),

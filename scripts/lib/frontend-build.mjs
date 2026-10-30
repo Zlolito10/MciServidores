@@ -44,7 +44,7 @@ export function assertPublicAssetPath(relative) {
 }
 
 /** Copy only regular public files; never follow source links into private paths. */
-export async function copyPublicAssets(source, destination, { omitSourceMaps = false } = {}) {
+export async function copyPublicAssets(source, destination, { omitSourceMaps = false, omitPublishedModules = false } = {}) {
   async function visit(directory, prefix = '') {
     for (const entry of await readdir(directory, { withFileTypes: true })) {
       const relative = assertPublicAssetPath(prefix + entry.name);
@@ -53,6 +53,7 @@ export async function copyPublicAssets(source, destination, { omitSourceMaps = f
       if (entry.isDirectory()) await visit(filename, relative + '/');
       else if (entry.isFile()) {
         if (omitSourceMaps && relative.endsWith('.map')) continue;
+        if (omitPublishedModules && relative.startsWith('assets/') && /\.(?:js|css)(?:\.map|\.LEGAL\.txt)?$/.test(relative)) continue;
         await cp(filename, path.join(destination, relative), { recursive: false, force: true });
       } else throw new Error('Non-regular frontend asset: ' + relative);
     }

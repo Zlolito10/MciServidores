@@ -38,7 +38,6 @@ import {
   L as LoaderCircleIcon,
   a4 as CameraIcon,
 } from "../vendor/vendor-ui-CnvYSvQL.js";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 const be = ce();
 const U = async (d, r) => {
   const n = `ministry_admin_${d}`,

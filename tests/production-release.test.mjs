@@ -45,7 +45,7 @@ test('complete synthetic evidence can satisfy the gate, while a missing capture 
  const real={google:{realSignInSucceeded:true,realSignOutSucceeded:true},camera:{physicalDevice:true,captureCallbacks:1,finalTrackState:'ended'}};
  await f.json('recovery/real-integrations-validation.json',real);
  await f.json('recovery/production-external-validation.json',{physicalGpsVerified:true,schedulerDeliveryVerified:true});
- await f.json('recovery/production-privacy-validation.json',{project,candidatePrivacyTestsPassed:true,migrationPlanValidated:true,legacyTokenRotationPlanValidated:true,rosterBackfillPlanValidated:true});
+ await f.json('recovery/production-privacy-validation.json',{project,candidatePrivacyTestsPassed:true,migrationPlanValidated:true,legacyTokenRotationPlanValidated:true,rosterBackfillPlanValidated:true,directoryBackfillPlanValidated:true});
  const artifact=await inspectProductionArtifact(f.root);
  await f.json('recovery/production-validation.json',{status:'passed',sourceDigest:await sourceDigest(f.root),backendBuildDigest:await backendBuildDigest(f.root),manifestSha256:artifact.manifestSha256,commands:['frontend-build','backend-build','node','python','emulator'].map(label=>({label,exitCode:0,tests:1}))});
  assert.equal((await inspectProductionReadiness(f.root)).status,'ready');

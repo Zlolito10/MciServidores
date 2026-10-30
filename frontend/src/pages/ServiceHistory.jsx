@@ -1,15 +1,24 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
 import { jsxRuntime } from "../vendor/jsx-runtime.js";
 import { r as React } from "../vendor/vendor-react-BwINE3B3.js";
+import {
+  boundedEventQuery,
+  eventDateWindow,
+  eventPage,
+  ecuadorCalendarDate,
+  createEventAssignmentFeed,
+  EVENT_PAGE_SIZE,
+  EVENT_RESULT_LIMIT,
+} from "../services/bounded-event-queries.js";
 import { normalizeRoleId } from "../utils/roles.js";
 import { LoadingSpinner } from "../components/LoadingSpinner.jsx";
 import {
   H as ie,
+  J as historyOrderBy,
+  L as historyLimitQuery,
   I as le,
   K as oe,
-  Y as Ee,
   E as Ce,
-  Z as Le,
 } from "../vendor/vendor-firebase-BjYbfC3F.js";
 import {
   useAuth,
@@ -32,7 +41,6 @@ import {
   T as TriangleAlertIcon,
   u as LogInIcon,
 } from "../vendor/vendor-ui-CnvYSvQL.js";
-import "../vendor/vendor-pdf-Cf03QSry.js";
 const fe = (b, R) => {
   if (!b) return "";
   const [I, p, F] = b.split("-").map(Number);
@@ -44,11 +52,23 @@ const ServiceHistory = () => {
     [p, F] = React.useState([]),
     [D, B] = React.useState([]),
     [S, V] = React.useState([]),
-    X = new Date(),
-    ge = String(X.getFullYear()),
-    he = String(X.getMonth() + 1).padStart(2, "0"),
-    [u, H] = React.useState(he),
-    [m, M] = React.useState(ge),
+    ge = ecuadorCalendarDate().year,
+    he = ecuadorCalendarDate().month,
+    [u, setHistoryMonth] = React.useState(he),
+    [m, setHistoryYear] = React.useState(ge),
+    [historyLimit, setHistoryLimit] = React.useState(EVENT_PAGE_SIZE),
+    [hasMoreHistory, setHasMoreHistory] = React.useState(false),
+    [historyError, setHistoryError] = React.useState(""),
+    H = (month) => {
+      setHistoryMonth(month);
+      setHistoryLimit(EVENT_PAGE_SIZE);
+      if (month !== "all" && m === "all") setHistoryYear(ge);
+    },
+    M = (year) => {
+      setHistoryYear(year);
+      setHistoryLimit(EVENT_PAGE_SIZE);
+      if (year === "all") setHistoryMonth("all");
+    },
     [h, y] = React.useState("all"),
     [W, T] = React.useState(!1),
     [Y, E] = React.useState(!1),
@@ -56,12 +76,7 @@ const ServiceHistory = () => {
     G = React.useRef(null),
     J = React.useRef(null),
     _ = React.useRef(null),
-    x = React.useRef(!1),
-    k = React.useRef(!1),
-    z = React.useRef(null),
-    N = () => {
-      x.current && k.current && I(!1);
-    };
+    z = React.useRef(null);
   (React.useEffect(() => {
     const t = (s) => {
       (G.current && !G.current.contains(s.target) && T(!1),
@@ -75,99 +90,112 @@ const ServiceHistory = () => {
   }, []),
     React.useEffect(() => {
       if (!b) return;
+      I(true);
+      B([]);
+      V([]);
+      F([]);
+      setHistoryError("");
+      const window = eventDateWindow(m, u);
+      const fail = (error) => {
+        console.error("Error loading bounded service history", error);
+        setHistoryError(
+          "No se pudo cargar el historial. Comprueba la conexión y vuelve a intentar.",
+        );
+        I(false);
+      };
       if (isBffEnabled()) {
-        let r = !1,
-          a = !1,
-          n = 0;
-        const i = async (g) => {
-          const v = !!g?.force;
+        let closed = false,
+          inFlight = false,
+          lastLoadedAt = 0;
+        const load = async (options = {}) => {
+          if (
+            closed ||
+            inFlight ||
+            (!options.force && Date.now() - lastLoadedAt < 30000)
+          )
+            return;
+          inFlight = true;
           try {
-            if (r || a) return;
-            const j = Date.now();
-            if (!v && j - n < 3e4) return;
-            a = !0;
-            const L = await bffFetch("/api/service-history");
-            if (r) return;
-            (V(L.assignments || []),
-              B(L.events || []),
-              (n = Date.now()),
-              k.current || (k.current = !0),
-              x.current || (x.current = !0),
-              N());
-          } catch (j) {
-            if (r) return;
-            (console.error("Error fetching service history (BFF):", j),
-              k.current || (k.current = !0),
-              x.current || (x.current = !0),
-              N());
+            const params = new URLSearchParams({ limit: String(historyLimit) });
+            if (window) {
+              params.set("startDate", window.startDate);
+              params.set("endDate", window.endDate);
+            } else params.set("all", "1");
+            const result = await bffFetch(`/api/service-history?${params}`);
+            if (closed) return;
+            V(result.assignments || []);
+            B(result.events || []);
+            setHasMoreHistory(result.hasMore === true);
+            lastLoadedAt = Date.now();
+            I(false);
+          } catch (error) {
+            if (!closed) fail(error);
           } finally {
-            a = !1;
+            inFlight = false;
           }
         };
-        (i({
-          force: !0,
-        }),
-          (z.current = () =>
-            void i({
-              force: !0,
-            })));
-        const l = () =>
-            void i({
-              force: !0,
-            }),
-          o = () =>
-            void i({
-              force: !0,
-            }),
-          d = () => {
-            document.visibilityState === "visible" &&
-              i({
-                force: !0,
-              });
-          };
-        return (
-          window.addEventListener("focus", l),
-          window.addEventListener("online", o),
-          document.addEventListener("visibilitychange", d),
-          () => {
-            ((r = !0),
-              (z.current = null),
-              window.removeEventListener("focus", l),
-              window.removeEventListener("online", o),
-              document.removeEventListener("visibilitychange", d));
-          }
-        );
+        load({ force: true });
+        z.current = () => load({ force: true });
+        const onFocus = () => {
+          if (document.visibilityState === "visible") load();
+        };
+        globalThis.window.addEventListener("focus", onFocus);
+        globalThis.window.addEventListener("online", onFocus);
+        document.addEventListener("visibilitychange", onFocus);
+        return () => {
+          closed = true;
+          z.current = null;
+          globalThis.window.removeEventListener("focus", onFocus);
+          globalThis.window.removeEventListener("online", onFocus);
+          document.removeEventListener("visibilitychange", onFocus);
+        };
       }
-      const s = (async () => {
-        const r = le(Le(firestoreDb, "assignments"), oe("userId", "==", b.uid));
-        return ie(
-          r,
-          (n) => {
-            const i = n.docs.map((l) => {
-              const o = l.ref.parent.parent?.id;
-              return {
-                id: l.id,
-                eventId: o,
-                ...l.data(),
-              };
-            });
-            (i.sort((l, o) => {
-              const d = l.eventDate || "";
-              return (o.eventDate || "").localeCompare(d);
-            }),
-              V(i),
-              k.current || ((k.current = !0), N()));
-          },
-          (n) => {
-            (console.error("Error listening to assignments:", n),
-              k.current || ((k.current = !0), N()));
-          },
-        );
-      })();
-      return () => {
-        s.then((r) => r && r());
-      };
-    }, [b]),
+      return createEventAssignmentFeed({
+        watchEvents: (next, error) =>
+          ie(
+            boundedEventQuery(
+              {
+                query: le,
+                where: oe,
+                orderBy: historyOrderBy,
+                limit: historyLimitQuery,
+              },
+              Ce(firestoreDb, "events"),
+              window,
+              historyLimit,
+            ),
+            (snapshot) => {
+              const page = eventPage(snapshot, historyLimit);
+              setHasMoreHistory(page.hasMore);
+              next({ docs: page.docs });
+            },
+            error,
+          ),
+        watchAssignments: (eventId, next, error) =>
+          ie(
+            le(
+              Ce(firestoreDb, "events", eventId, "assignments"),
+              oe("userId", "==", b.uid),
+            ),
+            next,
+            error,
+          ),
+        next: ({ events, assignments }) => {
+          B(events);
+          V(
+            [...assignments].flatMap(([eventId, snapshot]) =>
+              snapshot.docs.map((doc) => ({
+                ...doc.data(),
+                id: doc.id,
+                eventId,
+              })),
+            ),
+          );
+          I(false);
+        },
+        error: fail,
+      });
+    }, [b?.uid, m, u, historyLimit]),
     useChangeFeed({
       enabled: isBffEnabled() && !!b,
       resources: ["attendance", "assignments", "events", "service-history"],
@@ -196,49 +224,10 @@ const ServiceHistory = () => {
       );
     }, []),
     React.useEffect(() => {
-      if (!b || isBffEnabled()) return;
-      const t = Array.from(
-        new Set(
-          S.map((i) => i.eventId).filter(
-            (i) => typeof i == "string" && i.length > 0,
-          ),
-        ),
-      );
-      if (((x.current = !1), I(!0), t.length === 0)) {
-        (B([]), (x.current = !0), N());
+      if (D.length === 0 && S.length === 0) {
+        F([]);
         return;
       }
-      const s = (i, l) => {
-          const o = [];
-          for (let d = 0; d < i.length; d += l) o.push(i.slice(d, d + l));
-          return o;
-        },
-        r = new Map(),
-        n = s(t, 10).map((i) =>
-          ie(
-            le(Ce(firestoreDb, "events"), oe(Ee(), "in", i)),
-            (l) => {
-              l.docs.forEach((d) => {
-                r.set(d.id, {
-                  id: d.id,
-                  ...d.data(),
-                });
-              });
-              const o = t.map((d) => r.get(d)).filter(Boolean);
-              (B(o), x.current || ((x.current = !0), N()));
-            },
-            (l) => {
-              (console.error("Error listening to events for assignments:", l),
-                x.current || ((x.current = !0), N()));
-            },
-          ),
-        );
-      return () => {
-        n.forEach((i) => i());
-      };
-    }, [b, S]),
-    React.useEffect(() => {
-      if (D.length === 0 && S.length === 0) return;
       const t = (a) => {
           if (a.status === "completed") return !0;
           if (a.endTime && a.date) {
@@ -394,7 +383,7 @@ const ServiceHistory = () => {
       return new Date() > s && !t.checkInTime && !t.checkOutTime;
     }).length;
   let f = 0;
-  we.forEach((t) => {
+  te.forEach((t) => {
     const s = pe(t.eventDate, t.endTime, t.eventTime, t.eventStatus),
       r = U(t.eventDate, t.eventTime || t.serviceTime),
       a = !!t.checkOutTime,
@@ -431,7 +420,15 @@ const ServiceHistory = () => {
             ),
           ].sort((t, s) => t - s)
         : [],
-    C = Array.from(new Set([...p.map((t) => t.eventDate.split("-")[0]), m]))
+    C = Array.from(
+      new Set([
+        ...Array.from({ length: 31 }, (_, offset) =>
+          String(Number(ge) + 5 - offset),
+        ),
+        ...p.map((t) => t.eventDate.split("-")[0]),
+        m,
+      ]),
+    )
       .filter((t) => t !== "all" && !isNaN(Number(t)))
       .sort((t, s) => Number(s) - Number(t)),
     se = q.reduce((t, s) => {
@@ -464,17 +461,9 @@ const ServiceHistory = () => {
       11: "Noviembre",
       12: "Diciembre",
     },
-    A = (() => {
-      const t = new Set();
-      return (
-        p.forEach((s) => {
-          if (!s.eventDate) return;
-          const [r, a] = s.eventDate.split("-");
-          a && ((m !== "all" && r !== m) || t.add(a));
-        }),
-        Array.from(t).sort((s, r) => Number(s) - Number(r))
-      );
-    })(),
+    A = Array.from({ length: 12 }, (_, month) =>
+      String(month + 1).padStart(2, "0"),
+    ),
     ae = [
       {
         value: "all",
@@ -721,7 +710,7 @@ const ServiceHistory = () => {
                     <p className="max-w-[96px] text-[10px] uppercase tracking-wide text-gray-400 dark:text-slate-500 font-medium leading-tight">
                       {m !== "all" || u !== "all" || h !== "all"
                         ? "Servicios filtrados"
-                        : "Servicios totales"}
+                        : "Servicios cargados"}
                     </p>,
                   ]}
                 </div>,
@@ -769,13 +758,46 @@ const ServiceHistory = () => {
                       ]}
                     </div>,
                     <p className="text-[10px] uppercase tracking-wide text-gray-400 dark:text-slate-500 font-medium">
-                      {"Strikes"}
+                      {"Strikes del período"}
                     </p>,
                   ]}
                 </div>,
               ]}
             </div>
           </div>,
+          historyError && (
+            <p
+              role="alert"
+              className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700"
+            >
+              {historyError}
+            </p>
+          ),
+          <p className="text-sm text-gray-500">
+            Resumen del período cargado.{" "}
+            {hasMoreHistory
+              ? "Hay más eventos; carga los siguientes para ampliar el resumen."
+              : ""}
+          </p>,
+          hasMoreHistory &&
+            (historyLimit < EVENT_RESULT_LIMIT ? (
+              <button
+                type="button"
+                onClick={() =>
+                  setHistoryLimit((limit) =>
+                    Math.min(EVENT_RESULT_LIMIT, limit + EVENT_PAGE_SIZE),
+                  )
+                }
+                className="px-5 py-3 border border-purple-200 rounded-xl text-purple-700 font-medium"
+              >
+                Cargar más historial
+              </button>
+            ) : (
+              <p role="status" className="text-sm text-gray-500">
+                Se muestran hasta {EVENT_RESULT_LIMIT} eventos. Selecciona un
+                mes para acotar el historial.
+              </p>
+            )),
           Object.keys(se).length > 0 ? (
             <div className="space-y-8">
               {Object.entries(se).map(([t, s]) => (

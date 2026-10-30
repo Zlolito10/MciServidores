@@ -2,17 +2,9 @@
 import { reactDomClient as Is } from "./vendor/react-dom.js";
 import { jsxRuntime } from "./vendor/jsx-runtime.js";
 import { recoveryEnvironment } from "./config/environment.js";
-const __vite__mapDeps = (
-  i,
-  m = __vite__mapDeps,
-  d = m.f ||
-    (m.f = [
-      "assets/App-BPrQ3EPG.js",
-      "assets/vendor-react-BwINE3B3.js",
-      "assets/vendor-ui-CnvYSvQL.js",
-    ]),
-) => i.map((i) => d[i]);
-import { _ as xs } from "./vendor/vendor-pdf-Cf03QSry.js";
+// Current esbuild imports resolve their own chunks; legacy preload URLs are retired.
+const __vite__mapDeps = () => [];
+import { loadModule as xs } from "./services/module-loader.js";
 import {
   a as Ls,
   b as Ks,

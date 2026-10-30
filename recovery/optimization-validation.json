@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-30T17:35:11.870Z",
+  "baseline": {
+    "commit": "8eb20e5c439d26c37842a088665abda718a0f682",
+    "artifactSha256": "efa72d96a60f72026e2e6a9a8ce16337e2ea6f6f0c5b501c9c4e2e2877eed9e6",
+    "publicFiles": 96,
+    "precacheFiles": 89,
+    "precacheUncompressedBytes": 7080812,
+    "productionDeploymentPerformed": false
+  },
+  "after": {
+    "publicFiles": 62,
+    "publicUncompressedBytes": 3052291,
+    "eligibleStaticFiles": 55,
+    "precacheFiles": 16,
+    "precacheUncompressedBytes": 907871,
+    "publishedLegacyJavaScriptFiles": 0
+  },
+  "precacheUncompressedByteReduction": 6172941,
+  "precacheUncompressedReductionPercent": 87.18,
+  "measurement": "local artifact bytes before HTTP compression; not measured network latency or billing savings",
+  "sourceDigest": "ab6bbbca94c046603e858e31fab7bb39c2208c95b053df98c56fec4fd2719e53",
+  "manifestSha256": "e3b945bdefa6c8436855fa3adadb4b21b7e9df7aaf9f881ff5f8e73d40f6dc8c",
+  "tests": {
+    "node": 266,
+    "python": 15,
+    "functionalFlows": 43,
+    "securityFlows": 24,
+    "nodeIntegrationResultsIncludingContainers": 69
+  },
+  "productionWritesPerformed": false,
+  "productionDeploymentPerformed": false,
+  "appCheckActivated": false,
+  "iamChangesPerformed": 0
+}

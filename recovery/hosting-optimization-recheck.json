@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-30T17:31:13.883Z",
+  "project": "mcimachala-servidor",
+  "checks": {
+    "index.html": {
+      "status": 200,
+      "matchesRecoveredSnapshot": true
+    },
+    "app-version.json": {
+      "status": 200,
+      "matchesRecoveredSnapshot": true
+    }
+  },
+  "method": "two public GET requests only",
+  "writesPerformed": false,
+  "deploymentPerformed": false
+}

@@ -81,6 +81,17 @@ test('isolated production build has verifiable bytes, production config and no e
   }
   assert.equal(compiledEnvironments.length, 1);
   const properties = Object.fromEntries(compiledEnvironments[0].properties.map((property) => [property.key.name, property.value]));
-  assert.equal(properties.emulators.value, false); assert.equal(properties.enableServiceWorker.value, true); assert.equal(properties.flags.properties.length, 0);
+  const booleanValue=node=>node.type==='BooleanLiteral'?node.value:node.type==='UnaryExpression'&&node.operator==='!'&&node.argument.type==='NumericLiteral'?!node.argument.value:undefined;
+  assert.equal(booleanValue(properties.emulators), false); assert.equal(booleanValue(properties.enableServiceWorker), true); assert.equal(properties.flags.properties.length, 0);
+  assert.equal(manifest.files.some(file=>/^assets\/.*\.js$/.test(file.path)),false,'published JavaScript must not accompany the current application');
+  const settings=JSON.parse((await readFile(path.join(output,'service-worker-config.js'),'utf8')).split('=',2)[1].trim().replace(/;$/,''));
+  assert.ok(settings.precache.length<settings.assets.length);
+  const byPath=new Map(manifest.files.map(file=>['/'+file.path,file]));
+  assert.ok(settings.precache.reduce((total,asset)=>total+byPath.get(asset).bytes,0)<1_500_000,'anonymous bootstrap budget exceeded');
+  assert.ok(settings.assets.some(asset=>/vendor-pdf/.test(asset)&&!settings.precache.includes(asset)),'PDF export must remain deferred');
   const html = await readFile(path.join(output, 'index.html'), 'utf8'); assert.ok(html.includes('/' + manifest.entry));
+  const styles=manifest.files.filter(file=>/^assets\/app-[a-f0-9]{12}\.css$/.test(file.path));assert.equal(styles.length,1);
+  assert.ok(html.includes('/'+styles[0].path),'HTML must reference current content-addressed CSS');
+  assert.ok(settings.precache.includes('/'+styles[0].path),'offline shell must use the same CSS version');
+  assert.equal(styles[0].path,'assets/app-'+styles[0].sha256.slice(0,12)+'.css');
 });

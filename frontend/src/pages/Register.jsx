@@ -1,5 +1,5 @@
 // Reconstructed from the published MCI application. Original JSX/TSX and original symbol names were not available.
-import { _ as S } from "../vendor/vendor-pdf-Cf03QSry.js";
+import { loadModule as S } from "../services/module-loader.js";
 import { jsxRuntime } from "../vendor/jsx-runtime.js";
 import {
   r as React,

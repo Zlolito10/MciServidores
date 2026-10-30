@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-30T17:30:04.455Z",
+  "project": "demo-mci-servidores",
+  "environment": "local emulators, in-app browser",
+  "productionServicesUsed": false,
+  "productionWritesPerformed": false,
+  "productionDeployments": 0,
+  "sourceDigest": "ab6bbbca94c046603e858e31fab7bb39c2208c95b053df98c56fec4fd2719e53",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1280,
+      "height": 900
+    }
+  ],
+  "observations": [
+    {
+      "flow": "Synthetic administrator sign-in and sign-out",
+      "status": "passed"
+    },
+    {
+      "flow": "Events mobile and desktop, compact image-free card",
+      "status": "passed"
+    },
+    {
+      "flow": "Expandable filters and empty search then clear",
+      "status": "passed"
+    },
+    {
+      "flow": "Administration menu, Escape closes and restores focus",
+      "status": "passed"
+    },
+    {
+      "flow": "Event detail opens from real link",
+      "status": "passed"
+    },
+    {
+      "flow": "Attendance people and event-history views",
+      "status": "passed"
+    },
+    {
+      "flow": "Monthly PDF download from actual lazy import",
+      "status": "passed",
+      "bytes": 6310,
+      "pdfHeaderVerified": true
+    },
+    {
+      "flow": "Ordinary user personal history and empty prior-year selection",
+      "status": "passed"
+    },
+    {
+      "flow": "Protected ordinary-user avatar",
+      "status": "passed",
+      "width": 256,
+      "height": 256,
+      "blobUrl": true
+    },
+    {
+      "flow": "Scoped ministry account dashboard and events",
+      "status": "passed",
+      "globalNotificationActionVisible": false,
+      "globalAdministrationActionsVisible": false
+    }
+  ],
+  "screenshotsKeptPrivate": true,
+  "screenshots": [
+    "events-mobile.jpg",
+    "events-desktop-ministry.jpg",
+    "personal-history-mobile.jpg",
+    "events-desktop.jpg"
+  ],
+  "limits": [
+    "Not a visual review of every page or state",
+    "BFF administrative page was not visually reviewed; backend route and session regressions passed in emulators",
+    "Physical Google, camera, FCM, GPS, Drive and Cloud Scheduler were not exercised in this run",
+    "Initial sign-in failed before synthetic fixture seeding; seeded demo sign-ins subsequently passed",
+    "An old stylesheet cached under its original name was found and corrected with content-addressed CSS"
+  ],
+  "temporaryViewportRestored": true
+}
